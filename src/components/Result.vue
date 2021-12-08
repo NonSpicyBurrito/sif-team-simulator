@@ -1,0 +1,45 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { duration, percent, small, thousands } from '../core/formatting'
+import { simulateScore } from '../core/simulation'
+import Field from './Field.vue'
+import Histogram from './Histogram.vue'
+
+defineProps<{
+    time: number
+    summary: ReturnType<typeof simulateScore>
+}>()
+
+const sections = {
+    score: ['Score', thousands],
+    coverage: ['Coverage', percent],
+    hp: ['HP', small],
+} as const
+
+const selected = ref<keyof typeof sections>('score')
+</script>
+
+<template>
+    <div class="surface">
+        <Field label="Time">
+            {{ duration(time) }}
+        </Field>
+        <Field
+            v-for="([label, formatter], key) in sections"
+            :key="key"
+            :label="label"
+        >
+            <button class="w-full" @click="selected = key">
+                <span>{{ formatter(summary[key].mean) }}</span>
+                <span class="ml-2 text-sm text-gray-500">
+                    ± {{ formatter(summary[key].stdev) }}
+                </span>
+            </button>
+        </Field>
+
+        <Histogram
+            :data="summary[selected]"
+            :formatter="sections[selected][1]"
+        />
+    </div>
+</template>

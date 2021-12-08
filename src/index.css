@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.surface {
+    @apply m-8;
+    @apply p-8;
+    @apply rounded-xl;
+    @apply shadow-xl;
+    @apply bg-white;
+    @apply bg-opacity-5;
+}
+
+button {
+    @apply px-3 py-1;
+    @apply bg-gray-700;
+    @apply rounded-md;
+    @apply shadow-sm;
+    @apply hover:bg-gray-600;
+    @apply active:shadow-inner;
+    @apply active:bg-gray-700;
+    @apply disabled:bg-gray-800;
+    @apply disabled:text-gray-600;
+    @apply disabled:cursor-not-allowed;
+}
+
+select {
+    @apply px-2 py-1;
+    @apply bg-gray-700;
+    @apply rounded-md;
+    @apply shadow-sm;
+}
+
+input[type='number'] {
+    @apply px-3 py-1;
+    @apply bg-gray-700;
+    @apply rounded-md;
+    @apply shadow-sm;
+}
