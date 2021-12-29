@@ -14,6 +14,8 @@ export const charts = new Map<string, Chart>()
 export const sises = new Map<string, Sis>([
     ['Char', { type: 'self', value: 0.29 }],
     ['Petit', { type: 'self', value: 0.13 }],
+    ['Grand', { type: 'self', value: 0.53 }],
+    ['Midi', { type: 'self', value: 0.21 }],
     ['Bloom', { type: 'team', value: 0.04 }],
     ['Veil', { type: 'team', value: 0.024 }],
     ['Charm', { type: 'score', value: 2.5 }],
