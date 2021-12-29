@@ -23,15 +23,17 @@ defineProps<{
         />
     </Field>
     <Field label="Card Skill Level">
-        <button
-            v-for="sl in 8"
-            :key="sl"
-            class="mr-1"
-            :class="{ 'opacity-25': sl !== member.card.sl }"
-            @click="member.card.sl = sl"
-        >
-            {{ sl }}
-        </button>
+        <div class="flex flex-wrap -mb-1">
+            <button
+                v-for="sl in 8"
+                :key="sl"
+                class="mr-1 mb-1"
+                :class="{ 'opacity-25': sl !== member.card.sl }"
+                @click="member.card.sl = sl"
+            >
+                {{ sl }}
+            </button>
+        </div>
     </Field>
     <Field label="Card Skill">
         <div class="py-1 first-letter:uppercase">

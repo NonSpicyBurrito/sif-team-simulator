@@ -89,25 +89,29 @@ async function simulate() {
             />
         </Field>
         <Field label="Note Speed">
-            <button
-                v-for="speed in 10"
-                :key="speed"
-                class="mr-1"
-                :class="{ 'opacity-25': noteSpeed !== speed }"
-                @click="noteSpeed = speed"
-            >
-                {{ speed }}
-            </button>
+            <div class="flex flex-wrap -mb-1">
+                <button
+                    v-for="speed in 10"
+                    :key="speed"
+                    class="mr-1 mb-1"
+                    :class="{ 'opacity-25': noteSpeed !== speed }"
+                    @click="noteSpeed = speed"
+                >
+                    {{ speed }}
+                </button>
+            </div>
         </Field>
         <Field label="Memory Gallery Bonus">
-            <input
-                v-for="index in 3"
-                :key="index"
-                v-model="memoryGalleryBonus[index - 1]"
-                class="mr-1 w-32"
-                type="number"
-                step="1"
-            />
+            <div class="flex flex-wrap -mb-1">
+                <input
+                    v-for="index in 3"
+                    :key="index"
+                    v-model="memoryGalleryBonus[index - 1]"
+                    class="mr-1 mb-1 w-20 sm:w-32"
+                    type="number"
+                    step="1"
+                />
+            </div>
         </Field>
         <Field label="Guest Center">
             <input

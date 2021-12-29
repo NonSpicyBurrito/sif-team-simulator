@@ -5,9 +5,9 @@ defineProps<{
 </script>
 
 <template>
-    <div class="flex my-4">
-        <div class="flex-1 grow py-1 font-semibold">{{ label }}</div>
-        <div class="flex-1 grow-[2]">
+    <div class="flex flex-col my-4 sm:flex-row">
+        <div class="py-1 font-semibold sm:flex-1 sm:grow">{{ label }}</div>
+        <div class="sm:flex-1 sm:grow-[2]">
             <slot />
         </div>
     </div>

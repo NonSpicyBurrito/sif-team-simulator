@@ -17,7 +17,7 @@ defineProps<{
         <template v-if="member.accessory">
             <button @click="member.accessory = undefined">Delete</button>
         </template>
-        <div v-else class="flex flex-wrap">
+        <div v-else class="flex flex-wrap -mb-1">
             <template
                 v-for="[id, accessory] in accessories.entries()"
                 :key="id"
@@ -37,15 +37,17 @@ defineProps<{
     </Field>
     <template v-if="member.accessory">
         <Field label="Accessory Level">
-            <button
-                v-for="level in 8"
-                :key="level"
-                class="mr-1"
-                :class="{ 'opacity-25': member.accessory.level !== level }"
-                @click="member.accessory = { id: member.accessory!.id, level }"
-            >
-                {{ level }}
-            </button>
+            <div class="flex flex-wrap -mb-1">
+                <button
+                    v-for="level in 8"
+                    :key="level"
+                    class="mr-1 mb-1"
+                    :class="{ 'opacity-25': member.accessory.level !== level }"
+                    @click="member.accessory = { id: member.accessory!.id, level }"
+                >
+                    {{ level }}
+                </button>
+            </div>
         </Field>
         <Field label="Accessory Skill">
             <div class="py-1 first-letter:uppercase">

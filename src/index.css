@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 .surface {
-    @apply m-8;
-    @apply p-8;
+    @apply my-8;
+    @apply p-4 sm:p-8;
     @apply rounded-xl;
     @apply shadow-xl;
     @apply bg-white;

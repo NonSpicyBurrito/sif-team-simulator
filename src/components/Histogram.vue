@@ -8,7 +8,9 @@ defineProps<{
 </script>
 
 <template>
-    <div class="relative mt-16 h-96 border-b-2 border-l-2 border-gray-300">
+    <div
+        class="relative mt-16 h-48 border-b-2 border-l-2 border-gray-300 sm:h-96"
+    >
         <div v-for="(value, i) in data.histogram" :key="i" class="group">
             <div
                 class="absolute top-0 bottom-0"

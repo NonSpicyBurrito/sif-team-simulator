@@ -67,7 +67,7 @@ function deletePresetTeam(index: number) {
         <div
             v-for="(presetTeam, i) in presetTeams"
             :key="i"
-            class="flex justify-center my-2"
+            class="flex flex-col justify-center my-2 sm:flex-row"
         >
             <button @click="$emit('select', presetTeam)">
                 <TeamDisplay
@@ -76,8 +76,8 @@ function deletePresetTeam(index: number) {
                     :model-value="-1"
                 />
             </button>
-            <button class="ml-2" @click="deletePresetTeam(i)">
-                <div :style="{ 'writing-mode': 'vertical-lr' }">Delete</div>
+            <button class="mt-2 sm:mt-0 sm:ml-2" @click="deletePresetTeam(i)">
+                <div class="sm:[writing-mode:vertical-lr]">Delete</div>
             </button>
         </div>
     </div>

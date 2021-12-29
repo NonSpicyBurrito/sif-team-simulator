@@ -13,7 +13,7 @@ defineEmits<{
 </script>
 
 <template>
-    <div class="flex justify-center">
+    <div class="flex flex-wrap justify-center">
         <div
             v-for="(member, index) in team"
             :key="index"
