@@ -43,41 +43,43 @@ export function simulateScore(
 
     const skillInfos = team.map((member) => {
         const card = cards.get(member.card.id)!
+        const cardSl = member.card.sl
         const cardSkill = {
             trigger: {
                 type: card.skill.trigger.type,
-                chances: card.skill.trigger.chances.slice(member.card.sl - 1),
-                values: card.skill.trigger.values.slice(member.card.sl - 1),
+                chances: processSkill(card.skill.trigger.chances, cardSl),
+                values: processSkill(card.skill.trigger.values, cardSl),
             },
             effect: {
                 type: card.skill.effect.type,
-                durations: card.skill.effect.durations.slice(
-                    member.card.sl - 1
-                ),
-                values: card.skill.effect.values.slice(member.card.sl - 1),
+                durations: processSkill(card.skill.effect.durations, cardSl),
+                values: processSkill(card.skill.effect.values, cardSl),
             },
         }
-        const accessory = member.accessory
-            ? accessories.get(member.accessory.id)
-            : undefined
-        const accessorySkill = accessory
-            ? {
-                  trigger: {
-                      chances: accessory.skill.trigger.chances.slice(
-                          member.accessory!.level - 1
-                      ),
-                  },
-                  effect: {
-                      type: accessory.skill.effect.type,
-                      durations: accessory.skill.effect.durations.slice(
-                          member.accessory!.level - 1
-                      ),
-                      values: accessory.skill.effect.values.slice(
-                          member.accessory!.level - 1
-                      ),
-                  },
-              }
-            : undefined
+
+        if (!member.accessory) return { card: cardSkill }
+
+        const accessory = accessories.get(member.accessory.id)!
+        const accessorySl = member.accessory.level
+        const accessorySkill = {
+            trigger: {
+                chances: processSkill(
+                    accessory.skill.trigger.chances,
+                    accessorySl
+                ),
+            },
+            effect: {
+                type: accessory.skill.effect.type,
+                durations: processSkill(
+                    accessory.skill.effect.durations,
+                    accessorySl
+                ),
+                values: processSkill(
+                    accessory.skill.effect.values,
+                    accessorySl
+                ),
+            },
+        }
 
         return {
             card: cardSkill,
@@ -490,6 +492,12 @@ export function simulateScore(
     }
 
     return summarize(results)
+}
+
+function processSkill<T>(values: T[], level: number) {
+    return values
+        .concat(Array(16).fill(values[values.length - 1]))
+        .slice(level - 1)
 }
 
 function getComboMultiplier(combo: number) {
