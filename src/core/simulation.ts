@@ -296,7 +296,7 @@ export function simulateScore(
 
                     if (isPerfect) score += psuBonus
 
-                    score += cfBonus * cfMultiplier
+                    score += Math.min(1000, cfBonus * cfMultiplier)
                     break
                 }
             }
