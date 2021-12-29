@@ -165,6 +165,7 @@ export function simulateScore(
         let score = 0
         let hearts = 0
         let overheal = 0
+        let lastSkill: ((time: number, index: number) => void) | undefined
 
         const effects: Effect[] = []
 
@@ -174,6 +175,9 @@ export function simulateScore(
             let psuBonus = 0
             let cfBonus = 0
             let skillChanceMultiplier = 1 + skillChanceBonus
+
+            let tempLastSkill: typeof lastSkill
+            const encores: number[] = []
 
             const selfCoverageActivates: [number, number][] = []
 
@@ -303,6 +307,17 @@ export function simulateScore(
                 }
             }
 
+            if (encores.length) {
+                const skill = tempLastSkill || lastSkill
+                if (skill) {
+                    encores.forEach((index) => skill(event.time, index))
+                }
+
+                lastSkill = undefined
+            }
+
+            lastSkill = tempLastSkill || lastSkill
+
             function processEffect({ type, value }: Effect) {
                 switch (type) {
                     case 'psu':
@@ -322,6 +337,215 @@ export function simulateScore(
                         break
                 }
             }
+
+            function activateMemberSkill(
+                index: number,
+                time: number,
+                skillChanceMultiplier: number
+            ) {
+                if (effects.some((e) => e.index === index)) {
+                    selfCoverageFlags[index] = true
+                    return
+                }
+
+                const { card, accessory } = skillInfos[index]
+
+                if (
+                    Math.random() >=
+                    (card.trigger.chances[0] * skillChanceMultiplier) / 100
+                ) {
+                    if (!accessory) return
+                    if (
+                        Math.random() >=
+                        (accessory.trigger.chances[0] * skillChanceMultiplier) /
+                            100
+                    )
+                        return
+
+                    const level = consumeAmp()
+
+                    switch (accessory.effect.type) {
+                        case EffectType.Plock:
+                            doPlock(accessory.effect.durations[level])
+                            break
+                        case EffectType.Heal:
+                            doHeal(accessory.effect.values[level])
+                            break
+                        case EffectType.SRU:
+                            doSRU(
+                                accessory.effect.durations[level],
+                                accessory.effect.values[level] / 100
+                            )
+                            break
+                        case EffectType.PSU:
+                            doPSU(
+                                accessory.effect.durations[level],
+                                accessory.effect.values[level]
+                            )
+                            break
+                        case EffectType.CF:
+                            doCF(
+                                accessory.effect.durations[level],
+                                accessory.effect.values[level]
+                            )
+                            break
+                        case EffectType.Param:
+                            doParam(
+                                accessory.effect.durations[level],
+                                accessory.effect.values[level] / 100
+                            )
+                            break
+                    }
+                    return
+                }
+
+                const level = consumeAmp()
+
+                switch (card.effect.type) {
+                    case EffectType.Plock:
+                        doPlock(card.effect.durations[level])
+                        break
+                    case EffectType.Heal:
+                        doHeal(card.effect.values[level])
+                        break
+                    case EffectType.Score:
+                        doScore(card.effect.values[level])
+                        break
+                    case EffectType.SRU:
+                        doSRU(
+                            card.effect.durations[level],
+                            card.effect.values[level] / 100
+                        )
+                        break
+                    case EffectType.Encore:
+                        doEncore()
+                        break
+                    case EffectType.PSU:
+                        doPSU(
+                            card.effect.durations[level],
+                            card.effect.values[level]
+                        )
+                        break
+                    case EffectType.CF:
+                        doCF(
+                            card.effect.durations[level],
+                            card.effect.values[level]
+                        )
+                        break
+                    case EffectType.Amp:
+                        doAmp(card.effect.values[level])
+                        break
+                    case EffectType.Param:
+                        doParam(
+                            card.effect.durations[level],
+                            card.effect.values[level] / 100
+                        )
+                        break
+                    default:
+                        throw `Unknown effect: ${EffectType[card.effect.type]}`
+                }
+
+                function doPlock(duration: number) {
+                    tempLastSkill = (time, index) =>
+                        effects.push({
+                            time: time + duration,
+                            index,
+                            type: 'plock',
+                            value: 0,
+                        })
+                    tempLastSkill(time, index)
+                }
+
+                function doHeal(value: number) {
+                    const multiplier = sisHealMultipliers[index]
+
+                    tempLastSkill = () => {
+                        score += value * multiplier
+                        overheal += value
+
+                        if (overheal < maxHp) return
+                        hearts++
+                        overheal -= maxHp
+                    }
+                    tempLastSkill(time, index)
+                }
+
+                function doScore(value: number) {
+                    const multiplier = sisScoreMultipliers[index]
+
+                    tempLastSkill = () => (score += value * multiplier)
+                    tempLastSkill(time, index)
+                }
+
+                function doSRU(duration: number, value: number) {
+                    tempLastSkill = (time, index) =>
+                        effects.push({
+                            time: time + duration,
+                            index,
+                            type: 'sru',
+                            value,
+                        })
+                    tempLastSkill(time, index)
+                }
+
+                function doEncore() {
+                    encores.push(index)
+                }
+
+                function doPSU(duration: number, value: number) {
+                    tempLastSkill = (time, index) =>
+                        effects.push({
+                            time: time + duration,
+                            index,
+                            type: 'psu',
+                            value,
+                        })
+                    tempLastSkill(time, index)
+                }
+
+                function doCF(duration: number, value: number) {
+                    tempLastSkill = (time, index) =>
+                        effects.push({
+                            time: time + duration,
+                            index,
+                            type: 'cf',
+                            value,
+                        })
+                    tempLastSkill(time, index)
+                }
+
+                function doAmp(value: number) {
+                    tempLastSkill = (time, index) =>
+                        effects.push({
+                            time: Number.POSITIVE_INFINITY,
+                            index,
+                            type: 'amp',
+                            value,
+                        })
+                    tempLastSkill(time, index)
+                }
+
+                function doParam(duration: number, value: number) {
+                    tempLastSkill = (time, index) =>
+                        effects.push({
+                            time: time + duration,
+                            index,
+                            type: 'param',
+                            value,
+                        })
+                    tempLastSkill(time, index)
+                }
+            }
+
+            function consumeAmp() {
+                const index = effects.findIndex((e) => e.type === 'amp')
+                if (index === -1) return 0
+
+                const effect = effects[index]
+                effects.splice(index, 1)
+
+                return effect.value
+            }
         }
 
         results.push({
@@ -329,191 +553,6 @@ export function simulateScore(
             hp: hearts + overheal / maxHp,
             coverage: covered / notes,
         })
-
-        function activateMemberSkill(
-            index: number,
-            time: number,
-            skillChanceMultiplier: number
-        ) {
-            if (effects.some((e) => e.index === index)) {
-                selfCoverageFlags[index] = true
-                return
-            }
-
-            const { card, accessory } = skillInfos[index]
-
-            if (
-                Math.random() >=
-                (card.trigger.chances[0] * skillChanceMultiplier) / 100
-            ) {
-                if (!accessory) return
-                if (
-                    Math.random() >=
-                    (accessory.trigger.chances[0] * skillChanceMultiplier) / 100
-                )
-                    return
-
-                const level = consumeAmp()
-
-                switch (accessory.effect.type) {
-                    case EffectType.Plock:
-                        doPlock(accessory.effect.durations[level])
-                        break
-                    case EffectType.Heal:
-                        doHeal(accessory.effect.values[level])
-                        break
-                    case EffectType.SRU:
-                        doSRU(
-                            accessory.effect.durations[level],
-                            accessory.effect.values[level] / 100
-                        )
-                        break
-                    case EffectType.PSU:
-                        doPSU(
-                            accessory.effect.durations[level],
-                            accessory.effect.values[level]
-                        )
-                        break
-                    case EffectType.CF:
-                        doCF(
-                            accessory.effect.durations[level],
-                            accessory.effect.values[level]
-                        )
-                        break
-                    case EffectType.Param:
-                        doParam(
-                            accessory.effect.durations[level],
-                            accessory.effect.values[level] / 100
-                        )
-                        break
-                }
-                return
-            }
-
-            const level = consumeAmp()
-
-            switch (card.effect.type) {
-                case EffectType.Plock:
-                    doPlock(card.effect.durations[level])
-                    break
-                case EffectType.Heal:
-                    doHeal(card.effect.values[level])
-                    break
-                case EffectType.Score:
-                    doScore(card.effect.values[level])
-                    break
-                case EffectType.SRU:
-                    doSRU(
-                        card.effect.durations[level],
-                        card.effect.values[level] / 100
-                    )
-                    break
-                case EffectType.PSU:
-                    doPSU(
-                        card.effect.durations[level],
-                        card.effect.values[level]
-                    )
-                    break
-                case EffectType.CF:
-                    doCF(
-                        card.effect.durations[level],
-                        card.effect.values[level]
-                    )
-                    break
-                case EffectType.Amp:
-                    doAmp(card.effect.values[level])
-                    break
-                case EffectType.Param:
-                    doParam(
-                        card.effect.durations[level],
-                        card.effect.values[level] / 100
-                    )
-                    break
-                default:
-                    throw `Unknown effect: ${EffectType[card.effect.type]}`
-            }
-
-            function doPlock(duration: number) {
-                effects.push({
-                    time: time + duration,
-                    index,
-                    type: 'plock',
-                    value: 0,
-                })
-            }
-
-            function doHeal(value: number) {
-                const multiplier = sisHealMultipliers[index]
-
-                score += value * multiplier
-                overheal += value
-
-                if (overheal < maxHp) return
-                hearts++
-                overheal -= maxHp
-            }
-
-            function doScore(value: number) {
-                const multiplier = sisScoreMultipliers[index]
-
-                score += value * multiplier
-            }
-
-            function doSRU(duration: number, value: number) {
-                effects.push({
-                    time: time + duration,
-                    index,
-                    type: 'sru',
-                    value,
-                })
-            }
-
-            function doPSU(duration: number, value: number) {
-                effects.push({
-                    time: time + duration,
-                    index,
-                    type: 'psu',
-                    value,
-                })
-            }
-
-            function doCF(duration: number, value: number) {
-                effects.push({
-                    time: time + duration,
-                    index,
-                    type: 'cf',
-                    value,
-                })
-            }
-
-            function doAmp(value: number) {
-                effects.push({
-                    time: Number.POSITIVE_INFINITY,
-                    index,
-                    type: 'amp',
-                    value,
-                })
-            }
-
-            function doParam(duration: number, value: number) {
-                effects.push({
-                    time: time + duration,
-                    index,
-                    type: 'param',
-                    value,
-                })
-            }
-        }
-
-        function consumeAmp() {
-            const index = effects.findIndex((e) => e.type === 'amp')
-            if (index === -1) return 0
-
-            const effect = effects[index]
-            effects.splice(index, 1)
-
-            return effect.value
-        }
     }
 
     return summarize(results)
