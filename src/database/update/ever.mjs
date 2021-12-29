@@ -20,10 +20,10 @@ for (const accessory of data.accessories) {
     const data = await getAccessoryData(
         accessory.index,
         accessory.effectType,
-        accessory.cardId
+        accessory.character
     )
     accessories[accessory.id] = data
-    console.log(accessory.id, data.cardId)
+    console.log(accessory.id, data.character)
 }
 
 writeFileSync(accessoriesPath, JSON.stringify(accessories))
@@ -37,6 +37,7 @@ async function getData() {
     ).data
 
     const accessories = JSON.parse(extract(html, 'var accessories=', ';'))
+    const cards = JSON.parse(extract(html, 'var cards=', ';'))
     const members = JSON.parse(extract(html, 'var members=', ';'))
 
     return {
@@ -49,7 +50,7 @@ async function getData() {
             .map(({ data: [, , , id, , cardId, effectType], index }) => ({
                 id,
                 effectType,
-                cardId,
+                character: cardId && cards[cardId][0],
                 index,
             })),
         characters: Object.fromEntries(
@@ -58,7 +59,7 @@ async function getData() {
     }
 }
 
-async function getAccessoryData(index, effectType, cardId) {
+async function getAccessoryData(index, effectType, character) {
     const data = Object.entries(
         (
             await axios.get(
@@ -70,7 +71,7 @@ async function getAccessoryData(index, effectType, cardId) {
         .map(([, value]) => value)
 
     return {
-        cardId,
+        character,
         stats: data.map(([smile, pure, cool]) => [smile, pure, cool]),
         skill: {
             trigger: {

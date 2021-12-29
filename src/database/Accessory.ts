@@ -1,7 +1,7 @@
 import { AccessorySkill } from './Skill'
 
 export type Accessory = {
-    cardId: number
+    character: number
     stats: number[][]
     skill: AccessorySkill
 }

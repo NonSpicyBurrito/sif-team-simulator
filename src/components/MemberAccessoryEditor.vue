@@ -24,8 +24,8 @@ defineProps<{
             >
                 <AccessoryIcon
                     v-if="
-                        accessory.cardId === 0 ||
-                        cards.get(accessory.cardId)?.character ===
+                        accessory.character === 0 ||
+                        accessory.character ===
                             cards.get(member.card.id)?.character
                     "
                     class="mr-1 mb-1 w-12 h-12 cursor-pointer"
