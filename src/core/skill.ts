@@ -38,14 +38,27 @@ export function getSkillDescription(
     const effectValue = skill.effect.values[level - 1]
 
     switch (skill.effect.type) {
-        case EffectType.Score:
-            descriptions.push(`add ${effectValue} score`)
+        case EffectType.Plock:
+            descriptions.push(`perfect lock`, `for ${effectDuration} seconds`)
             break
         case EffectType.Heal:
             descriptions.push(`heal ${effectValue} hp`)
             break
-        case EffectType.Plock:
-            descriptions.push(`perfect lock`, `for ${effectDuration} seconds`)
+        case EffectType.Score:
+            descriptions.push(`add ${effectValue} score`)
+            break
+        case EffectType.SRU:
+            descriptions.push(
+                `increase skill activation chance by ${
+                    'type' in skill.trigger
+                        ? effectValue
+                        : Math.round((effectValue - 1) * 100)
+                }%`,
+                `for ${effectDuration} seconds`
+            )
+            break
+        case EffectType.Encore:
+            descriptions.push('repeat last activated skill')
             break
         case EffectType.PSU:
             descriptions.push(
@@ -61,25 +74,12 @@ export function getSkillDescription(
                 `for ${effectDuration} seconds`
             )
             break
-        case EffectType.Param:
-            descriptions.push(
-                `increase stat by ${
-                    'type' in skill.trigger
-                        ? effectValue
-                        : Math.round((effectValue - 1) * 100)
-                }%`,
-                `for ${effectDuration} seconds`
-            )
-            break
         case EffectType.Amp:
             descriptions.push(`increase skill level by ${effectValue}`)
             break
-        case EffectType.Encore:
-            descriptions.push('repeat last activated skill')
-            break
-        case EffectType.SRU:
+        case EffectType.Param:
             descriptions.push(
-                `increase skill activation chance by ${
+                `increase stat by ${
                     'type' in skill.trigger
                         ? effectValue
                         : Math.round((effectValue - 1) * 100)
