@@ -379,6 +379,9 @@ export function simulateScore(
                                 accessory.effect.values[level] - 1
                             )
                             break
+                        case EffectType.Encore:
+                            doEncore()
+                            break
                         case EffectType.PSU:
                             doPSU(
                                 accessory.effect.durations[level],
