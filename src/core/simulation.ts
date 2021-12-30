@@ -374,7 +374,7 @@ export function simulateScore(
                         case EffectType.SRU:
                             doSRU(
                                 accessory.effect.durations[level],
-                                accessory.effect.values[level] / 100
+                                accessory.effect.values[level] - 1
                             )
                             break
                         case EffectType.PSU:

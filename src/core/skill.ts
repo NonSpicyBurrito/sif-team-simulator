@@ -76,7 +76,11 @@ export function getSkillDescription(
             break
         case EffectType.SRU:
             descriptions.push(
-                `increase skill activation chance by ${effectValue}%`,
+                `increase skill activation chance by ${
+                    'type' in skill.trigger
+                        ? effectValue
+                        : Math.round((effectValue - 1) * 100)
+                }%`,
                 `for ${effectDuration} seconds`
             )
             break
