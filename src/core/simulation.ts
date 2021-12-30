@@ -7,6 +7,65 @@ import { summarize } from './presentation'
 import { calculateTeamStat } from './stats'
 import { Team } from './Team'
 
+type Event = {
+    time: number
+} & (
+    | {
+          type: 'spawn'
+      }
+    | {
+          type: 'hit'
+          position: number
+          isSwing: boolean
+          perfectJudgments: true[]
+      }
+)
+
+class BuffState {
+    public value = 0
+    public endTime?: number
+
+    public update(time: number) {
+        if (this.endTime && time > this.endTime) {
+            this.endTime = undefined
+            this.value = 0
+        }
+    }
+
+    public set(endTime: number, value: number) {
+        this.endTime = endTime
+        this.value = value
+    }
+}
+
+class StackedBuffState {
+    public value = 0
+
+    private buffs: {
+        endTime: number
+        value: number
+    }[] = []
+
+    public update(time: number) {
+        for (let i = this.buffs.length - 1; i >= 0; i--) {
+            if (time <= this.buffs[i].endTime) continue
+
+            this.value -= this.buffs[i].value
+            this.buffs.splice(i, 1)
+        }
+    }
+
+    public add(endTime: number, value: number) {
+        this.value += value
+        this.buffs.push({ endTime, value })
+    }
+}
+
+type SelfCoverage = {
+    endTime: number
+    retrigger: boolean
+}
+
 export function simulateScore(
     team: Team,
     memoryGalleryBonus: number[],
@@ -18,27 +77,6 @@ export function simulateScore(
     skillChanceBonus: number,
     count: number
 ) {
-    type Event = {
-        time: number
-    } & (
-        | {
-              type: 'spawn'
-          }
-        | {
-              type: 'hit'
-              position: number
-              isSwing: boolean
-              perfectJudgments: true[]
-          }
-    )
-
-    type Effect = {
-        time: number
-        index: number
-        type: 'plock' | 'psu' | 'param' | 'cf' | 'amp' | 'sru'
-        value: number
-    }
-
     const results: Record<'score' | 'hp' | 'coverage', number>[] = []
 
     const skillInfos = team.map((member) => {
@@ -157,7 +195,9 @@ export function simulateScore(
 
     for (let i = 0; i < count; i++) {
         const triggerCounters = team.map(() => 0)
-        const selfCoverageFlags = team.map(() => false)
+        const selfCoverages: (SelfCoverage | undefined)[] = team.map(
+            () => undefined
+        )
 
         let notes = 0
         let combo = 0
@@ -167,46 +207,43 @@ export function simulateScore(
         let overheal = 0
         let lastSkill: ((time: number, index: number) => void) | undefined
 
-        const effects: Effect[] = []
+        let ampState: number | undefined
+
+        const sruState = new BuffState()
+        const paramState = new BuffState()
+
+        const plockState = new StackedBuffState()
+        const psuState = new StackedBuffState()
+        const cfState = new StackedBuffState()
 
         for (const event of events) {
-            let isPlockActive = false
-            let paramMultiplier = 0
-            let psuBonus = 0
-            let cfBonus = 0
-            let skillChanceMultiplier = 1 + skillChanceBonus
+            sruState.update(event.time)
+            paramState.update(event.time)
+
+            plockState.update(event.time)
+            psuState.update(event.time)
+            cfState.update(event.time)
+
+            const isPlockActive = plockState.value > 0
+            const paramMultiplier = paramState.value
+            const psuBonus = psuState.value
+            const cfBonus = cfState.value
+            const skillChanceMultiplier = 1 + skillChanceBonus + sruState.value
 
             let tempLastSkill: typeof lastSkill
             const encores: number[] = []
 
-            const selfCoverageActivates: [number, number][] = []
+            selfCoverages.forEach((selfCoverage, index) => {
+                if (!selfCoverage) return
 
-            for (let i = effects.length - 1; i >= 0; i--) {
-                const { time, index } = effects[i]
+                if (event.time > selfCoverage.endTime) {
+                    selfCoverages[index] = undefined
 
-                if (time >= event.time) {
-                    processEffect(effects[i])
-                    continue
+                    if (selfCoverage.retrigger) {
+                        activateMemberSkill(selfCoverage.endTime, index)
+                    }
                 }
-                effects.splice(i, 1)
-
-                if (!selfCoverageFlags[index]) continue
-                selfCoverageFlags[index] = false
-
-                selfCoverageActivates.push([index, time])
-            }
-
-            if (selfCoverageActivates.length) {
-                let i = effects.length
-
-                selfCoverageActivates.forEach(([index, time]) =>
-                    activateMemberSkill(index, time, skillChanceMultiplier)
-                )
-
-                for (; i < effects.length; i++) {
-                    processEffect(effects[i])
-                }
-            }
+            })
 
             switch (event.type) {
                 case 'spawn': {
@@ -216,11 +253,7 @@ export function simulateScore(
                         if (triggerCounters[i] < count) return
                         triggerCounters[i] -= count
 
-                        activateMemberSkill(
-                            i,
-                            event.time,
-                            skillChanceMultiplier
-                        )
+                        activateMemberSkill(event.time, i)
                     })
                     break
                 }
@@ -250,11 +283,7 @@ export function simulateScore(
                         if (triggerCounters[i] < count) return
                         triggerCounters[i] -= count
 
-                        activateMemberSkill(
-                            i,
-                            event.time,
-                            skillChanceMultiplier
-                        )
+                        activateMemberSkill(event.time, i)
                     })
 
                     if (isPerfect) {
@@ -264,11 +293,7 @@ export function simulateScore(
                             if (triggerCounters[i] < count) return
                             triggerCounters[i] -= count
 
-                            activateMemberSkill(
-                                i,
-                                event.time,
-                                skillChanceMultiplier
-                            )
+                            activateMemberSkill(event.time, i)
                         })
                     }
 
@@ -318,33 +343,10 @@ export function simulateScore(
 
             lastSkill = tempLastSkill || lastSkill
 
-            function processEffect({ type, value }: Effect) {
-                switch (type) {
-                    case 'psu':
-                        psuBonus += value
-                        break
-                    case 'cf':
-                        cfBonus += value
-                        break
-                    case 'param':
-                        paramMultiplier = Math.max(paramMultiplier, value)
-                        break
-                    case 'plock':
-                        isPlockActive = true
-                        break
-                    case 'sru':
-                        skillChanceMultiplier *= 1 + value
-                        break
-                }
-            }
-
-            function activateMemberSkill(
-                index: number,
-                time: number,
-                skillChanceMultiplier: number
-            ) {
-                if (effects.some((e) => e.index === index)) {
-                    selfCoverageFlags[index] = true
+            function activateMemberSkill(time: number, index: number) {
+                const selfCoverage = selfCoverages[index]
+                if (selfCoverage) {
+                    selfCoverage.retrigger = true
                     return
                 }
 
@@ -441,18 +443,13 @@ export function simulateScore(
                             card.effect.values[level] / 100
                         )
                         break
-                    default:
-                        throw `Unknown effect: ${EffectType[card.effect.type]}`
                 }
 
                 function doPlock(duration: number) {
-                    tempLastSkill = (time, index) =>
-                        effects.push({
-                            time: time + duration,
-                            index,
-                            type: 'plock',
-                            value: 0,
-                        })
+                    tempLastSkill = (time, index) => {
+                        plockState.add(time + duration, 1)
+                        setSelfCoverage(time + duration, index)
+                    }
                     tempLastSkill(time, index)
                 }
 
@@ -478,13 +475,12 @@ export function simulateScore(
                 }
 
                 function doSRU(duration: number, value: number) {
-                    tempLastSkill = (time, index) =>
-                        effects.push({
-                            time: time + duration,
-                            index,
-                            type: 'sru',
-                            value,
-                        })
+                    tempLastSkill = (time, index) => {
+                        if (sruState.endTime) return
+
+                        sruState.set(time + duration, value)
+                        setSelfCoverage(time + duration, index)
+                    }
                     tempLastSkill(time, index)
                 }
 
@@ -493,58 +489,47 @@ export function simulateScore(
                 }
 
                 function doPSU(duration: number, value: number) {
-                    tempLastSkill = (time, index) =>
-                        effects.push({
-                            time: time + duration,
-                            index,
-                            type: 'psu',
-                            value,
-                        })
+                    tempLastSkill = (time, index) => {
+                        psuState.add(time + duration, value)
+                        setSelfCoverage(time + duration, index)
+                    }
                     tempLastSkill(time, index)
                 }
 
                 function doCF(duration: number, value: number) {
-                    tempLastSkill = (time, index) =>
-                        effects.push({
-                            time: time + duration,
-                            index,
-                            type: 'cf',
-                            value,
-                        })
+                    tempLastSkill = (time, index) => {
+                        cfState.add(time + duration, value)
+                        setSelfCoverage(time + duration, index)
+                    }
                     tempLastSkill(time, index)
                 }
 
                 function doAmp(value: number) {
-                    tempLastSkill = (time, index) =>
-                        effects.push({
-                            time: Number.POSITIVE_INFINITY,
-                            index,
-                            type: 'amp',
-                            value,
-                        })
+                    tempLastSkill = () => (ampState = ampState || value)
                     tempLastSkill(time, index)
                 }
 
                 function doParam(duration: number, value: number) {
-                    tempLastSkill = (time, index) =>
-                        effects.push({
-                            time: time + duration,
-                            index,
-                            type: 'param',
-                            value,
-                        })
+                    tempLastSkill = (time, index) => {
+                        if (paramState.endTime) return
+
+                        paramState.set(time + duration, value)
+                        setSelfCoverage(time + duration, index)
+                    }
                     tempLastSkill(time, index)
+                }
+
+                function setSelfCoverage(endTime: number, index: number) {
+                    selfCoverages[index] = { endTime, retrigger: false }
                 }
             }
 
             function consumeAmp() {
-                const index = effects.findIndex((e) => e.type === 'amp')
-                if (index === -1) return 0
+                if (!ampState) return 0
 
-                const effect = effects[index]
-                effects.splice(index, 1)
-
-                return effect.value
+                const temp = ampState
+                ampState = undefined
+                return temp
             }
         }
 
