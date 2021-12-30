@@ -63,7 +63,11 @@ export function getSkillDescription(
             break
         case EffectType.Param:
             descriptions.push(
-                `increase stat by ${effectValue}%`,
+                `increase stat by ${
+                    'type' in skill.trigger
+                        ? effectValue
+                        : Math.round((effectValue - 1) * 100)
+                }%`,
                 `for ${effectDuration} seconds`
             )
             break

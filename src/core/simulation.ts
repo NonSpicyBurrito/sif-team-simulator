@@ -392,7 +392,7 @@ export function simulateScore(
                         case EffectType.Param:
                             doParam(
                                 accessory.effect.durations[level],
-                                accessory.effect.values[level] / 100
+                                accessory.effect.values[level] - 1
                             )
                             break
                     }
