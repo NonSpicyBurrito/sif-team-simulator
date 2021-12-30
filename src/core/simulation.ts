@@ -154,7 +154,7 @@ export function simulateScore(
                 perfectTriggers.push([i, card.trigger.values[0]])
                 break
             default:
-                throw `Unknown trigger: ${EffectType[card.effect.type]}`
+                throw `Unknown trigger: ${TriggerType[card.trigger.type]}`
         }
     })
 
