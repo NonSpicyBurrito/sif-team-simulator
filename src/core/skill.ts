@@ -74,6 +74,9 @@ export function getSkillDescription(
         case EffectType.Amp:
             descriptions.push(`increase skill level by ${effectValue}`)
             break
+        case EffectType.Encore:
+            descriptions.push('repeat last activated skill')
+            break
         case EffectType.SRU:
             descriptions.push(
                 `increase skill activation chance by ${
