@@ -258,7 +258,7 @@ export function simulateScore(
             }
 
             let tempLastSkill: typeof lastSkill
-            const encores: number[] = []
+            const activatedEncores: number[] = []
 
             selfCoverages.forEach((selfCoverage, index) => {
                 if (!selfCoverage) return
@@ -359,15 +359,16 @@ export function simulateScore(
                 }
             }
 
-            if (encores.length) {
+            if (activatedEncores.length) {
                 const skill = tempLastSkill || lastSkill
                 if (skill) {
-                    encores.forEach((index) => skill(event.time, index))
+                    activatedEncores.forEach((index) =>
+                        skill(event.time, index)
+                    )
                 }
 
                 lastSkill = undefined
             }
-
             lastSkill = tempLastSkill || lastSkill
 
             function activateMemberSkill(time: number, index: number) {
@@ -559,7 +560,7 @@ export function simulateScore(
 
                 function doEncore(level: number) {
                     if (level) ampState = level
-                    encores.push(index)
+                    activatedEncores.push(index)
                 }
 
                 function doPSU(duration: number, value: number) {
