@@ -375,9 +375,7 @@ export function simulateScore(
 
             if (!ampState && tempAmp) {
                 if (import.meta.env.DEV) {
-                    if (!ampState) {
-                        log('Amp', tempAmp, 'activates')
-                    }
+                    log('Amp', tempAmp, 'activates')
                 }
 
                 ampState = tempAmp
@@ -393,7 +391,12 @@ export function simulateScore(
                     selfCoverage.retrigger = true
 
                     if (import.meta.env.DEV) {
-                        log('Member', index, 'in self coverage')
+                        log(
+                            'Member',
+                            index,
+                            'in self coverage until',
+                            selfCoverage.endTime
+                        )
                     }
                     return
                 }
@@ -559,7 +562,9 @@ export function simulateScore(
                             log(
                                 'Member',
                                 index,
-                                'activates SRU until',
+                                'activates SRU',
+                                value,
+                                'until',
                                 time + duration
                             )
                         }
@@ -581,7 +586,9 @@ export function simulateScore(
                             log(
                                 'Member',
                                 index,
-                                'activates PSU until',
+                                'activates PSU',
+                                value,
+                                'until',
                                 time + duration
                             )
                         }
@@ -598,7 +605,9 @@ export function simulateScore(
                             log(
                                 'Member',
                                 index,
-                                'activates CF until',
+                                'activates CF',
+                                value,
+                                'until',
                                 time + duration
                             )
                         }
