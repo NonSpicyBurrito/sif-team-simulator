@@ -265,8 +265,6 @@ export function simulateScore(
             }
 
             tempLastSkill = undefined
-            const activatedEncores: number[] = []
-
             tempAmp = 0
 
             selfCoverages.forEach((selfCoverage, index) => {
@@ -368,16 +366,6 @@ export function simulateScore(
                 }
             }
 
-            if (activatedEncores.length) {
-                const skill = tempLastSkill || lastSkill
-                if (skill) {
-                    activatedEncores.forEach((index) =>
-                        skill(event.time, index)
-                    )
-                }
-
-                lastSkill = undefined
-            }
             lastSkill = tempLastSkill || lastSkill
 
             if (!ampState && tempAmp) {
@@ -583,7 +571,9 @@ export function simulateScore(
                 }
 
                 function doEncore() {
-                    activatedEncores.push(index)
+                    ;(tempLastSkill || lastSkill)?.(time, index)
+
+                    lastSkill = undefined
                 }
 
                 function doPSU(duration: number, value: number) {
