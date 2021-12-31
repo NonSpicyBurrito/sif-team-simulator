@@ -168,9 +168,9 @@ export function simulateScore(
         }
     })
 
-    orderTriggers(noteTriggers)
-    orderTriggers(comboTriggers)
-    orderTriggers(perfectTriggers)
+    orderTriggers(noteTriggers, [2, 1, 0])
+    orderTriggers(comboTriggers, [2, 1, 0])
+    orderTriggers(perfectTriggers, [2, 1, 0])
 
     const sisScoreMultipliers = team.map(() => 1)
     const sisHealMultipliers = team.map(() => 0)
@@ -221,6 +221,12 @@ export function simulateScore(
     }
 
     for (let i = 0; i < count; i++) {
+        const coinFlip = Math.random() < 0.5
+
+        if (import.meta.env.DEV) {
+            log('coinFlip', coinFlip)
+        }
+
         const triggerCounters = team.map(() => 0)
         const selfCoverages: (SelfCoverage | undefined)[] = team.map(
             () => undefined
@@ -279,6 +285,8 @@ export function simulateScore(
                 }
             })
 
+            const triggers: [number][] = []
+
             switch (event.type) {
                 case 'spawn': {
                     noteTriggers.forEach(([i, count]) => {
@@ -287,7 +295,7 @@ export function simulateScore(
                         if (triggerCounters[i] < count) return
                         triggerCounters[i] -= count
 
-                        activateMemberSkill(event.time, i)
+                        triggers.push([i])
                     })
                     break
                 }
@@ -317,7 +325,7 @@ export function simulateScore(
                         if (triggerCounters[i] < count) return
                         triggerCounters[i] -= count
 
-                        activateMemberSkill(event.time, i)
+                        triggers.push([i])
                     })
 
                     if (isPerfect) {
@@ -327,7 +335,7 @@ export function simulateScore(
                             if (triggerCounters[i] < count) return
                             triggerCounters[i] -= count
 
-                            activateMemberSkill(event.time, i)
+                            triggers.push([i])
                         })
                     }
 
@@ -364,6 +372,34 @@ export function simulateScore(
                     score += Math.min(1000, cfBonus * cfMultiplier)
                     break
                 }
+            }
+
+            if (triggers.length) {
+                if (coinFlip) {
+                    let hasAmp = false
+                    let hasEncore = false
+                    let hasNormal = false
+
+                    triggers.forEach(([i]) => {
+                        switch (skillInfos[i].card.effect.type) {
+                            case EffectType.Amp:
+                                hasAmp = true
+                                break
+                            case EffectType.Encore:
+                                hasEncore = true
+                                break
+                            default:
+                                hasNormal = true
+                                break
+                        }
+                    })
+
+                    if (hasAmp && hasEncore && hasNormal) {
+                        orderTriggers(triggers, [0, 1, 2])
+                    }
+                }
+
+                triggers.forEach(([i]) => activateMemberSkill(event.time, i))
             }
 
             lastSkill = tempLastSkill || lastSkill
@@ -661,15 +697,20 @@ export function simulateScore(
 
     return summarize(results)
 
-    function orderTriggers(triggers: [number, number][]) {
+    function orderTriggers(
+        triggers: [number, ...unknown[]][],
+        priorities: [number, number, number]
+    ) {
         triggers.sort(([a], [b]) => getPriority(a) - getPriority(b))
 
         function getPriority(index: number) {
             switch (skillInfos[index].card.effect.type) {
+                case EffectType.Amp:
+                    return priorities[0]
                 case EffectType.Encore:
-                    return 1
+                    return priorities[1]
                 default:
-                    return 0
+                    return priorities[2]
             }
         }
     }
