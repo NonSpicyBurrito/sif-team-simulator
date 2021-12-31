@@ -168,6 +168,10 @@ export function simulateScore(
         }
     })
 
+    orderTriggers(noteTriggers)
+    orderTriggers(comboTriggers)
+    orderTriggers(perfectTriggers)
+
     const sisScoreMultipliers = team.map(() => 1)
     const sisHealMultipliers = team.map(() => 0)
 
@@ -228,9 +232,12 @@ export function simulateScore(
         let score = 0
         let hearts = 0
         let overheal = 0
+
         let lastSkill: ((time: number, index: number) => void) | undefined
+        let tempLastSkill: typeof lastSkill
 
         let ampState: number | undefined
+        let tempAmp = 0
 
         const sruState = new BuffState()
         const paramState = new BuffState()
@@ -257,10 +264,10 @@ export function simulateScore(
                 log('Event', event.type, 'at', event.time)
             }
 
-            let tempLastSkill: typeof lastSkill
+            tempLastSkill = undefined
             const activatedEncores: number[] = []
 
-            let tempAmp = 0
+            tempAmp = 0
 
             selfCoverages.forEach((selfCoverage, index) => {
                 if (!selfCoverage) return
@@ -431,7 +438,7 @@ export function simulateScore(
                             )
                             break
                         case EffectType.Encore:
-                            doEncore(level)
+                            doEncore()
                             break
                         case EffectType.PSU:
                             doPSU(
@@ -474,7 +481,7 @@ export function simulateScore(
                         )
                         break
                     case EffectType.Encore:
-                        doEncore(level)
+                        doEncore()
                         break
                     case EffectType.PSU:
                         doPSU(
@@ -575,8 +582,7 @@ export function simulateScore(
                     tempLastSkill(time, index)
                 }
 
-                function doEncore(level: number) {
-                    if (level) ampState = level
+                function doEncore() {
                     activatedEncores.push(index)
                 }
 
@@ -619,8 +625,8 @@ export function simulateScore(
                 }
 
                 function doAmp(value: number) {
-                    tempLastSkill = () => (tempAmp = value)
-                    tempLastSkill(time, index)
+                    tempAmp = value
+                    tempLastSkill = () => doAmp(value)
                 }
 
                 function doParam(duration: number, value: number) {
@@ -664,6 +670,19 @@ export function simulateScore(
     }
 
     return summarize(results)
+
+    function orderTriggers(triggers: [number, number][]) {
+        triggers.sort(([a], [b]) => getPriority(a) - getPriority(b))
+
+        function getPriority(index: number) {
+            switch (skillInfos[index].card.effect.type) {
+                case EffectType.Encore:
+                    return 1
+                default:
+                    return 0
+            }
+        }
+    }
 
     function log(...args: unknown[]) {
         if (count === 1) console.log(...args)
