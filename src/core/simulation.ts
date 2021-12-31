@@ -260,6 +260,8 @@ export function simulateScore(
             let tempLastSkill: typeof lastSkill
             const activatedEncores: number[] = []
 
+            let tempAmp = 0
+
             selfCoverages.forEach((selfCoverage, index) => {
                 if (!selfCoverage) return
 
@@ -370,6 +372,16 @@ export function simulateScore(
                 lastSkill = undefined
             }
             lastSkill = tempLastSkill || lastSkill
+
+            if (!ampState && tempAmp) {
+                if (import.meta.env.DEV) {
+                    if (!ampState) {
+                        log('Amp', tempAmp, 'activates')
+                    }
+                }
+
+                ampState = tempAmp
+            }
 
             function activateMemberSkill(time: number, index: number) {
                 if (import.meta.env.DEV) {
@@ -598,15 +610,7 @@ export function simulateScore(
                 }
 
                 function doAmp(value: number) {
-                    tempLastSkill = (time, index) => {
-                        if (import.meta.env.DEV) {
-                            if (!ampState) {
-                                log('Member', index, 'activates Amp', value)
-                            }
-                        }
-
-                        ampState = ampState || value
-                    }
+                    tempLastSkill = () => (tempAmp = value)
                     tempLastSkill(time, index)
                 }
 
