@@ -415,7 +415,7 @@ export function simulateScore(
                             )
                             break
                         case EffectType.Encore:
-                            doEncore()
+                            doEncore(level)
                             break
                         case EffectType.PSU:
                             doPSU(
@@ -458,7 +458,7 @@ export function simulateScore(
                         )
                         break
                     case EffectType.Encore:
-                        doEncore()
+                        doEncore(level)
                         break
                     case EffectType.PSU:
                         doPSU(
@@ -557,7 +557,8 @@ export function simulateScore(
                     tempLastSkill(time, index)
                 }
 
-                function doEncore() {
+                function doEncore(level: number) {
+                    if (level) ampState = level
                     encores.push(index)
                 }
 
