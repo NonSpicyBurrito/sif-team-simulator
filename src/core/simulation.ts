@@ -664,7 +664,7 @@ export function simulateScore(
 
                 function doAmp(value: number) {
                     tempAmp = value
-                    tempLastSkill = () => doAmp(value)
+                    tempLastSkill = tempLastSkill || (() => doAmp(value))
                 }
 
                 function doParam(duration: number, value: number) {
@@ -690,7 +690,7 @@ export function simulateScore(
                 }
 
                 function doSkill(skill: (time: number, index: number) => void) {
-                    tempLastSkill = skill
+                    tempLastSkill = tempLastSkill || skill
                     skill(time, index)
                 }
             }
@@ -722,11 +722,11 @@ export function simulateScore(
         function getPriority(index: number) {
             switch (skillInfos[index].card.effect.type) {
                 case EffectType.Amp:
-                    return priorities[0]
+                    return priorities[0] * 100 - index
                 case EffectType.Encore:
-                    return priorities[1]
+                    return priorities[1] * 100 - index
                 default:
-                    return priorities[2]
+                    return priorities[2] * 100 - index
             }
         }
     }
