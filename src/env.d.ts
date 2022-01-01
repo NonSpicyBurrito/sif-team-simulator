@@ -6,3 +6,6 @@ declare module '*.vue' {
     const component: DefineComponent<{}, {}, any>
     export default component
 }
+
+declare const VITE_APP_BRANCH: string
+declare const VITE_APP_SHA1: string

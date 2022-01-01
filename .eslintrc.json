@@ -20,6 +20,8 @@
         "prettier"
     ],
     "globals": {
+        "VITE_APP_BRANCH": "readonly",
+        "VITE_APP_SHA1": "readonly",
         "defineProps": "readonly",
         "defineEmits": "readonly"
     },
