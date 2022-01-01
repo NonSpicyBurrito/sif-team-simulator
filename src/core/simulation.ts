@@ -163,8 +163,6 @@ export function simulateScore(
             case TriggerType.Perfect:
                 perfectTriggers.push([i, card.trigger.values[0]])
                 break
-            default:
-                throw `Unknown trigger: ${TriggerType[card.trigger.type]}`
         }
     })
 
