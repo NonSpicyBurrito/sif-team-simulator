@@ -3,6 +3,7 @@ import Field from '../components/Field.vue'
 
 const branch = VITE_APP_BRANCH
 const sha1 = VITE_APP_SHA1
+const buildTime = new Date(VITE_APP_BUILD_TIME).toLocaleString()
 </script>
 
 <template>
@@ -26,6 +27,11 @@ const sha1 = VITE_APP_SHA1
         <Field label="SHA1">
             <div class="py-1 sm:text-center">
                 {{ sha1 }}
+            </div>
+        </Field>
+        <Field label="Build Time">
+            <div class="py-1 sm:text-center">
+                {{ buildTime }}
             </div>
         </Field>
     </div>

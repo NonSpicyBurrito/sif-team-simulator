@@ -22,6 +22,7 @@
     "globals": {
         "VITE_APP_BRANCH": "readonly",
         "VITE_APP_SHA1": "readonly",
+        "VITE_APP_BUILD_TIME": "readonly",
         "defineProps": "readonly",
         "defineEmits": "readonly"
     },
