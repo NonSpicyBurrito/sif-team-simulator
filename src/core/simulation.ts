@@ -549,7 +549,7 @@ export function simulateScore(
                 }
 
                 function doPlock(duration: number) {
-                    tempLastSkill = (time, index) => {
+                    doSkill((time, index) => {
                         if (import.meta.env.DEV) {
                             log(
                                 'Member',
@@ -561,14 +561,13 @@ export function simulateScore(
 
                         plockState.add(time + duration, 1)
                         setSelfCoverage(time + duration, index)
-                    }
-                    tempLastSkill(time, index)
+                    })
                 }
 
                 function doHeal(value: number) {
                     const multiplier = sisHealMultipliers[index]
 
-                    tempLastSkill = (time, index) => {
+                    doSkill((time, index) => {
                         if (import.meta.env.DEV) {
                             log(
                                 'Member',
@@ -586,25 +585,23 @@ export function simulateScore(
                         if (overheal < maxHp) return
                         hearts++
                         overheal -= maxHp
-                    }
-                    tempLastSkill(time, index)
+                    })
                 }
 
                 function doScore(value: number) {
                     const multiplier = sisScoreMultipliers[index]
 
-                    tempLastSkill = (time, index) => {
+                    doSkill((time, index) => {
                         if (import.meta.env.DEV) {
                             log('Member', index, 'scores', value * multiplier)
                         }
 
                         score += value * multiplier
-                    }
-                    tempLastSkill(time, index)
+                    })
                 }
 
                 function doSRU(duration: number, value: number) {
-                    tempLastSkill = (time, index) => {
+                    doSkill((time, index) => {
                         if (sruState.endTime) return
 
                         if (import.meta.env.DEV) {
@@ -620,8 +617,7 @@ export function simulateScore(
 
                         sruState.set(time + duration, value)
                         setSelfCoverage(time + duration, index)
-                    }
-                    tempLastSkill(time, index)
+                    })
                 }
 
                 function doEncore() {
@@ -631,7 +627,7 @@ export function simulateScore(
                 }
 
                 function doPSU(duration: number, value: number) {
-                    tempLastSkill = (time, index) => {
+                    doSkill((time, index) => {
                         if (import.meta.env.DEV) {
                             log(
                                 'Member',
@@ -645,12 +641,11 @@ export function simulateScore(
 
                         psuState.add(time + duration, value)
                         setSelfCoverage(time + duration, index)
-                    }
-                    tempLastSkill(time, index)
+                    })
                 }
 
                 function doCF(duration: number, value: number) {
-                    tempLastSkill = (time, index) => {
+                    doSkill((time, index) => {
                         if (import.meta.env.DEV) {
                             log(
                                 'Member',
@@ -664,8 +659,7 @@ export function simulateScore(
 
                         cfState.add(time + duration, value)
                         setSelfCoverage(time + duration, index)
-                    }
-                    tempLastSkill(time, index)
+                    })
                 }
 
                 function doAmp(value: number) {
@@ -674,7 +668,7 @@ export function simulateScore(
                 }
 
                 function doParam(duration: number, value: number) {
-                    tempLastSkill = (time, index) => {
+                    doSkill((time, index) => {
                         if (paramState.endTime) return
 
                         if (import.meta.env.DEV) {
@@ -688,12 +682,16 @@ export function simulateScore(
 
                         paramState.set(time + duration, value)
                         setSelfCoverage(time + duration, index)
-                    }
-                    tempLastSkill(time, index)
+                    })
                 }
 
                 function setSelfCoverage(endTime: number, index: number) {
                     selfCoverages[index] = { endTime, retrigger: false }
+                }
+
+                function doSkill(skill: (time: number, index: number) => void) {
+                    tempLastSkill = skill
+                    skill(time, index)
                 }
             }
 
