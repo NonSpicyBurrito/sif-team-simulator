@@ -526,6 +526,9 @@ export function simulateScore(
                                 accessory.effect.values[level]
                             )
                             break
+                        case EffectType.Amp:
+                            doAmp(accessory.effect.values[level])
+                            break
                         case EffectType.Param:
                             doParam(
                                 accessory.effect.durations[level],
