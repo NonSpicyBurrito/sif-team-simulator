@@ -411,10 +411,6 @@ export function simulateScore(
             }
 
             function activateMemberSkill(time: number, index: number) {
-                if (import.meta.env.DEV) {
-                    log('Attempts to activate member', index, 'at', event.time)
-                }
-
                 const selfCoverage = selfCoverages[index]
                 if (selfCoverage) {
                     selfCoverage.retrigger = true
@@ -423,7 +419,7 @@ export function simulateScore(
                         log(
                             'Member',
                             index,
-                            'in self coverage until',
+                            'activates self coverage retrigger at',
                             selfCoverage.endTime
                         )
                     }
@@ -432,11 +428,35 @@ export function simulateScore(
 
                 const { card, accessory } = skillInfos[index]
 
+                if (import.meta.env.DEV) {
+                    log(
+                        'Attempts to activate member',
+                        index,
+                        'at',
+                        event.time,
+                        'with',
+                        (card.trigger.chances[0] * skillChanceMultiplier) / 100,
+                        'skill chance'
+                    )
+                }
+
                 if (
                     Math.random() >=
                     (card.trigger.chances[0] * skillChanceMultiplier) / 100
                 ) {
                     if (!accessory) return
+
+                    log(
+                        'Attempts to activate member',
+                        index,
+                        'at',
+                        event.time,
+                        'with',
+                        (accessory.trigger.chances[0] * skillChanceMultiplier) /
+                            100,
+                        'accessory chance'
+                    )
+
                     if (
                         Math.random() >=
                         (accessory.trigger.chances[0] * skillChanceMultiplier) /
