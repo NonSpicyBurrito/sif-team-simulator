@@ -789,7 +789,7 @@ export function simulateScore(
                         case 'number':
                             return arg.toString()
                         default:
-                            return JSON.stringify(arg)
+                            return JSON.stringify(arg, null, 1)
                     }
                 })
                 .join(' ')

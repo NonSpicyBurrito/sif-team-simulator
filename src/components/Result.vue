@@ -48,7 +48,7 @@ const selected = ref<keyof typeof sections>('score')
             <p
                 v-for="(line, index) in summary.diagnostics"
                 :key="index"
-                class="py-1 border-b-[1px] border-gray-700"
+                class="p-1 border-b-[1px] border-gray-700"
             >
                 {{ line }}
             </p>
