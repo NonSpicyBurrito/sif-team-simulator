@@ -621,6 +621,18 @@ export function simulateScore(
                 }
 
                 function doEncore() {
+                    if (import.meta.env.DEV) {
+                        if (tempLastSkill || lastSkill) {
+                            log('Member', index, 'activates encore')
+                        } else {
+                            log(
+                                'Member',
+                                index,
+                                'activates encore but no skill to copy'
+                            )
+                        }
+                    }
+
                     ;(tempLastSkill || lastSkill)?.(time, index)
 
                     lastSkill = undefined
