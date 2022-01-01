@@ -42,4 +42,16 @@ const selected = ref<keyof typeof sections>('score')
             :formatter="sections[selected][1]"
         />
     </div>
+
+    <div v-if="summary.diagnostics.length" class="surface">
+        <div class="overflow-y-auto h-[75vh] font-mono">
+            <p
+                v-for="(line, index) in summary.diagnostics"
+                :key="index"
+                class="py-1 border-b-[1px] border-gray-700"
+            >
+                {{ line }}
+            </p>
+        </div>
+    </div>
 </template>

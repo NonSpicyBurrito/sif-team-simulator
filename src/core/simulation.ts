@@ -78,6 +78,7 @@ export function simulateScore(
     count: number
 ) {
     const results: Record<'score' | 'hp' | 'coverage', number>[] = []
+    const diagnostics: string[] = []
 
     const triggerTypes = new Set<TriggerType>()
     const effectTypes = new Set<EffectType>()
@@ -752,7 +753,10 @@ export function simulateScore(
         }
     }
 
-    return summarize(results)
+    return {
+        ...summarize(results),
+        diagnostics,
+    }
 
     function orderTriggers(
         triggers: [number, ...unknown[]][],
@@ -776,6 +780,20 @@ export function simulateScore(
         if (count !== 1) return
 
         console.log(...args)
+        diagnostics.push(
+            args
+                .map((arg) => {
+                    switch (typeof arg) {
+                        case 'string':
+                            return arg
+                        case 'number':
+                            return arg.toString()
+                        default:
+                            return JSON.stringify(arg)
+                    }
+                })
+                .join(' ')
+        )
     }
 }
 
