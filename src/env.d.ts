@@ -10,3 +10,4 @@ declare module '*.vue' {
 declare const VITE_APP_BRANCH: string
 declare const VITE_APP_SHA1: string
 declare const VITE_APP_BUILD_TIME: number
+declare const VITE_APP_DIAGNOSTICS: boolean

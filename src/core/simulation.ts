@@ -205,7 +205,7 @@ export function simulateScore(
     })
     events.sort((a, b) => a.time - b.time)
 
-    if (import.meta.env.DEV) {
+    if (VITE_APP_DIAGNOSTICS) {
         log('skillInfos', skillInfos)
         log('onScreenDuration', onScreenDuration)
         log('attributeMultipliers', attributeMultipliers)
@@ -221,7 +221,7 @@ export function simulateScore(
     for (let i = 0; i < count; i++) {
         const coinFlip = Math.random() < 0.5
 
-        if (import.meta.env.DEV) {
+        if (VITE_APP_DIAGNOSTICS) {
             log('coinFlip', coinFlip)
         }
 
@@ -253,7 +253,7 @@ export function simulateScore(
         for (const event of events) {
             tickSelfCoverage(event.time)
 
-            if (import.meta.env.DEV) {
+            if (VITE_APP_DIAGNOSTICS) {
                 log('Event', event.type, 'at', event.time)
             }
 
@@ -435,7 +435,7 @@ export function simulateScore(
             lastSkill = tempLastSkill || lastSkill
 
             if (!ampState && tempAmp) {
-                if (import.meta.env.DEV) {
+                if (VITE_APP_DIAGNOSTICS) {
                     log('Amp', tempAmp, 'activates')
                 }
 
@@ -447,7 +447,7 @@ export function simulateScore(
                 if (selfCoverage) {
                     selfCoverage.retrigger = true
 
-                    if (import.meta.env.DEV) {
+                    if (VITE_APP_DIAGNOSTICS) {
                         log(
                             'Member',
                             index,
@@ -460,7 +460,7 @@ export function simulateScore(
 
                 const { card, accessory } = skillInfos[index]
 
-                if (import.meta.env.DEV) {
+                if (VITE_APP_DIAGNOSTICS) {
                     log(
                         'Attempts to activate member',
                         index,
@@ -585,7 +585,7 @@ export function simulateScore(
 
                 function doPlock(duration: number) {
                     doSkill((time, index) => {
-                        if (import.meta.env.DEV) {
+                        if (VITE_APP_DIAGNOSTICS) {
                             log(
                                 'Member',
                                 index,
@@ -603,7 +603,7 @@ export function simulateScore(
                     const multiplier = sisHealMultipliers[index]
 
                     doSkill((time, index) => {
-                        if (import.meta.env.DEV) {
+                        if (VITE_APP_DIAGNOSTICS) {
                             log(
                                 'Member',
                                 index,
@@ -627,7 +627,7 @@ export function simulateScore(
                     const multiplier = sisScoreMultipliers[index]
 
                     doSkill((time, index) => {
-                        if (import.meta.env.DEV) {
+                        if (VITE_APP_DIAGNOSTICS) {
                             log('Member', index, 'scores', value * multiplier)
                         }
 
@@ -639,7 +639,7 @@ export function simulateScore(
                     doSkill((time, index) => {
                         if (sruState.endTime) return
 
-                        if (import.meta.env.DEV) {
+                        if (VITE_APP_DIAGNOSTICS) {
                             log(
                                 'Member',
                                 index,
@@ -656,7 +656,7 @@ export function simulateScore(
                 }
 
                 function doEncore() {
-                    if (import.meta.env.DEV) {
+                    if (VITE_APP_DIAGNOSTICS) {
                         if (tempLastSkill || lastSkill) {
                             log('Member', index, 'activates encore')
                         } else {
@@ -675,7 +675,7 @@ export function simulateScore(
 
                 function doPSU(duration: number, value: number) {
                     doSkill((time, index) => {
-                        if (import.meta.env.DEV) {
+                        if (VITE_APP_DIAGNOSTICS) {
                             log(
                                 'Member',
                                 index,
@@ -693,7 +693,7 @@ export function simulateScore(
 
                 function doCF(duration: number, value: number) {
                     doSkill((time, index) => {
-                        if (import.meta.env.DEV) {
+                        if (VITE_APP_DIAGNOSTICS) {
                             log(
                                 'Member',
                                 index,
@@ -718,7 +718,7 @@ export function simulateScore(
                     doSkill((time, index) => {
                         if (paramState.endTime) return
 
-                        if (import.meta.env.DEV) {
+                        if (VITE_APP_DIAGNOSTICS) {
                             log(
                                 'Member',
                                 index,
@@ -773,7 +773,9 @@ export function simulateScore(
     }
 
     function log(...args: unknown[]) {
-        if (count === 1) console.log(...args)
+        if (count !== 1) return
+
+        console.log(...args)
     }
 }
 
