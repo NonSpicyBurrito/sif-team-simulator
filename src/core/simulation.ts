@@ -26,7 +26,7 @@ class BuffState {
     public endTime?: number
 
     public update(time: number) {
-        if (this.endTime && time > this.endTime) {
+        if (this.endTime && time >= this.endTime) {
             this.endTime = undefined
             this.value = 0
         }
@@ -48,7 +48,7 @@ class StackedBuffState {
 
     public update(time: number) {
         for (let i = this.buffs.length - 1; i >= 0; i--) {
-            if (time <= this.buffs[i].endTime) continue
+            if (time < this.buffs[i].endTime) continue
 
             this.value -= this.buffs[i].value
             this.buffs.splice(i, 1)
@@ -251,37 +251,13 @@ export function simulateScore(
         const cfState = new StackedBuffState()
 
         for (const event of events) {
-            sruState.update(event.time)
-            paramState.update(event.time)
-
-            plockState.update(event.time)
-            psuState.update(event.time)
-            cfState.update(event.time)
-
-            const isPlockActive = plockState.value > 0
-            const paramMultiplier = paramState.value
-            const psuBonus = psuState.value
-            const cfBonus = cfState.value
-            const skillChanceMultiplier = 1 + skillChanceBonus + sruState.value
+            tickSelfCoverage(event.time)
 
             if (import.meta.env.DEV) {
                 log('Event', event.type, 'at', event.time)
             }
 
-            tempLastSkill = undefined
-            tempAmp = 0
-
-            selfCoverages.forEach((selfCoverage, index) => {
-                if (!selfCoverage) return
-
-                if (event.time > selfCoverage.endTime) {
-                    selfCoverages[index] = undefined
-
-                    if (selfCoverage.retrigger) {
-                        activateMemberSkill(selfCoverage.endTime, index)
-                    }
-                }
-            })
+            tickBuffs(event.time)
 
             const triggers: [number][] = []
 
@@ -298,6 +274,11 @@ export function simulateScore(
                     break
                 }
                 case 'hit': {
+                    const isPlockActive = plockState.value > 0
+                    const paramMultiplier = paramState.value
+                    const psuBonus = psuState.value
+                    const cfBonus = cfState.value
+
                     const baseJudgments = event.perfectJudgments.map(
                         () => Math.random() < perfectRate
                     )
@@ -372,7 +353,58 @@ export function simulateScore(
                 }
             }
 
-            if (triggers.length) {
+            if (!triggers.length) continue
+            tickSkills(event.time, triggers)
+        }
+
+        results.push({
+            score,
+            hp: hearts + overheal / maxHp,
+            coverage: covered / notes,
+        })
+
+        function tickSelfCoverage(time: number) {
+            const triggersByTime = new Map<number, [number][]>()
+
+            selfCoverages.forEach((selfCoverage, index) => {
+                if (!selfCoverage) return
+                if (selfCoverage.endTime > time) return
+                if (!selfCoverage.retrigger) return
+
+                const triggers = triggersByTime.get(selfCoverage.endTime) || []
+                triggers.push([index])
+                triggersByTime.set(selfCoverage.endTime, triggers)
+            })
+
+            if (!triggersByTime.size) return
+            ;[...triggersByTime.entries()]
+                .sort(([a], [b]) => a - b)
+                .forEach(([time, triggers]) => {
+                    triggers.forEach(
+                        ([index]) => (selfCoverages[index] = undefined)
+                    )
+
+                    tickBuffs(time)
+                    tickSkills(time, triggers)
+                })
+        }
+
+        function tickBuffs(time: number) {
+            sruState.update(time)
+            paramState.update(time)
+
+            plockState.update(time)
+            psuState.update(time)
+            cfState.update(time)
+        }
+
+        function tickSkills(time: number, triggers: [number][]) {
+            tempLastSkill = undefined
+            tempAmp = 0
+
+            const skillChanceMultiplier = 1 + skillChanceBonus + sruState.value
+
+            if (triggers.length >= 3) {
                 if (coinFlip) {
                     let hasAmp = false
                     let hasEncore = false
@@ -396,9 +428,9 @@ export function simulateScore(
                         orderTriggers(triggers, [0, 1, 2])
                     }
                 }
-
-                triggers.forEach(([i]) => activateMemberSkill(event.time, i))
             }
+
+            triggers.forEach(([i]) => activateMemberSkill(time, i))
 
             lastSkill = tempLastSkill || lastSkill
 
@@ -433,7 +465,7 @@ export function simulateScore(
                         'Attempts to activate member',
                         index,
                         'at',
-                        event.time,
+                        time,
                         'with',
                         (card.trigger.chances[0] * skillChanceMultiplier) / 100,
                         'skill chance'
@@ -450,7 +482,7 @@ export function simulateScore(
                         'Attempts to activate member',
                         index,
                         'at',
-                        event.time,
+                        time,
                         'with',
                         (accessory.trigger.chances[0] * skillChanceMultiplier) /
                             100,
@@ -706,21 +738,15 @@ export function simulateScore(
                     skill(time, index)
                 }
             }
-
-            function consumeAmp() {
-                if (!ampState) return 0
-
-                const temp = ampState
-                ampState = undefined
-                return temp
-            }
         }
 
-        results.push({
-            score,
-            hp: hearts + overheal / maxHp,
-            coverage: covered / notes,
-        })
+        function consumeAmp() {
+            if (!ampState) return 0
+
+            const temp = ampState
+            ampState = undefined
+            return temp
+        }
     }
 
     return summarize(results)
