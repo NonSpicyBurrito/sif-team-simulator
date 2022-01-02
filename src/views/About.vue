@@ -28,7 +28,7 @@ const diagnostics = VITE_APP_DIAGNOSTICS
             </div>
         </Field>
         <Field label="SHA1">
-            <div class="py-1 sm:text-center">
+            <div class="py-1 break-all sm:text-center">
                 {{ sha1 }}
             </div>
         </Field>
