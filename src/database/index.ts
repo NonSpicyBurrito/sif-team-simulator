@@ -12,15 +12,20 @@ export const cards = new Map<number, Card>()
 export const characters = new Map<number, Character>()
 export const charts = new Map<string, Chart>()
 export const sises = new Map<string, Sis>([
-    ['Char', { type: 'self', value: 0.29 }],
-    ['Petit', { type: 'self', value: 0.13 }],
-    ['Grand', { type: 'self', value: 0.53 }],
-    ['Midi', { type: 'self', value: 0.21 }],
-    ['Bloom', { type: 'team', value: 0.04 }],
-    ['Veil', { type: 'team', value: 0.024 }],
     ['Charm', { type: 'score', value: 2.5 }],
     ['Heal', { type: 'heal', value: 480 }],
     ['Trick', { type: 'plock', value: 0.33 }],
+    ['Grand', { type: 'self', value: 0.53 }],
+    ['Char', { type: 'self', value: 0.29 }],
+    ['Midi', { type: 'self', value: 0.21 }],
+    ['Petit', { type: 'self', value: 0.13 }],
+    ['Trill', { type: 'self', value: 0.28 }],
+    ['Cross', { type: 'self', value: 0.16 }],
+    ['Ring', { type: 'self', value: 0.1 }],
+    ['Bloom', { type: 'team', value: 0.04 }],
+    ['Veil', { type: 'team', value: 0.024 }],
+    ['Aura', { type: 'team', value: 0.018 }],
+    ['Nonet', { type: 'team', value: 0.042 }],
 ])
 
 Promise.all([
