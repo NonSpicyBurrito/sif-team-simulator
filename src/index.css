@@ -31,7 +31,8 @@ select {
     @apply shadow-sm;
 }
 
-input[type='number'] {
+input[type='number'],
+input[type='text'] {
     @apply px-3 py-1;
     @apply bg-gray-700;
     @apply rounded-md;
