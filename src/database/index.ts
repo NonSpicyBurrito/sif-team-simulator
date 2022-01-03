@@ -26,6 +26,7 @@ export const sises = new Map<string, Sis>([
     ['Veil', { type: 'team', value: 0.024 }],
     ['Aura', { type: 'team', value: 0.018 }],
     ['Nonet', { type: 'team', value: 0.042 }],
+    ['Nonet Petit', { type: 'team', value: 0.015 }],
     ['Wink', { type: 'flat', value: 1400 }],
     ['Perfume', { type: 'flat', value: 450 }],
     ['Kiss', { type: 'flat', value: 200 }],
