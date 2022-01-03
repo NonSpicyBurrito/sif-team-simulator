@@ -403,7 +403,8 @@ export function simulateScore(
             tempLastSkill = undefined
             tempAmp = 0
 
-            const skillChanceMultiplier = 1 + skillChanceBonus + sruState.value
+            const skillChanceMultiplier =
+                (1 + skillChanceBonus) * (1 + sruState.value)
 
             if (triggers.length >= 3) {
                 if (coinFlip) {
