@@ -7,14 +7,13 @@ import { extract } from './utils.mjs'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const axios = Axios.default
 
-const accessoriesPath = `${__dirname}/../../../public/database/accessories.json`
-const charactersPath = `${__dirname}/../../../public/database/characters.json`
+const path = `${__dirname}/../../../public/database/accessories.json`
 
-const accessories = JSON.parse(readFileSync(accessoriesPath))
+const accessories = JSON.parse(readFileSync(path))
 
 const data = await getData()
 
-for (const accessory of data.accessories) {
+for (const accessory of data) {
     if (accessories[accessory.id]) continue
 
     const data = await getAccessoryData(
@@ -26,8 +25,7 @@ for (const accessory of data.accessories) {
     console.log(accessory.id, data.character)
 }
 
-writeFileSync(accessoriesPath, JSON.stringify(accessories))
-writeFileSync(charactersPath, JSON.stringify(data.characters))
+writeFileSync(path, JSON.stringify(accessories))
 
 async function getData() {
     const html = (
@@ -38,25 +36,19 @@ async function getData() {
 
     const accessories = JSON.parse(extract(html, 'var accessories=', ';'))
     const cards = JSON.parse(extract(html, 'var cards=', ';'))
-    const members = JSON.parse(extract(html, 'var members=', ';'))
 
-    return {
-        accessories: accessories
-            .map((data, index) => ({
-                data,
-                index,
-            }))
-            .filter(({ data }) => !!data && data[4] === 4)
-            .map(({ data: [, , , id, , cardId, effectType], index }) => ({
-                id,
-                effectType,
-                character: cardId && cards[cardId][0],
-                index,
-            })),
-        characters: Object.fromEntries(
-            Object.entries(members).map(([id, names]) => [id, names[1]])
-        ),
-    }
+    return accessories
+        .map((data, index) => ({
+            data,
+            index,
+        }))
+        .filter(({ data }) => !!data && data[4] === 4)
+        .map(({ data: [, , , id, , cardId, effectType], index }) => ({
+            id,
+            effectType,
+            character: cardId && cards[cardId][0],
+            index,
+        }))
 }
 
 async function getAccessoryData(index, effectType, character) {
