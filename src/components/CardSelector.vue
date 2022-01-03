@@ -79,7 +79,7 @@ const counter = useInterval(50)
 watch(debouncedSearch, () => (start.value = counter.value))
 
 const displayedIds = computed(() =>
-    ids.value.slice(0, (counter.value - start.value) * 10)
+    ids.value.slice(0, (counter.value - start.value + 1) * 10)
 )
 
 function enumKeys<T>(enumType: Record<string, string | T>) {
