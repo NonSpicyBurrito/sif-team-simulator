@@ -81,9 +81,6 @@ export function simulateScore(
     const results: Record<'score' | 'hp' | 'coverage', number>[] = []
     const diagnostics: string[] = []
 
-    const triggerTypes = new Set<TriggerType>()
-    const effectTypes = new Set<EffectType>()
-
     const skillInfos = team.map((member) => {
         const card = cards.get(member.card.id)!
         const cardSl = member.card.sl
@@ -99,8 +96,6 @@ export function simulateScore(
                 values: processSkill(card.skill.effect.values, cardSl),
             },
         }
-        triggerTypes.add(card.skill.trigger.type)
-        effectTypes.add(card.skill.effect.type)
 
         if (!member.accessory) return { card: cardSkill }
 
@@ -125,17 +120,12 @@ export function simulateScore(
                 ),
             },
         }
-        effectTypes.add(accessory.skill.effect.type)
 
         return {
             card: cardSkill,
             accessory: accessorySkill,
         }
     })
-
-    if (triggerTypes.has(TriggerType.Time)) throw 'Unsupported trigger: Time'
-    if (triggerTypes.has(TriggerType.Chain)) throw 'Unsupported trigger: Chain'
-    if (effectTypes.has(EffectType.Sync)) throw 'Unsupported effect: Sync'
 
     const stat = calculateTeamStat(team, memoryGalleryBonus, guestCenter)
     const chart = charts.get(chartId)!
@@ -165,6 +155,10 @@ export function simulateScore(
             case TriggerType.Perfect:
                 perfectTriggers.push([i, card.trigger.values[0]])
                 break
+            default:
+                throw `Unsupported card trigger: ${
+                    TriggerType[card.trigger.type]
+                }`
         }
     })
 
@@ -540,6 +534,10 @@ export function simulateScore(
                                 accessory.effect.values[level] - 1
                             )
                             break
+                        default:
+                            throw `Unsupported accessory effect: ${
+                                EffectType[accessory.effect.type]
+                            }`
                     }
                     return
                 }
@@ -586,6 +584,10 @@ export function simulateScore(
                             card.effect.values[level] / 100
                         )
                         break
+                    default:
+                        throw `Unsupported card effect: ${
+                            EffectType[card.effect.type]
+                        }`
                 }
 
                 function doPlock(duration: number) {
