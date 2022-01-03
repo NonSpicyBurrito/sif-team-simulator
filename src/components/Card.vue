@@ -38,8 +38,8 @@ defineProps<{
             v-if="sisNames"
             class="flex absolute bottom-0 justify-center w-full"
         >
-            <div class="tag">
-                {{ sisNames.join(' + ') }}
+            <div class="text-center tag">
+                {{ sisNames.join(' ') }}
             </div>
         </div>
     </div>
