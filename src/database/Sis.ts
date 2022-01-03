@@ -1,4 +1,4 @@
 export type Sis = {
-    type: 'self' | 'team' | 'score' | 'heal' | 'plock'
+    type: 'score' | 'heal' | 'plock' | 'self' | 'team' | 'flat'
     value: number
 }

@@ -38,6 +38,7 @@ export function calculateTeamStat(
 
     let teamSisMultiplier = 0
     const selfSisMultipliers = team.map(() => 0)
+    const flatSisBonuses = team.map(() => 0)
     const trickMultipliers = team.map(() => 0)
     team.forEach((member, i) =>
         member.sisNames.forEach((name) => {
@@ -48,6 +49,9 @@ export function calculateTeamStat(
                     break
                 case 'team':
                     teamSisMultiplier += sis.value
+                    break
+                case 'flat':
+                    flatSisBonuses[i] += sis.value
                     break
                 case 'plock':
                     trickMultipliers[i] = sis.value
@@ -67,7 +71,9 @@ export function calculateTeamStat(
               ][attribute]
             : 0
 
-        const panel = (raw + accessoryBonus) * (1 + selfSisMultipliers[i])
+        const panel =
+            (raw + accessoryBonus) * (1 + selfSisMultipliers[i]) +
+            flatSisBonuses[i]
         const affected = panel * (1 + teamSisMultiplier + centerMultiplier)
 
         result.base +=
