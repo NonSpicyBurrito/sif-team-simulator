@@ -50,7 +50,7 @@ export function summarize<T extends string>(results: Record<T, number>[]) {
                     max,
                     mean: summary[key].mean,
                     stdev: Math.sqrt(summary[key].m2 / summary[key].count),
-                    histogram: histogram.map((count) => count / maxCount),
+                    histogram: histogram.map((count) => count / maxCount || 0),
                 },
             ]
         })
