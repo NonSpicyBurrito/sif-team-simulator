@@ -26,7 +26,7 @@ function importPreset() {
         const data = prompt('Paste preset data:', '[]')
         if (!data) throw 'No data'
 
-        presetTeams.value = JSON.parse(data)
+        presetTeams.value.push(...JSON.parse(data))
     } catch (error) {
         alert('Invalid data')
     }
