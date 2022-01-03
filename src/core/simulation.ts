@@ -75,6 +75,7 @@ export function simulateScore(
     noteSpeed: number,
     tapScoreBonus: number,
     skillChanceBonus: number,
+    skillChanceReduction: number,
     count: number
 ) {
     const results: Record<'score' | 'hp' | 'coverage', number>[] = []
@@ -469,14 +470,16 @@ export function simulateScore(
                         'at',
                         time,
                         'with',
-                        (card.trigger.chances[0] * skillChanceMultiplier) / 100,
+                        (card.trigger.chances[0] / 100 - skillChanceReduction) *
+                            skillChanceMultiplier,
                         'skill chance'
                     )
                 }
 
                 if (
                     Math.random() >=
-                    (card.trigger.chances[0] * skillChanceMultiplier) / 100
+                    (card.trigger.chances[0] / 100 - skillChanceReduction) *
+                        skillChanceMultiplier
                 ) {
                     if (!accessory) return
 

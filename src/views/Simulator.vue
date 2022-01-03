@@ -18,6 +18,7 @@ const memoryGalleryBonus = useLocalStorage('memoryGalleryBonus', [144, 78, 78])
 const guestCenter = useLocalStorage('guestCenter', 0.21)
 const tapScoreBonus = useLocalStorage('tapScoreBonus', 0)
 const skillChanceBonus = useLocalStorage('skillChanceBonus', 0)
+const skillChanceReduction = useLocalStorage('skillChanceReduction', 0)
 const count = useLocalStorage('count', 10000)
 const team = useLocalStorage('team', Array(9).fill(null) as PartialTeam)
 
@@ -52,6 +53,7 @@ async function simulate() {
             noteSpeed.value,
             tapScoreBonus.value,
             skillChanceBonus.value,
+            skillChanceReduction.value,
             count.value
         )
 
@@ -135,6 +137,14 @@ async function simulate() {
                 class="w-full"
                 type="number"
                 step="0.1"
+            />
+        </Field>
+        <Field label="Skill Chance Reduction">
+            <input
+                v-model="skillChanceReduction"
+                class="w-full"
+                type="number"
+                step="0.05"
             />
         </Field>
         <Field label="Count">
