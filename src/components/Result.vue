@@ -15,6 +15,7 @@ defineProps<{
 
 const sections = {
     score: ['Score', thousands],
+    scorePerNote: ['Score / Note', thousands],
     hp: ['HP', small],
     coverage: ['Coverage', percent],
 } as const

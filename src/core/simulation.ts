@@ -78,7 +78,10 @@ export function simulateScore(
     skillChanceReduction: number,
     count: number
 ) {
-    const results: Record<'score' | 'hp' | 'coverage', number>[] = []
+    const results: Record<
+        'score' | 'scorePerNote' | 'hp' | 'coverage',
+        number
+    >[] = []
     const diagnostics: string[] = []
 
     const skillInfos = team.map((member) => {
@@ -132,6 +135,7 @@ export function simulateScore(
     const onScreenDuration =
         noteSpeed >= 6 ? 1.6 - noteSpeed * 0.1 : 1.9 - noteSpeed * 0.15
 
+    const noteCount = chart.notes.length
     const attributeMultipliers = team.map(({ card: { id } }) =>
         cards.get(id)!.attribute === chart.attribute ? 1.1 : 1
     )
@@ -355,6 +359,7 @@ export function simulateScore(
 
         results.push({
             score,
+            scorePerNote: score / noteCount,
             hp: hearts + overheal / maxHp,
             coverage: covered / notes,
         })
