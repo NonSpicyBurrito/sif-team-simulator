@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { getChartDescription } from '../core/chart'
 import { duration, percent, small, thousands } from '../core/formatting'
 import { simulateScore } from '../core/simulation'
+import { charts } from '../database'
 import Field from './Field.vue'
 import Histogram from './Histogram.vue'
 
 defineProps<{
+    chartId: string
     time: number
     summary: ReturnType<typeof simulateScore>
 }>()
@@ -21,6 +24,9 @@ const selected = ref<keyof typeof sections>('score')
 
 <template>
     <div class="surface">
+        <Field label="Chart">
+            {{ getChartDescription(charts.get(chartId)!) }}
+        </Field>
         <Field
             v-for="([label, formatter], key) in sections"
             :key="key"

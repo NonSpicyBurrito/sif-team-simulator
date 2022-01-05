@@ -32,6 +32,7 @@ const canCalculate = computed(() => isTeamComplete(team.value))
 const isCalculating = ref(false)
 
 const result = ref<{
+    chartId: string
     time: number
     summary: ReturnType<typeof simulateScore>
 }>()
@@ -58,6 +59,7 @@ async function simulate() {
         )
 
         result.value = {
+            chartId: chartId.value,
             time: Date.now() - startTime,
             summary,
         }
