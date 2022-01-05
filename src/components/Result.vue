@@ -21,9 +21,6 @@ const selected = ref<keyof typeof sections>('score')
 
 <template>
     <div class="surface">
-        <Field label="Time">
-            {{ duration(time) }}
-        </Field>
         <Field
             v-for="([label, formatter], key) in sections"
             :key="key"
@@ -35,6 +32,9 @@ const selected = ref<keyof typeof sections>('score')
                     ± {{ formatter(summary[key].stdev) }}
                 </span>
             </button>
+        </Field>
+        <Field label="Time">
+            {{ duration(time) }}
         </Field>
 
         <Histogram
