@@ -12,8 +12,8 @@ defineProps<{
 
 const sections = {
     score: ['Score', thousands],
-    coverage: ['Coverage', percent],
     hp: ['HP', small],
+    coverage: ['Coverage', percent],
 } as const
 
 const selected = ref<keyof typeof sections>('score')
