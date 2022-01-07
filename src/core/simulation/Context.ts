@@ -26,6 +26,8 @@ export class Context {
     public readonly attributeMultipliers: number[]
     public readonly tapScoreMultiplier: number
     public readonly maxHp: number
+    public readonly normalPriorities: number[]
+    public readonly coinFlipPriorities: number[]
     public readonly noteTriggers: [number, number][] = []
     public readonly comboTriggers: [number, number][] = []
     public readonly perfectTriggers: [number, number][] = []
@@ -113,6 +115,9 @@ export class Context {
             .map(({ card: { id } }) => cards.get(id)!.hp)
             .reduce((a, b) => a + b, 0)
 
+        this.normalPriorities = this.getPriorities(2, 1, 0)
+        this.coinFlipPriorities = this.getPriorities(0, 1, 2)
+
         this.skillInfos.forEach(({ card }, i) => {
             switch (card.trigger.type) {
                 case TriggerType.Note:
@@ -131,9 +136,9 @@ export class Context {
             }
         })
 
-        this.sortTriggers(this.noteTriggers, [2, 1, 0])
-        this.sortTriggers(this.comboTriggers, [2, 1, 0])
-        this.sortTriggers(this.perfectTriggers, [2, 1, 0])
+        this.sortTriggers(this.noteTriggers, this.normalPriorities)
+        this.sortTriggers(this.comboTriggers, this.normalPriorities)
+        this.sortTriggers(this.perfectTriggers, this.normalPriorities)
 
         team.forEach((member, i) =>
             member.sisNames.forEach((name) => {
@@ -201,24 +206,9 @@ export class Context {
 
     public sortTriggers(
         triggers: [number, ...unknown[]][],
-        priorities: [number, number, number]
+        priorities: number[]
     ) {
-        triggers.sort(
-            ([a], [b]) =>
-                this.getPriority(a, priorities) -
-                this.getPriority(b, priorities)
-        )
-    }
-
-    public getPriority(index: number, priorities: [number, number, number]) {
-        switch (this.skillInfos[index].card.effect.type) {
-            case EffectType.Amp:
-                return priorities[0] * 100 - index
-            case EffectType.Encore:
-                return priorities[1] * 100 - index
-            default:
-                return priorities[2] * 100 - index
-        }
+        triggers.sort(([a], [b]) => priorities[a] - priorities[b])
     }
 
     public log(...args: unknown[]) {
@@ -239,6 +229,19 @@ export class Context {
                 })
                 .join(' ')
         )
+    }
+
+    private getPriorities(amp: number, encore: number, others: number) {
+        return this.skillInfos.map((skillInfo, index) => {
+            switch (skillInfo.card.effect.type) {
+                case EffectType.Amp:
+                    return amp * 100 - index
+                case EffectType.Encore:
+                    return encore * 100 - index
+                default:
+                    return others * 100 - index
+            }
+        })
     }
 }
 

@@ -28,7 +28,7 @@ export function tickSkills(this: Live, time: number, triggers: [number][]) {
         })
 
         if (hasAmp && hasEncore && hasNormal) {
-            this.context.sortTriggers(triggers, [0, 1, 2])
+            this.context.sortTriggers(triggers, this.context.coinFlipPriorities)
         }
     }
 
