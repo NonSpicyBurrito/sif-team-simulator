@@ -94,7 +94,7 @@ export class Live {
 
         return {
             score: this.score,
-            scorePerNote: this.score / this.context.noteCount,
+            scorePerNote: this.score / this.notes,
             hp: this.hearts + this.overheal / this.context.maxHp,
             coverage: this.covered / this.notes,
         }

@@ -22,7 +22,6 @@ type SkillInfo = {
 export class Context {
     public readonly skillInfos: SkillInfo[]
     public readonly stat: ReturnType<typeof calculateTeamStat>
-    public readonly noteCount: number
     public readonly attributeMultipliers: number[]
     public readonly tapScoreMultiplier: number
     public readonly maxHp: number
@@ -106,7 +105,6 @@ export class Context {
         const onScreenDuration =
             noteSpeed >= 6 ? 1.6 - noteSpeed * 0.1 : 1.9 - noteSpeed * 0.15
 
-        this.noteCount = chart.notes.length
         this.attributeMultipliers = team.map(({ card: { id } }) =>
             cards.get(id)!.attribute === chart.attribute ? 1.1 : 1
         )
