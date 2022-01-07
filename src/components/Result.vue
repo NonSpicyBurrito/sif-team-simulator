@@ -52,13 +52,13 @@ const selected = ref<keyof typeof sections>('score')
 
     <div v-if="summary.diagnostics.length" class="surface">
         <div class="overflow-y-auto h-[75vh] font-mono">
-            <p
+            <div
                 v-for="(line, index) in summary.diagnostics"
                 :key="index"
                 class="p-1 border-b-[1px] border-gray-700"
             >
                 {{ line }}
-            </p>
+            </div>
         </div>
     </div>
 </template>
