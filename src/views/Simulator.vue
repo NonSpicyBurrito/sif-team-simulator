@@ -11,6 +11,7 @@ import { isTeamComplete, PartialTeam, Team } from '../core/Team'
 import { clone, sleep } from '../core/utils'
 import { charts, isLoading } from '../database'
 
+const mode = useLocalStorage('mode', 'normal')
 const chartId = useLocalStorage('chartId', 'Live_s0529.json')
 const perfectRate = useLocalStorage('perfectRate', 0.85)
 const noteSpeed = useLocalStorage('noteSpeed', 9)
@@ -47,6 +48,7 @@ async function simulate() {
         const startTime = Date.now()
         const summary = simulateScore(
             team.value as Team,
+            mode.value,
             memoryGalleryBonus.value,
             guestCenter.value,
             chartId.value,
@@ -77,6 +79,19 @@ async function simulate() {
         class="mx-auto max-w-4xl transition-opacity"
         :class="{ 'opacity-25': isCalculating }"
     >
+        <Field label="Mode">
+            <div class="flex flex-wrap -mb-1">
+                <button
+                    v-for="(value, key) in { normal: 'Normal', afk: 'AFK' }"
+                    :key="key"
+                    class="mr-1 mb-1"
+                    :class="{ 'opacity-25': mode !== key }"
+                    @click="mode = key"
+                >
+                    {{ value }}
+                </button>
+            </div>
+        </Field>
         <Field label="Chart">
             <select v-model="chartId" class="w-full">
                 <option v-for="[id, info] in charts" :key="id" :value="id">

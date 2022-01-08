@@ -5,6 +5,7 @@ import { activateSelfCoverage } from './activations/self-coverage'
 import { Context } from './Context'
 import { processEvent } from './events'
 import { processHitEvent } from './events/HitEvent'
+import { processMissEvent } from './events/MissEvent'
 import { processSpawnEvent } from './events/SpawnEvent'
 import { processTimeSkillEvent } from './events/TimeSkillEvent'
 import { consumeAmp, doAmp } from './skills/amp'
@@ -60,6 +61,7 @@ export class Live {
     public processEvent = processEvent
     public processSpawnEvent = processSpawnEvent
     public processHitEvent = processHitEvent
+    public processMissEvent = processMissEvent
     public processTimeSkillEvent = processTimeSkillEvent
 
     public tickSelfCoverage = tickSelfCoverage

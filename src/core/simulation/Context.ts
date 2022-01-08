@@ -40,6 +40,7 @@ export class Context {
 
     public constructor(
         team: Team,
+        mode: string,
         memoryGalleryBonus: number[],
         guestCenter: number,
         chartId: string,
@@ -50,6 +51,9 @@ export class Context {
         skillChanceReduction: number,
         enableDiagnostics: boolean
     ) {
+        if (mode !== 'normal' && mode !== 'afk')
+            throw `Unsupported mode: ${mode}`
+
         this.skillInfos = team.map((member) => {
             const card = cards.get(member.card.id)!
             const cardSl = member.card.sl
@@ -167,14 +171,26 @@ export class Context {
                 time: note.startTime - onScreenDuration,
                 type: 'spawn',
             })
-            this.events.push({
-                time: note.endTime,
-                type: 'hit',
-                position: note.position,
-                isSwing: note.isSwing,
-                perfectJudgments:
-                    note.startTime === note.endTime ? [true] : [true, true],
-            })
+            switch (mode) {
+                case 'normal':
+                    this.events.push({
+                        time: note.endTime,
+                        type: 'hit',
+                        position: note.position,
+                        isSwing: note.isSwing,
+                        perfectJudgments:
+                            note.startTime === note.endTime
+                                ? [true]
+                                : [true, true],
+                    })
+                    break
+                case 'afk':
+                    this.events.push({
+                        time: note.endTime,
+                        type: 'miss',
+                    })
+                    break
+            }
         })
         this.events.sort((a, b) => a.time - b.time)
 

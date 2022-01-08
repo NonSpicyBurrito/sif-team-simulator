@@ -4,6 +4,7 @@ import { Context } from './Context'
 
 export function simulateScore(
     team: Team,
+    mode: string,
     memoryGalleryBonus: number[],
     guestCenter: number,
     chartId: string,
@@ -16,6 +17,7 @@ export function simulateScore(
 ) {
     const { results, diagnostics } = new Context(
         team,
+        mode,
         memoryGalleryBonus,
         guestCenter,
         chartId,
