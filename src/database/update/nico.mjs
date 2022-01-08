@@ -14,15 +14,19 @@ const charts = JSON.parse(readFileSync(path))
 for (const id of await getChartIds()) {
     if (charts[id]) continue
 
-    const data = await getChartData(id)
-    charts[id] = data
-    console.log(
-        id,
-        data.title,
-        data.difficulty,
-        data.attribute,
-        data.notes.length
-    )
+    try {
+        const data = await getChartData(id)
+        charts[id] = data
+        console.log(
+            id,
+            data.title,
+            data.difficulty,
+            data.attribute,
+            data.notes.length
+        )
+    } catch (error) {
+        console.error(id, error)
+    }
 }
 
 writeFileSync(path, JSON.stringify(charts))

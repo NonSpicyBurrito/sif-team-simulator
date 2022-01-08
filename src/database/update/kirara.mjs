@@ -15,20 +15,24 @@ const characters = JSON.parse(readFileSync(charactersPath))
 for (const id of await getCardIds()) {
     if (cards[id]) continue
 
-    const [data, name] = await getCardData(id)
+    try {
+        const [data, name] = await getCardData(id)
 
-    cards[id] = data
-    console.log(
-        id,
-        name,
-        data.character,
-        data.attribute,
-        data.center,
-        data.skill.trigger.type,
-        data.skill.effect.type
-    )
+        cards[id] = data
+        console.log(
+            id,
+            name,
+            data.character,
+            data.attribute,
+            data.center,
+            data.skill.trigger.type,
+            data.skill.effect.type
+        )
 
-    characters[data.character] = name
+        characters[data.character] = name
+    } catch (error) {
+        console.error(id, error)
+    }
 }
 
 writeFileSync(cardsPath, JSON.stringify(cards))

@@ -16,13 +16,17 @@ const data = await getData()
 for (const accessory of data) {
     if (accessories[accessory.id]) continue
 
-    const data = await getAccessoryData(
-        accessory.index,
-        accessory.effectType,
-        accessory.character
-    )
-    accessories[accessory.id] = data
-    console.log(accessory.id, data.character)
+    try {
+        const data = await getAccessoryData(
+            accessory.index,
+            accessory.effectType,
+            accessory.character
+        )
+        accessories[accessory.id] = data
+        console.log(accessory.id, data.character)
+    } catch (error) {
+        console.error(accessory.id, error)
+    }
 }
 
 writeFileSync(path, JSON.stringify(accessories))
