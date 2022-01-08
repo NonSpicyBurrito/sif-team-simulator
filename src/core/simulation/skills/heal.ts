@@ -12,11 +12,11 @@ export function doHeal(this: Live, time: number, index: number, value: number) {
                 'heals',
                 value,
                 'scores',
-                value * multiplier
+                value * multiplier * (this.overheal >= 0 ? 1 : 0)
             )
         }
 
-        this.score += value * multiplier
+        this.score += value * multiplier * (this.overheal >= 0 ? 1 : 0)
         this.overheal += value
 
         if (this.overheal < this.context.maxHp) return
