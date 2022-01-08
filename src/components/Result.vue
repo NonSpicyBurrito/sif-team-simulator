@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { getChartDescription } from '../core/chart'
 import { duration, percent, small, thousands } from '../core/formatting'
 import { simulateScore } from '../core/simulation'
@@ -8,6 +8,7 @@ import Field from './Field.vue'
 import Histogram from './Histogram.vue'
 
 const props = defineProps<{
+    mode: string
     chartId: string
     time: number
     result: ReturnType<typeof simulateScore>
@@ -28,7 +29,13 @@ const sections = computed(
         } as const)
 )
 
-const selected = ref<keyof typeof sections['value']>('score')
+const selected = ref<keyof typeof sections['value']>('survivedNotes')
+
+watchEffect(() => {
+    if (selected.value === 'survivedNotes' && props.mode !== 'afk') {
+        selected.value = 'score'
+    }
+})
 </script>
 
 <template>
@@ -36,23 +43,29 @@ const selected = ref<keyof typeof sections['value']>('score')
         <Field label="Chart">
             {{ getChartDescription(charts.get(chartId)!) }}
         </Field>
-        <Field
+
+        <template
             v-for="([label, formatter, title], key) in sections"
             :key="key"
-            :label="label"
         >
-            <button class="w-full" @click="selected = key">
-                <template v-if="title">
-                    {{ title }}
-                </template>
-                <template v-else>
-                    <span>{{ formatter(result[key].mean) }}</span>
-                    <span class="ml-2 text-sm text-gray-500">
-                        ± {{ formatter(result[key].stdev) }}
-                    </span>
-                </template>
-            </button>
-        </Field>
+            <Field
+                v-if="key !== 'survivedNotes' || mode === 'afk'"
+                :label="label"
+            >
+                <button class="w-full" @click="selected = key">
+                    <template v-if="title">
+                        {{ title }}
+                    </template>
+                    <template v-else>
+                        <span>{{ formatter(result[key].mean) }}</span>
+                        <span class="ml-2 text-sm text-gray-500">
+                            ± {{ formatter(result[key].stdev) }}
+                        </span>
+                    </template>
+                </button>
+            </Field>
+        </template>
+
         <Field label="Time">
             {{ duration(time) }}
         </Field>
