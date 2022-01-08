@@ -15,7 +15,7 @@ export function simulateScore(
     skillChanceReduction: number,
     count: number
 ) {
-    const { results, diagnostics } = new Context(
+    const { results, survivalRate, diagnostics } = new Context(
         team,
         mode,
         memoryGalleryBonus,
@@ -31,6 +31,7 @@ export function simulateScore(
 
     return {
         ...summarize(results),
+        survivalRate,
         diagnostics,
     }
 }

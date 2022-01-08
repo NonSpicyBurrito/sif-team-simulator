@@ -21,6 +21,7 @@ type SkillInfo = {
 export class Context {
     public readonly skillInfos: SkillInfo[]
     public readonly stat: ReturnType<typeof calculateTeamStat>
+    public readonly noteCount: number
     public readonly attributeMultipliers: number[]
     public readonly tapScoreMultiplier: number
     public readonly maxHp: number
@@ -105,6 +106,7 @@ export class Context {
 
         this.stat = calculateTeamStat(team, memoryGalleryBonus, guestCenter)
         const chart = charts.get(chartId)!
+        this.noteCount = chart.notes.length
         const maxTime = Math.max(...chart.notes.map(({ endTime }) => endTime))
         const onScreenDuration =
             noteSpeed >= 6 ? 1.6 - noteSpeed * 0.1 : 1.9 - noteSpeed * 0.15
@@ -223,6 +225,10 @@ export class Context {
 
         return {
             results,
+            survivalRate:
+                results.filter(
+                    ({ survivedNotes }) => survivedNotes === this.noteCount
+                ).length / count,
             diagnostics: this.diagnostics || [],
         }
     }

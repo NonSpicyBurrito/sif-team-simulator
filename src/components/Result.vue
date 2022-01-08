@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { getChartDescription } from '../core/chart'
 import { duration, percent, small, thousands } from '../core/formatting'
 import { simulateScore } from '../core/simulation'
@@ -7,21 +7,28 @@ import { charts } from '../database'
 import Field from './Field.vue'
 import Histogram from './Histogram.vue'
 
-defineProps<{
+const props = defineProps<{
     chartId: string
     time: number
-    summary: ReturnType<typeof simulateScore>
+    result: ReturnType<typeof simulateScore>
 }>()
 
-const sections = {
-    survivedNotes: ['Survived Notes', thousands],
-    score: ['Score', thousands],
-    scorePerNote: ['Score / Note', thousands],
-    overhealHearts: ['Overheal Hearts', small],
-    plockCoverage: ['Plock Coverage', percent],
-} as const
+const sections = computed(
+    () =>
+        ({
+            survivedNotes: [
+                'Survival Rate',
+                thousands,
+                percent(props.result.survivalRate),
+            ],
+            score: ['Score', thousands],
+            scorePerNote: ['Score / Note', thousands],
+            overhealHearts: ['Overheal Hearts', small],
+            plockCoverage: ['Plock Coverage', percent],
+        } as const)
+)
 
-const selected = ref<keyof typeof sections>('score')
+const selected = ref<keyof typeof sections['value']>('score')
 </script>
 
 <template>
@@ -30,15 +37,20 @@ const selected = ref<keyof typeof sections>('score')
             {{ getChartDescription(charts.get(chartId)!) }}
         </Field>
         <Field
-            v-for="([label, formatter], key) in sections"
+            v-for="([label, formatter, title], key) in sections"
             :key="key"
             :label="label"
         >
             <button class="w-full" @click="selected = key">
-                <span>{{ formatter(summary[key].mean) }}</span>
-                <span class="ml-2 text-sm text-gray-500">
-                    ± {{ formatter(summary[key].stdev) }}
-                </span>
+                <template v-if="title">
+                    {{ title }}
+                </template>
+                <template v-else>
+                    <span>{{ formatter(result[key].mean) }}</span>
+                    <span class="ml-2 text-sm text-gray-500">
+                        ± {{ formatter(result[key].stdev) }}
+                    </span>
+                </template>
             </button>
         </Field>
         <Field label="Time">
@@ -46,15 +58,15 @@ const selected = ref<keyof typeof sections>('score')
         </Field>
 
         <Histogram
-            :data="summary[selected]"
+            :data="result[selected]"
             :formatter="sections[selected][1]"
         />
     </div>
 
-    <div v-if="summary.diagnostics.length" class="surface">
+    <div v-if="result.diagnostics.length" class="surface">
         <div class="overflow-y-auto h-[75vh] font-mono">
             <div
-                v-for="(line, index) in summary.diagnostics"
+                v-for="(line, index) in result.diagnostics"
                 :key="index"
                 class="p-1 border-b-[1px] border-gray-700"
             >

@@ -35,7 +35,7 @@ const isCalculating = ref(false)
 const result = ref<{
     chartId: string
     time: number
-    summary: ReturnType<typeof simulateScore>
+    result: ReturnType<typeof simulateScore>
 }>()
 
 async function simulate() {
@@ -46,7 +46,7 @@ async function simulate() {
 
     try {
         const startTime = Date.now()
-        const summary = simulateScore(
+        const simulateResult = simulateScore(
             team.value as Team,
             mode.value,
             memoryGalleryBonus.value,
@@ -63,7 +63,7 @@ async function simulate() {
         result.value = {
             chartId: chartId.value,
             time: Date.now() - startTime,
-            summary,
+            result: simulateResult,
         }
     } catch (error) {
         alert(error)
