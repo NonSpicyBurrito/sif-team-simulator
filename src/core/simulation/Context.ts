@@ -116,33 +116,29 @@ export class Context {
         this.normalPriorities = this.getPriorities(2, 1, 0)
         this.coinFlipPriorities = this.getPriorities(0, 1, 2)
 
-        this.skillInfos.forEach(({ card }, i) => {
-            switch (card.trigger.type) {
+        this.skillInfos.forEach(({ card: { trigger } }, i) => {
+            switch (trigger.type) {
                 case TriggerType.Time:
-                    for (
-                        let j = 1;
-                        j <= maxTime / card.trigger.values[0];
-                        j++
-                    ) {
+                    for (let j = 1; j <= maxTime / trigger.values[0]; j++) {
                         this.events.push({
-                            time: j * card.trigger.values[0],
+                            time: j * trigger.values[0],
                             type: 'timeSkill',
                             index: i,
                         })
                     }
                     break
                 case TriggerType.Note:
-                    this.noteTriggers.push([i, card.trigger.values[0]])
+                    this.noteTriggers.push([i, trigger.values[0]])
                     break
                 case TriggerType.Combo:
-                    this.comboTriggers.push([i, card.trigger.values[0]])
+                    this.comboTriggers.push([i, trigger.values[0]])
                     break
                 case TriggerType.Perfect:
-                    this.perfectTriggers.push([i, card.trigger.values[0]])
+                    this.perfectTriggers.push([i, trigger.values[0]])
                     break
                 default:
                     throw `Unsupported card trigger: ${
-                        TriggerType[card.trigger.type]
+                        TriggerType[trigger.type]
                     }`
             }
         })
