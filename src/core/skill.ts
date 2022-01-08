@@ -15,6 +15,9 @@ export function getSkillDescription(
         const triggerValue = skill.trigger.values[level - 1]
 
         switch (skill.trigger.type) {
+            case TriggerType.Time:
+                descriptions.push(`every ${triggerValue} seconds`)
+                break
             case TriggerType.Note:
                 descriptions.push(`every ${triggerValue} notes`)
                 break
