@@ -39,9 +39,13 @@ export function summarize<T extends string>(results: Record<T, number>[]) {
             const histogram = [...Array(bars + 1).keys()].map((i) => {
                 const from = min + (i - 0.5) * range
                 const to = min + (i + 0.5) * range
-                return values.filter((v) => v >= from && v < to).length
+                return {
+                    count: values.filter((v) => v >= from && v < to).length,
+                    percentile:
+                        values.filter((v) => v >= from).length / values.length,
+                }
             })
-            const maxCount = Math.max(...histogram)
+            const maxCount = Math.max(...histogram.map(({ count }) => count))
 
             return [
                 key,
@@ -50,7 +54,10 @@ export function summarize<T extends string>(results: Record<T, number>[]) {
                     max,
                     mean: summary[key].mean,
                     stdev: Math.sqrt(summary[key].m2 / summary[key].count),
-                    histogram: histogram.map((count) => count / maxCount || 0),
+                    histogram: histogram.map(({ count, percentile }) => ({
+                        value: count / maxCount || 0,
+                        percentile,
+                    })),
                 },
             ]
         })
@@ -61,7 +68,10 @@ export function summarize<T extends string>(results: Record<T, number>[]) {
             max: number
             mean: number
             stdev: number
-            histogram: number[]
+            histogram: {
+                value: number
+                percentile: number
+            }[]
         }
     >
 }
