@@ -14,6 +14,7 @@ defineProps<{
 }>()
 
 const sections = {
+    survivedNotes: ['Survived Notes', thousands],
     score: ['Score', thousands],
     scorePerNote: ['Score / Note', thousands],
     overhealHearts: ['Overheal Hearts', small],

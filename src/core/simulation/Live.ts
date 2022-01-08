@@ -44,6 +44,7 @@ export class Live {
     public score = 0
     public hearts = 0
     public overheal = 0
+    public survivedNotes = Number.POSITIVE_INFINITY
 
     public lastSkill: LastSkill | undefined
     public tempLastSkill: LastSkill | undefined
@@ -101,6 +102,10 @@ export class Live {
             scorePerNote: this.score / this.notes,
             overhealHearts: this.hearts + this.overheal / this.context.maxHp,
             plockCoverage: this.covered / this.notes,
+            survivedNotes:
+                this.survivedNotes === Number.POSITIVE_INFINITY
+                    ? this.notes
+                    : this.survivedNotes,
         }
     }
 }

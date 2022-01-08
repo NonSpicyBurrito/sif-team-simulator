@@ -11,7 +11,18 @@ export function processMissEvent(this: Live) {
     this.notes++
     if (isPlockActive) this.covered++
 
-    this.overheal -= 2
+    if (this.overheal > 0) {
+        this.overheal = -2
+    } else {
+        this.overheal -= 2
+    }
+
+    if (
+        this.survivedNotes === Number.POSITIVE_INFINITY &&
+        this.context.maxHp + this.overheal <= 0
+    ) {
+        this.survivedNotes = this.notes - 1
+    }
 
     return [] as [number][]
 }
