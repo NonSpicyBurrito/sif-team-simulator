@@ -9,8 +9,7 @@ import {
 } from '../../database/Skill'
 import { calculateTeamStat } from '../stats'
 import { Team } from '../Team'
-import { HitEvent } from './events/HitEvent'
-import { SpawnEvent } from './events/SpawnEvent'
+import { Event } from './events'
 import { Live } from './Live'
 import { fill } from './utils'
 
@@ -32,7 +31,7 @@ export class Context {
     public readonly perfectTriggers: [number, number][] = []
     public readonly sisScoreMultipliers = fill(1)
     public readonly sisHealMultipliers = fill(0)
-    public readonly events: (SpawnEvent | HitEvent)[] = []
+    public readonly events: Event[] = []
     public readonly perfectRate: number
     public readonly skillChanceBonus: number
     public readonly skillChanceReduction: number
@@ -102,6 +101,7 @@ export class Context {
 
         this.stat = calculateTeamStat(team, memoryGalleryBonus, guestCenter)
         const chart = charts.get(chartId)!
+        const maxTime = Math.max(...chart.notes.map(({ endTime }) => endTime))
         const onScreenDuration =
             noteSpeed >= 6 ? 1.6 - noteSpeed * 0.1 : 1.9 - noteSpeed * 0.15
 
@@ -118,6 +118,19 @@ export class Context {
 
         this.skillInfos.forEach(({ card }, i) => {
             switch (card.trigger.type) {
+                case TriggerType.Time:
+                    for (
+                        let j = 1;
+                        j <= maxTime / card.trigger.values[0];
+                        j++
+                    ) {
+                        this.events.push({
+                            time: j * card.trigger.values[0],
+                            type: 'timeSkill',
+                            index: i,
+                        })
+                    }
+                    break
                 case TriggerType.Note:
                     this.noteTriggers.push([i, card.trigger.values[0]])
                     break

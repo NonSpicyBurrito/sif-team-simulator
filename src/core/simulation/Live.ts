@@ -6,6 +6,7 @@ import { Context } from './Context'
 import { processEvent } from './events'
 import { processHitEvent } from './events/HitEvent'
 import { processSpawnEvent } from './events/SpawnEvent'
+import { processTimeSkillEvent } from './events/TimeSkillEvent'
 import { consumeAmp, doAmp } from './skills/amp'
 import { doCF } from './skills/cf'
 import { doEncore } from './skills/encore'
@@ -59,6 +60,7 @@ export class Live {
     public processEvent = processEvent
     public processSpawnEvent = processSpawnEvent
     public processHitEvent = processHitEvent
+    public processTimeSkillEvent = processTimeSkillEvent
 
     public tickSelfCoverage = tickSelfCoverage
     public tickBuffs = tickBuffs

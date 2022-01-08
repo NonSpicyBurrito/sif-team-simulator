@@ -1,8 +1,11 @@
 import { Live } from '../Live'
 import { HitEvent } from './HitEvent'
 import { SpawnEvent } from './SpawnEvent'
+import { TimeSkillEvent } from './TimeSkillEvent'
 
-export function processEvent(this: Live, event: SpawnEvent | HitEvent) {
+export type Event = SpawnEvent | HitEvent | TimeSkillEvent
+
+export function processEvent(this: Live, event: Event) {
     this.tickSelfCoverage(event.time)
 
     if (VITE_APP_DIAGNOSTICS) {
@@ -19,6 +22,9 @@ export function processEvent(this: Live, event: SpawnEvent | HitEvent) {
             break
         case 'hit':
             triggers = this.processHitEvent(event)
+            break
+        case 'timeSkill':
+            triggers = this.processTimeSkillEvent(event)
             break
     }
 
