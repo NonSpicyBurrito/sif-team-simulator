@@ -7,16 +7,21 @@ import { extract } from './utils.mjs'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const axios = Axios.default
 
-const path = `${__dirname}/../../../public/database/charts.json`
+const pathBase = `${__dirname}/../../../public/database/charts`
 
-const charts = JSON.parse(readFileSync(path))
+const chartsByDifficulty = Object.fromEntries(
+    [1, 2, 3, 4, 6].map((difficulty) => [
+        difficulty,
+        JSON.parse(readFileSync(`${pathBase}/${difficulty}.json`)),
+    ])
+)
 
-for (const id of await getChartIds()) {
-    if (charts[id]) continue
+for (const [difficulty, id] of await getChartIds()) {
+    if (chartsByDifficulty[difficulty][id]) continue
 
     try {
         const data = await getChartData(id)
-        charts[id] = data
+        chartsByDifficulty[difficulty][id] = data
         console.log(
             id,
             data.title,
@@ -29,7 +34,9 @@ for (const id of await getChartIds()) {
     }
 }
 
-writeFileSync(path, JSON.stringify(charts))
+Object.entries(chartsByDifficulty).forEach(([difficulty, charts]) =>
+    writeFileSync(`${pathBase}/${difficulty}.json`, JSON.stringify(charts))
+)
 
 async function getChartIds() {
     const html = (
@@ -44,11 +51,8 @@ async function getChartIds() {
     lives.forEach(({ difficulties }) =>
         difficulties.forEach((diff) => {
             if (!diff.available) return
-            if (diff.difficulty !== 6) return
-            if (diff.ac_flag) return
-            if (diff.five_keys_flag) return
 
-            ids.push(diff.notes_setting_asset)
+            ids.push([diff.difficulty, diff.notes_setting_asset])
         })
     )
 

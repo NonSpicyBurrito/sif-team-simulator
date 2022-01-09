@@ -58,7 +58,7 @@ async function initCharacters() {
 }
 
 async function initCharts() {
-    Object.entries(await loadJson('charts')).forEach(([id, chart]) =>
+    Object.entries(await loadJson('charts/6')).forEach(([id, chart]) =>
         charts.set(id, chart as Chart)
     )
 }
