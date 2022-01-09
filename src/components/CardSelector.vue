@@ -3,6 +3,7 @@ import { useDebounce, useLocalStorage } from '@vueuse/core'
 import { computed } from 'vue'
 import { useLargeArray } from '../composables/large-array'
 import { cards, characters } from '../database'
+import { Rarity } from '../database/Card'
 import { EffectType, TriggerType } from '../database/Skill'
 import Card from './Card.vue'
 import Field from './Field.vue'
@@ -14,6 +15,7 @@ defineEmits<{
 const search = useLocalStorage('cardSelector.search', '')
 const debouncedSearch = useDebounce(search, 500)
 
+const rarities = enumKeys(Rarity)
 const attributes = ['smile', 'pure', 'cool']
 const triggers = enumKeys(TriggerType)
 const effects = enumKeys(EffectType)
@@ -31,6 +33,12 @@ const ids = useLargeArray(
 
         return conditions.reduce(
             (ids, condition) => {
+                if (rarities[condition]) {
+                    return ids.filter(
+                        (id) => cards.get(id)?.rarity === rarities[condition]
+                    )
+                }
+
                 if (attributes.includes(condition)) {
                     return ids.filter(
                         (id) =>
@@ -92,6 +100,10 @@ function enumKeys<T>(enumType: Record<string, string | T>) {
     <Field label="Search">
         <input v-model="search" class="w-full" type="text" />
         <div class="my-1 text-sm">
+            <p>
+                <span class="font-semibold">Rarities:</span>
+                {{ Object.keys(rarities).join(', ') }}
+            </p>
             <p>
                 <span class="font-semibold">Attributes:</span>
                 {{ attributes.join(', ') }}
