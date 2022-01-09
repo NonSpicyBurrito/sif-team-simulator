@@ -2,6 +2,7 @@ import { EffectType } from '../../../database/Skill'
 import { Live } from '../Live'
 
 export function tickSkills(this: Live, time: number, triggers: [number][]) {
+    this.purgeLastSkill = false
     this.tempLastSkill = undefined
     this.tempAmp = 0
 
@@ -34,7 +35,8 @@ export function tickSkills(this: Live, time: number, triggers: [number][]) {
 
     triggers.forEach(([i]) => this.activate(time, i, skillChanceMultiplier))
 
-    this.lastSkill = this.tempLastSkill || this.lastSkill
+    this.lastSkill =
+        this.tempLastSkill || (this.purgeLastSkill ? undefined : this.lastSkill)
 
     if (!this.ampState && this.tempAmp) {
         if (VITE_APP_DIAGNOSTICS) {

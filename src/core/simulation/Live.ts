@@ -46,6 +46,7 @@ export class Live {
     public overheal = 0
     public survivedNotes = Number.POSITIVE_INFINITY
 
+    public purgeLastSkill = false
     public lastSkill: LastSkill | undefined
     public tempLastSkill: LastSkill | undefined
 

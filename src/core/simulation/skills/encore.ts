@@ -15,5 +15,5 @@ export function doEncore(this: Live, time: number, index: number) {
 
     ;(this.tempLastSkill || this.lastSkill)?.(time, index)
 
-    this.lastSkill = undefined
+    this.purgeLastSkill = true
 }
