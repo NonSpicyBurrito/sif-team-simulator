@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useLocalStorage } from '@vueuse/core'
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, ref, watch, watchEffect } from 'vue'
 import Field from '../components/Field.vue'
 import PresetEditor from '../components/PresetEditor.vue'
 import Result from '../components/Result.vue'
@@ -8,11 +8,13 @@ import TeamEditor from '../components/TeamEditor.vue'
 import { getChartDescription } from '../core/chart'
 import { simulateScore } from '../core/simulation'
 import { isTeamComplete, PartialTeam, Team } from '../core/Team'
-import { clone, sleep } from '../core/utils'
-import { charts, isLoading } from '../database'
+import { clone, enumKeys, sleep } from '../core/utils'
+import { charts, initDatabase, isLoading } from '../database'
+import { Difficulty } from '../database/Chart'
 
 const mode = useLocalStorage('mode', 'normal')
-const chartId = useLocalStorage('chartId', 'Live_s0529.json')
+const difficulty = useLocalStorage('difficulty', Difficulty.Master)
+const chartId = useLocalStorage('chartId', '')
 const perfectRate = useLocalStorage('perfectRate', 0.85)
 const noteSpeed = useLocalStorage('noteSpeed', 9)
 const memoryGalleryBonus = useLocalStorage('memoryGalleryBonus', [144, 78, 78])
@@ -22,6 +24,17 @@ const skillChanceBonus = useLocalStorage('skillChanceBonus', 0)
 const skillChanceReduction = useLocalStorage('skillChanceReduction', 0)
 const count = useLocalStorage('count', 10000)
 const team = useLocalStorage('team', Array(9).fill(null) as PartialTeam)
+
+watchEffect(() => initDatabase(difficulty.value))
+
+watchEffect(() => {
+    if (isLoading.value) return
+    if (charts.get(chartId.value)) return
+
+    chartId.value = charts.keys().next().value
+})
+
+const difficulties = enumKeys(Difficulty)
 
 const showPreset = ref(false)
 function selectPresetTeam(presetTeam: PartialTeam) {
@@ -38,6 +51,7 @@ const result = ref<{
     time: number
     result: ReturnType<typeof simulateScore>
 }>()
+watch(difficulty, () => (result.value = undefined))
 
 async function simulate() {
     isCalculating.value = true
@@ -91,6 +105,19 @@ async function simulate() {
                     @click="mode = key"
                 >
                     {{ value }}
+                </button>
+            </div>
+        </Field>
+        <Field label="Difficulty">
+            <div class="flex flex-wrap -mb-1">
+                <button
+                    v-for="(value, key) in difficulties"
+                    :key="value"
+                    class="mr-1 mb-1 first-letter:uppercase"
+                    :class="{ 'opacity-25': difficulty !== value }"
+                    @click="difficulty = value"
+                >
+                    {{ key }}
                 </button>
             </div>
         </Field>

@@ -2,6 +2,7 @@
 import { useDebounce, useLocalStorage } from '@vueuse/core'
 import { computed } from 'vue'
 import { useLargeArray } from '../composables/large-array'
+import { enumKeys } from '../core/utils'
 import { cards, characters } from '../database'
 import { Rarity } from '../database/Card'
 import { EffectType, TriggerType } from '../database/Skill'
@@ -86,14 +87,6 @@ const ids = useLargeArray(
         )
     })
 )
-
-function enumKeys<T>(enumType: Record<string, string | T>) {
-    return Object.fromEntries(
-        Object.entries(enumType)
-            .filter(([, value]) => typeof value === 'number')
-            .map(([key, value]) => [key.toLowerCase(), value] as [string, T])
-    )
-}
 </script>
 
 <template>

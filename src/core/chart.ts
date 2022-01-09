@@ -1,10 +1,9 @@
-import { Chart } from '../database/Chart'
+import { Chart, Difficulty } from '../database/Chart'
 
-const difficultyNames = { 6: 'Master' } as Record<number, string>
 const attributeNames = ['Smile', 'Pure', 'Cool']
 
 export function getChartDescription(chart: Chart) {
-    return `${chart.title} [ ${difficultyNames[chart.difficulty]} / ${
+    return `${chart.title} [ ${Difficulty[chart.difficulty]} / ${
         attributeNames[chart.attribute]
     } / ${chart.notes.length} ]`
 }

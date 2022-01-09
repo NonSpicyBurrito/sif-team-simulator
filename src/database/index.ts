@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { Accessory } from './Accessory'
 import { Card } from './Card'
 import { Character } from './Character'
-import { Chart } from './Chart'
+import { Chart, Difficulty } from './Chart'
 import { Sis } from './Sis'
 
 export const isLoading = ref(true)
@@ -32,12 +32,20 @@ export const sises = new Map<string, Sis>([
     ['Kiss', { type: 'flat', value: 200 }],
 ])
 
-Promise.all([
-    initAccessories(),
-    initCards(),
-    initCharacters(),
-    initCharts(),
-]).then(() => (isLoading.value = false))
+export async function initDatabase(difficulty: Difficulty) {
+    isLoading.value = true
+
+    charts.clear()
+
+    const promises = [initCharts(difficulty)]
+    if (!accessories.size) promises.push(initAccessories())
+    if (!cards.size) promises.push(initCards())
+    if (!characters.size) promises.push(initCharacters())
+
+    await Promise.all(promises)
+
+    isLoading.value = false
+}
 
 async function initAccessories() {
     Object.entries(await loadJson('accessories')).forEach(([id, accessory]) =>
@@ -57,9 +65,9 @@ async function initCharacters() {
     )
 }
 
-async function initCharts() {
-    Object.entries(await loadJson('charts/6')).forEach(([id, chart]) =>
-        charts.set(id, chart as Chart)
+async function initCharts(difficulty: Difficulty) {
+    Object.entries(await loadJson(`charts/${difficulty}`)).forEach(
+        ([id, chart]) => charts.set(id, chart as Chart)
     )
 }
 
