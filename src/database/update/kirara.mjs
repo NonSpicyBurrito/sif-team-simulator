@@ -23,6 +23,7 @@ for (const id of await getCardIds()) {
             id,
             name,
             data.character,
+            data.rarity,
             data.attribute,
             data.center,
             data.skill.trigger.type,
@@ -43,7 +44,7 @@ async function getCardIds() {
         await axios.post(
             'https://sif.kirara.ca/api/ds/neo-search/cards/results.json',
             {
-                rarity: [1, 2, 3, 5],
+                rarity: [1],
                 max_smile: {
                     compare_type: 'gt',
                     compare_to: 1,
@@ -62,6 +63,7 @@ async function getCardData(id) {
     return [
         {
             character: data.type_id,
+            rarity: data.rarity,
             stats: [last(data.smile), last(data.pure), last(data.cool)],
             hp: data.hp_base,
             attribute: data.attribute - 1,
