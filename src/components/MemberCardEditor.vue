@@ -6,12 +6,19 @@ import { Member } from '../core/Team'
 import { cards } from '../database'
 import Field from './Field.vue'
 
-defineProps<{
+const props = defineProps<{
     member: Member
 }>()
+
+function viewDetails() {
+    window.open(`https://sif.kirara.ca/card/${props.member.card.id}`, '_blank')
+}
 </script>
 
 <template>
+    <Field label="Card">
+        <button @click="viewDetails">View Details</button>
+    </Field>
     <Field label="Card Level">
         <input
             v-model="member.card.level"
