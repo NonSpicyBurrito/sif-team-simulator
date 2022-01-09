@@ -35,37 +35,48 @@ export const sises = new Map<string, Sis>([
 export async function initDatabase(difficulty: Difficulty) {
     isLoading.value = true
 
-    charts.clear()
-
-    const promises = [initCharts(difficulty)]
-    if (!accessories.size) promises.push(initAccessories())
-    if (!cards.size) promises.push(initCards())
-    if (!characters.size) promises.push(initCharacters())
-
-    await Promise.all(promises)
+    await Promise.all([
+        initCharts(difficulty),
+        initAccessories(),
+        initCards(),
+        initCharacters(),
+    ])
 
     isLoading.value = false
 }
 
 async function initAccessories() {
+    if (accessories.size) return
+
     Object.entries(await loadJson('accessories')).forEach(([id, accessory]) =>
         accessories.set(id, accessory as Accessory)
     )
 }
 
 async function initCards() {
+    if (cards.size) return
+
     Object.entries(await loadJson('cards')).forEach(([id, card]) =>
         cards.set(+id, card as Card)
     )
 }
 
 async function initCharacters() {
+    if (characters.size) return
+
     Object.entries(await loadJson('characters')).forEach(([id, character]) =>
         characters.set(+id, character as Character)
     )
 }
 
+let currentDifficulty: Difficulty | undefined
+
 async function initCharts(difficulty: Difficulty) {
+    if (currentDifficulty === difficulty) return
+
+    currentDifficulty = difficulty
+    charts.clear()
+
     Object.entries(await loadJson(`charts/${difficulty}`)).forEach(
         ([id, chart]) => charts.set(id, chart as Chart)
     )
