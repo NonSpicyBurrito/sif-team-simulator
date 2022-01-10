@@ -13,6 +13,8 @@ import { Event } from './events'
 import { Live } from './Live'
 import { fill } from './utils'
 
+const missTiming = 0.256
+
 type SkillInfo = {
     card: CardSkill
     accessory?: AccessorySkill
@@ -188,7 +190,7 @@ export class Context {
                     break
                 case 'afk':
                     this.events.push({
-                        time: note.endTime,
+                        time: note.endTime + missTiming,
                         type: 'miss',
                     })
                     break
