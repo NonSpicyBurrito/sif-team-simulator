@@ -8,8 +8,8 @@ export function small(value: number) {
     return value.toFixed(2)
 }
 
-export function percent(value: number) {
-    return `${(value * 100).toFixed(1)}%`
+export function percent(value: number, digits = 1) {
+    return `${(value * 100).toFixed(digits)}%`
 }
 
 export function duration(ms: number) {

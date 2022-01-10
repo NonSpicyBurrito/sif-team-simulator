@@ -4,6 +4,7 @@ import {
     EffectType,
     TriggerType,
 } from '../database/Skill'
+import { percent } from './formatting'
 
 export function getSkillDescription(
     skill: CardSkill | AccessorySkill,
@@ -35,7 +36,7 @@ export function getSkillDescription(
     }
 
     const triggerChance = skill.trigger.chances[level - 1]
-    descriptions.push(`${triggerChance}% chance`)
+    descriptions.push(`${percent(triggerChance / 100, 0)} chance`)
 
     const effectDuration = skill.effect.durations[level - 1]
     const effectValue = skill.effect.values[level - 1]
@@ -52,11 +53,12 @@ export function getSkillDescription(
             break
         case EffectType.SRU:
             descriptions.push(
-                `increase skill activation chance by ${
+                `increase skill activation chance by ${percent(
                     'type' in skill.trigger
-                        ? effectValue
-                        : Math.round((effectValue - 1) * 100)
-                }%`,
+                        ? effectValue / 100
+                        : effectValue - 1,
+                    0
+                )}`,
                 `for ${effectDuration} seconds`
             )
             break
@@ -82,11 +84,12 @@ export function getSkillDescription(
             break
         case EffectType.Param:
             descriptions.push(
-                `increase stat by ${
+                `increase stat by ${percent(
                     'type' in skill.trigger
-                        ? effectValue
-                        : Math.round((effectValue - 1) * 100)
-                }%`,
+                        ? effectValue / 100
+                        : effectValue - 1,
+                    0
+                )}`,
                 `for ${effectDuration} seconds`
             )
             break

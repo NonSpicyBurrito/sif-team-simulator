@@ -19,12 +19,12 @@ export function activateAccessorySkill(
             'at',
             time,
             'with',
-            (trigger.chances[0] * skillChanceMultiplier) / 100,
+            (trigger.chances[0] / 100) * skillChanceMultiplier,
             'accessory skill chance'
         )
     }
 
-    if (Math.random() >= (trigger.chances[0] * skillChanceMultiplier) / 100)
+    if (Math.random() >= (trigger.chances[0] / 100) * skillChanceMultiplier)
         return
 
     const level = this.consumeAmp()
