@@ -25,7 +25,8 @@ for (const chunk of chunks) {
                 data.character,
                 data.rarity,
                 data.attribute,
-                data.center,
+                data.center.main.type,
+                data.center.extra.type,
                 data.skill.trigger.type,
                 data.skill.effect.type
             )
@@ -77,7 +78,17 @@ async function getCardsData(ids) {
             stats: [last(card.smile), last(card.pure), last(card.cool)],
             hp: card.hp_base,
             attribute: card.attribute - 1,
-            center: card.center_skill.percent + card.center_skill.extra_percent,
+            center: {
+                main: {
+                    type: card.center_skill.effect_type,
+                    value: card.center_skill.percent,
+                },
+                extra: {
+                    apply: card.center_skill.extra_apply_type || undefined,
+                    type: card.center_skill.extra_effect || undefined,
+                    value: card.center_skill.extra_percent || undefined,
+                },
+            },
             skill: {
                 trigger: {
                     type: card.skill.trigger_type,

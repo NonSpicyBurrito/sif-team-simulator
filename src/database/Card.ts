@@ -1,3 +1,4 @@
+import { CenterSkill } from './Center'
 import { CardSkill } from './Skill'
 
 export enum Rarity {
@@ -13,6 +14,6 @@ export type Card = {
     stats: number[]
     hp: number
     attribute: number
-    center: number
+    center: CenterSkill
     skill: CardSkill
 }

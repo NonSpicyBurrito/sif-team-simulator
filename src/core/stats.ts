@@ -60,7 +60,8 @@ export function calculateTeamStat(
         })
     )
 
-    const centerMultiplier = center / 100 + guestCenter
+    const centerMultiplier =
+        (center.main.value + (center.extra.value || 0)) / 100 + guestCenter
 
     team.forEach((member, i) => {
         const raw = getRawMemberStats(member, memoryGalleryBonus)[attribute]
