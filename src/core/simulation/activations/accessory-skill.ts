@@ -36,6 +36,9 @@ export function activateAccessorySkill(
         case EffectType.Heal:
             this.doHeal(time, index, effect.values[level])
             break
+        case EffectType.Score:
+            this.doScore(time, index, effect.values[level])
+            break
         case EffectType.SRU:
             this.doSRU(
                 time,
