@@ -12,27 +12,28 @@ const charactersPath = `${__dirname}/../../../public/database/characters.json`
 const cards = JSON.parse(readFileSync(cardsPath))
 const characters = JSON.parse(readFileSync(charactersPath))
 
-for (const id of await getCardIds()) {
-    if (cards[id]) continue
+const ids = (await getCardIds()).filter((id) => !cards[id])
+const chunks = split(ids, 1000)
 
+for (const chunk of chunks) {
     try {
-        const [data, name] = await getCardData(id)
+        ;(await getCardsData(chunk)).forEach(([id, data, name]) => {
+            cards[id] = data
+            console.log(
+                id,
+                name,
+                data.character,
+                data.rarity,
+                data.attribute,
+                data.center,
+                data.skill.trigger.type,
+                data.skill.effect.type
+            )
 
-        cards[id] = data
-        console.log(
-            id,
-            name,
-            data.character,
-            data.rarity,
-            data.attribute,
-            data.center,
-            data.skill.trigger.type,
-            data.skill.effect.type
-        )
-
-        characters[data.character] = name
+            characters[data.character] = name
+        })
     } catch (error) {
-        console.error(id, error)
+        console.error(error)
     }
 }
 
@@ -55,34 +56,43 @@ async function getCardIds() {
     ).data.result
 }
 
-async function getCardData(id) {
-    const data = (
-        await axios.get(`https://sif.kirara.ca/api/v1/card/${id}.json`)
-    ).data.cards[0]
+function split(array, size) {
+    return [...Array(Math.ceil(array.length / size))].map((_, i) =>
+        array.slice(i * size, i * size + size)
+    )
+}
 
-    return [
+async function getCardsData(ids) {
+    const cards = (
+        await axios.get(
+            `https://sif.kirara.ca/api/v1/card/${ids.join(',')}.json`
+        )
+    ).data.cards
+
+    return cards.map((card) => [
+        card.ordinal,
         {
-            character: data.type_id,
-            rarity: data.rarity,
-            stats: [last(data.smile), last(data.pure), last(data.cool)],
-            hp: data.hp_base,
-            attribute: data.attribute - 1,
-            center: data.center_skill.percent + data.center_skill.extra_percent,
+            character: card.type_id,
+            rarity: card.rarity,
+            stats: [last(card.smile), last(card.pure), last(card.cool)],
+            hp: card.hp_base,
+            attribute: card.attribute - 1,
+            center: card.center_skill.percent + card.center_skill.extra_percent,
             skill: {
                 trigger: {
-                    type: data.skill.trigger_type,
-                    chances: data.skill.probability,
-                    values: data.skill.trigger_val,
+                    type: card.skill.trigger_type,
+                    chances: card.skill.probability,
+                    values: card.skill.trigger_val,
                 },
                 effect: {
-                    type: data.skill.effect_type,
-                    durations: data.skill.effect_dur,
-                    values: data.skill.effect_val,
+                    type: card.skill.effect_type,
+                    durations: card.skill.effect_dur,
+                    values: card.skill.effect_val,
                 },
             },
         },
-        data.char_name,
-    ]
+        card.char_name,
+    ])
 }
 
 function last(array) {
