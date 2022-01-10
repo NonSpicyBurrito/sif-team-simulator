@@ -4,7 +4,7 @@ import {
     EffectType,
     TriggerType,
 } from '../database/Skill'
-import { percent } from './formatting'
+import { percent, thousands } from './formatting'
 
 export function getSkillDescription(
     skill: CardSkill | AccessorySkill,
@@ -49,7 +49,7 @@ export function getSkillDescription(
             descriptions.push(`heal ${effectValue} hp`)
             break
         case EffectType.Score:
-            descriptions.push(`add ${effectValue} score`)
+            descriptions.push(`add ${thousands(effectValue)} score`)
             break
         case EffectType.SRU:
             descriptions.push(
@@ -67,15 +67,15 @@ export function getSkillDescription(
             break
         case EffectType.PSU:
             descriptions.push(
-                `add ${effectValue} score for every perfect`,
+                `add ${thousands(effectValue)} score for every perfect`,
                 `for ${effectDuration} seconds`
             )
             break
         case EffectType.CF:
             descriptions.push(
-                `add ${effectValue} to ${
+                `add ${thousands(effectValue)} to ${thousands(
                     effectValue * 10
-                } score for every combo`,
+                )} score for every combo`,
                 `for ${effectDuration} seconds`
             )
             break
