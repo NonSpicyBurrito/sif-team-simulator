@@ -50,7 +50,7 @@ async function getData() {
         .map(({ data: [, , , id, , cardId, effectType], index }) => ({
             id,
             effectType,
-            character: cardId && cards[cardId][0],
+            character: cards[cardId]?.[0] || 0,
             index,
         }))
 }
