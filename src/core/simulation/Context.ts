@@ -144,7 +144,7 @@ export class Context {
                     break
                 default:
                     throw `Unsupported card trigger: ${
-                        TriggerType[trigger.type]
+                        TriggerType[trigger.type] || trigger.type
                     }`
             }
         })

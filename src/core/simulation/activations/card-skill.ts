@@ -82,7 +82,9 @@ export function activateCardSkill(
             )
             break
         default:
-            throw `Unsupported card effect: ${EffectType[effect.type]}`
+            throw `Unsupported card effect: ${
+                EffectType[effect.type] || effect.type
+            }`
     }
 
     return true

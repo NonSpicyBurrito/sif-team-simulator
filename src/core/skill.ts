@@ -30,7 +30,9 @@ export function getSkillDescription(
                 break
             default:
                 descriptions.push(
-                    `unsupported trigger: ${TriggerType[trigger.type]}`
+                    `unsupported trigger: ${
+                        TriggerType[trigger.type] || trigger.type
+                    }`
                 )
         }
     }
@@ -90,7 +92,9 @@ export function getSkillDescription(
             )
             break
         default:
-            descriptions.push(`unsupported effect: ${EffectType[effect.type]}`)
+            descriptions.push(
+                `unsupported effect: ${EffectType[effect.type] || effect.type}`
+            )
     }
 
     return descriptions.join(', ') + '. '

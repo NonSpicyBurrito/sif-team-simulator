@@ -78,7 +78,9 @@ export function activateAccessorySkill(
             )
             break
         default:
-            throw `Unsupported accessory effect: ${EffectType[effect.type]}`
+            throw `Unsupported accessory effect: ${
+                EffectType[effect.type] || effect.type
+            }`
     }
 
     return true
