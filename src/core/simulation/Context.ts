@@ -190,7 +190,7 @@ export class Context {
                     break
                 case 'afk':
                     this.events.push({
-                        time: note.endTime + missTiming,
+                        time: note.startTime + missTiming,
                         type: 'miss',
                     })
                     break
