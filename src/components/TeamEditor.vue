@@ -69,14 +69,12 @@ function selectCard(cardId: number) {
             v-if="teamStat"
             class="flex justify-center items-center my-2 text-center"
         >
-            <div class="w-32 text-sm text-gray-600">
-                {{ thousands(teamStat.param) }}
-            </div>
-            <div class="w-32 font-semibold">
-                {{ thousands(teamStat.base) }}
-            </div>
-            <div class="w-32 text-sm text-gray-600">
-                {{ thousands(teamStat.trick) }}
+            <div
+                v-for="({ base }, index) in teamStat"
+                :key="index"
+                class="w-32"
+            >
+                {{ thousands(base) }}
             </div>
         </div>
     </div>

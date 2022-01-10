@@ -30,58 +30,64 @@ export function calculateTeamStat(
 ) {
     const { attribute, center } = cards.get(team[4].card.id)!
 
-    const result = {
+    const results = [...Array(3)].map(() => ({
         base: 0,
         param: 0,
         trick: 0,
-    }
+    }))
 
-    let teamSisMultiplier = 0
-    const selfSisMultipliers = team.map(() => 0)
-    const flatSisBonuses = team.map(() => 0)
-    const trickMultipliers = team.map(() => 0)
+    const centerMultiplier = [0, 0, 0]
+    const teamSisMultiplier = [0, 0, 0]
+    const selfSisMultipliers = team.map(() => [0, 0, 0])
+    const flatSisBonuses = team.map(() => [0, 0, 0])
+    const trickMultipliers = team.map(() => [0, 0, 0])
     team.forEach((member, i) =>
         member.sisNames.forEach((name) => {
             const sis = sises.get(name)!
             switch (sis.type) {
                 case 'self':
-                    selfSisMultipliers[i] += sis.value
+                    selfSisMultipliers[i][attribute] += sis.value
                     break
                 case 'team':
-                    teamSisMultiplier += sis.value
+                    teamSisMultiplier[attribute] += sis.value
                     break
                 case 'flat':
-                    flatSisBonuses[i] += sis.value
+                    flatSisBonuses[i][attribute] += sis.value
                     break
                 case 'plock':
-                    trickMultipliers[i] = sis.value
+                    trickMultipliers[i][attribute] = sis.value
                     break
             }
         })
     )
 
-    const centerMultiplier =
+    centerMultiplier[attribute] +=
         (center.main.value + (center.extra.value || 0)) / 100 + guestCenter
 
     team.forEach((member, i) => {
-        const raw = getRawMemberStats(member, memoryGalleryBonus)[attribute]
+        const raws = getRawMemberStats(member, memoryGalleryBonus)
 
-        const accessoryBonus = member.accessory
-            ? accessories.get(member.accessory.id)!.stats[
-                  member.accessory.level - 1
-              ][attribute]
-            : 0
+        results.forEach((result, j) => {
+            const raw = raws[j]
 
-        const panel =
-            (raw + accessoryBonus) * (1 + selfSisMultipliers[i]) +
-            flatSisBonuses[i]
-        const affected = panel * (1 + teamSisMultiplier + centerMultiplier)
+            const accessoryBonus = member.accessory
+                ? accessories.get(member.accessory.id)!.stats[
+                      member.accessory.level - 1
+                  ][j]
+                : 0
 
-        result.base +=
-            (raw * teamSisMultiplier + panel) * (1 + centerMultiplier)
-        result.param += affected
-        result.trick += affected * trickMultipliers[i]
+            const panel =
+                (raw + accessoryBonus) * (1 + selfSisMultipliers[i][j]) +
+                flatSisBonuses[i][j]
+            const affected =
+                panel * (1 + teamSisMultiplier[j] + centerMultiplier[j])
+
+            result.base +=
+                (raw * teamSisMultiplier[j] + panel) * (1 + centerMultiplier[j])
+            result.param += affected
+            result.trick += affected * trickMultipliers[i][j]
+        })
     })
 
-    return result
+    return results
 }

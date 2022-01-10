@@ -22,7 +22,7 @@ type SkillInfo = {
 
 export class Context {
     public readonly skillInfos: SkillInfo[]
-    public readonly stat: ReturnType<typeof calculateTeamStat>
+    public readonly stat: ReturnType<typeof calculateTeamStat>[number]
     public readonly noteCount: number
     public readonly attributeMultipliers: number[]
     public readonly tapScoreMultiplier: number
@@ -106,8 +106,10 @@ export class Context {
             }
         })
 
-        this.stat = calculateTeamStat(team, memoryGalleryBonus, guestCenter)
         const chart = charts.get(chartId)!
+        this.stat = calculateTeamStat(team, memoryGalleryBonus, guestCenter)[
+            chart.attribute
+        ]
         this.noteCount = chart.notes.length
         const maxTime = Math.max(...chart.notes.map(({ endTime }) => endTime))
         const onScreenDuration =
