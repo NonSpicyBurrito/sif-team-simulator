@@ -7,15 +7,15 @@ import {
 import { percent, thousands } from './formatting'
 
 export function getSkillDescription(
-    skill: CardSkill | AccessorySkill,
+    { trigger, effect }: CardSkill | AccessorySkill,
     level: number
 ) {
     const descriptions: string[] = []
 
-    if ('type' in skill.trigger) {
-        const triggerValue = skill.trigger.values[level - 1]
+    if ('type' in trigger) {
+        const triggerValue = trigger.values[level - 1]
 
-        switch (skill.trigger.type) {
+        switch (trigger.type) {
             case TriggerType.Time:
                 descriptions.push(`every ${triggerValue} seconds`)
                 break
@@ -30,18 +30,18 @@ export function getSkillDescription(
                 break
             default:
                 descriptions.push(
-                    `unsupported trigger: ${TriggerType[skill.trigger.type]}`
+                    `unsupported trigger: ${TriggerType[trigger.type]}`
                 )
         }
     }
 
-    const triggerChance = skill.trigger.chances[level - 1]
+    const triggerChance = trigger.chances[level - 1]
     descriptions.push(`${percent(triggerChance / 100, 0)} chance`)
 
-    const effectDuration = skill.effect.durations[level - 1]
-    const effectValue = skill.effect.values[level - 1]
+    const effectDuration = effect.durations[level - 1]
+    const effectValue = effect.values[level - 1]
 
-    switch (skill.effect.type) {
+    switch (effect.type) {
         case EffectType.Plock:
             descriptions.push(`perfect lock`, `for ${effectDuration} seconds`)
             break
@@ -54,9 +54,7 @@ export function getSkillDescription(
         case EffectType.SRU:
             descriptions.push(
                 `increase skill activation chance by ${percent(
-                    'type' in skill.trigger
-                        ? effectValue / 100
-                        : effectValue - 1,
+                    'type' in trigger ? effectValue / 100 : effectValue - 1,
                     0
                 )}`,
                 `for ${effectDuration} seconds`
@@ -85,18 +83,14 @@ export function getSkillDescription(
         case EffectType.Param:
             descriptions.push(
                 `increase stat by ${percent(
-                    'type' in skill.trigger
-                        ? effectValue / 100
-                        : effectValue - 1,
+                    'type' in trigger ? effectValue / 100 : effectValue - 1,
                     0
                 )}`,
                 `for ${effectDuration} seconds`
             )
             break
         default:
-            descriptions.push(
-                `unsupported effect: ${EffectType[skill.effect.type]}`
-            )
+            descriptions.push(`unsupported effect: ${EffectType[effect.type]}`)
     }
 
     return descriptions.join(', ') + '. '
