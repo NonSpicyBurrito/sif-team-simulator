@@ -74,6 +74,14 @@ const ids = useLargeArray(
                     )
                 }
 
+                const wideValue = +condition
+                if (wideValue) {
+                    return ids.filter(
+                        (id) =>
+                            cards.get(id)?.skill.trigger.values[0] === wideValue
+                    )
+                }
+
                 const allowedCharacters = [...characters.entries()]
                     .filter(([, name]) =>
                         name.toLowerCase().includes(condition)
