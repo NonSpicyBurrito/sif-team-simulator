@@ -173,21 +173,21 @@ async function simulate() {
             </div>
         </Field>
         <Field label="Guest Center">
-            <template v-if="guestCenter">
-                <button @click="guestCenter = undefined">Delete</button>
-                <div class="py-1 first-letter:uppercase">
-                    {{ getCenterDescription(guestCenter) }}
-                </div>
-            </template>
-            <template v-else>
-                <button @click="showSelectCenter = !showSelectCenter">
-                    Select
-                </button>
-            </template>
+            <button v-if="guestCenter" @click="guestCenter = undefined">
+                Delete
+            </button>
+            <button v-else @click="showSelectCenter = !showSelectCenter">
+                Select
+            </button>
         </Field>
         <div v-if="!guestCenter && showSelectCenter" class="surface">
             <CardSelector @select="selectGuestCenter" />
         </div>
+        <Field v-if="guestCenter" label="Guest Center Skill">
+            <div class="py-1 first-letter:uppercase">
+                {{ getCenterDescription(guestCenter) }}
+            </div>
+        </Field>
         <Field label="Tap Score Bonus">
             <input
                 v-model="tapScoreBonus"
