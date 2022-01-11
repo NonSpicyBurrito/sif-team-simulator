@@ -25,6 +25,7 @@ export class Context {
     public readonly skillInfos: SkillInfo[]
     public readonly stat: ReturnType<typeof calculateTeamStat>[number]
     public readonly noteCount: number
+    public readonly groupMultipliers: number[]
     public readonly attributeMultipliers: number[]
     public readonly tapScoreMultiplier: number
     public readonly maxHp: number
@@ -119,6 +120,9 @@ export class Context {
         const onScreenDuration =
             noteSpeed >= 6 ? 1.6 - noteSpeed * 0.1 : 1.9 - noteSpeed * 0.15
 
+        this.groupMultipliers = team.map(({ card: { id } }) =>
+            cards.get(id)!.group === chart.group ? 1.1 : 1
+        )
         this.attributeMultipliers = team.map(({ card: { id } }) =>
             cards.get(id)!.attribute === chart.attribute ? 1.1 : 1
         )
@@ -214,6 +218,7 @@ export class Context {
             this.log('skillInfos', this.skillInfos)
             this.log('stat', this.stat)
             this.log('onScreenDuration', onScreenDuration)
+            this.log('groupMultipliers', this.groupMultipliers)
             this.log('attributeMultipliers', this.attributeMultipliers)
             this.log('tapScoreMultiplier', this.tapScoreMultiplier)
             this.log('maxHp', this.maxHp)

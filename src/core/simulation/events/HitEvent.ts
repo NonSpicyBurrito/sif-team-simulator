@@ -58,7 +58,7 @@ export function processHitEvent(this: Live, event: HitEvent) {
         1
     )
     const comboMultiplier = getComboMultiplier(this.combo)
-    const groupMultiplier = 1.1
+    const groupMultiplier = this.context.groupMultipliers[event.position]
     const attributeMultiplier =
         this.context.attributeMultipliers[event.position]
     const noteMultiplier = event.isSwing ? 0.5 : 1
