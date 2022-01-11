@@ -28,6 +28,11 @@ export function getSkillDescription(
             case TriggerType.Perfect:
                 descriptions.push(`every ${triggerValue} perfects`)
                 break
+            case TriggerType.StarPerfect:
+                descriptions.push(
+                    `every ${triggerValue} perfects on star notes`
+                )
+                break
             default:
                 descriptions.push(
                     `unsupported trigger: ${

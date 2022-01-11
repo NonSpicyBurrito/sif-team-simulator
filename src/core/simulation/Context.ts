@@ -34,6 +34,7 @@ export class Context {
     public readonly noteTriggers: [number, number][] = []
     public readonly comboTriggers: [number, number][] = []
     public readonly perfectTriggers: [number, number][] = []
+    public readonly starPerfectTriggers: [number, number][] = []
     public readonly sisScoreMultipliers = fill(1)
     public readonly sisHealMultipliers = fill(0)
     public readonly events: Event[] = []
@@ -154,6 +155,9 @@ export class Context {
                 case TriggerType.Perfect:
                     this.perfectTriggers.push([i, trigger.values[0]])
                     break
+                case TriggerType.StarPerfect:
+                    this.starPerfectTriggers.push([i, trigger.values[0]])
+                    break
                 default:
                     throw `Unsupported card trigger: ${
                         TriggerType[trigger.type] || trigger.type
@@ -164,6 +168,7 @@ export class Context {
         this.sortTriggers(this.noteTriggers, this.normalPriorities)
         this.sortTriggers(this.comboTriggers, this.normalPriorities)
         this.sortTriggers(this.perfectTriggers, this.normalPriorities)
+        this.sortTriggers(this.starPerfectTriggers, this.normalPriorities)
 
         team.forEach((member, i) =>
             member.sisNames.forEach((name) => {
@@ -191,6 +196,7 @@ export class Context {
                         time: note.endTime,
                         type: 'hit',
                         position: note.position,
+                        isStar: note.isStar,
                         isSwing: note.isSwing,
                         perfectJudgments:
                             note.startTime === note.endTime
@@ -225,6 +231,7 @@ export class Context {
             this.log('noteTriggers', this.noteTriggers)
             this.log('comboTriggers', this.comboTriggers)
             this.log('perfectTriggers', this.perfectTriggers)
+            this.log('starPerfectTriggers', this.starPerfectTriggers)
             this.log('sisScoreMultipliers', this.sisScoreMultipliers)
             this.log('sisHealMultipliers', this.sisHealMultipliers)
         }

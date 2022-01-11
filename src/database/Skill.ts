@@ -3,6 +3,7 @@ export enum TriggerType {
     Note = 3,
     Combo = 4,
     Perfect = 6,
+    StarPerfect = 12,
     Chain = 100,
 }
 

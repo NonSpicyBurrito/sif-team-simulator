@@ -6,6 +6,7 @@ export type HitEvent = {
     time: number
     type: 'hit'
     position: number
+    isStar: boolean
     isSwing: boolean
     perfectJudgments: true[]
 }
@@ -51,6 +52,17 @@ export function processHitEvent(this: Live, event: HitEvent) {
 
             triggers.push([i])
         })
+
+        if (event.isStar) {
+            this.context.starPerfectTriggers.forEach(([i, count]) => {
+                this.triggerCounters[i]++
+
+                if (this.triggerCounters[i] < count) return
+                this.triggerCounters[i] -= count
+
+                triggers.push([i])
+            })
+        }
     }
 
     const judgmentMultiplier = judgments.reduce(
