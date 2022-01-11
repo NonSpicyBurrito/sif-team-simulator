@@ -6,6 +6,7 @@ import { thousands } from '../core/formatting'
 import { calculateTeamStat } from '../core/stats'
 import { isTeamComplete, PartialTeam } from '../core/Team'
 import { cards, charts } from '../database'
+import { CenterSkill } from '../database/Center'
 import CardSelector from './CardSelector.vue'
 import MemberEditor from './MemberEditor.vue'
 import TeamDisplay from './TeamDisplay.vue'
@@ -14,7 +15,7 @@ const props = defineProps<{
     team: PartialTeam
     memoryGalleryBonus: number[]
     chartId: string
-    guestCenter: number
+    guestCenter: CenterSkill
 }>()
 
 const chartAttribute = computed(() => charts.get(props.chartId)?.attribute)

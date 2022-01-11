@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { accessories, cards, charts, sises } from '../../database'
+import { CenterSkill } from '../../database/Center'
 import {
     AccessorySkill,
     CardSkill,
@@ -45,7 +46,7 @@ export class Context {
         team: Team,
         mode: string,
         memoryGalleryBonus: number[],
-        guestCenter: number,
+        guestCenter: CenterSkill,
         chartId: string,
         perfectRate: number,
         noteSpeed: number,

@@ -28,7 +28,7 @@ export function calculateTeamStat(
     team: Team,
     memoryGalleryBonus: number[],
     chartId: string,
-    guestCenter: number
+    guestCenter?: CenterSkill
 ) {
     const { attribute } = charts.get(chartId)!
     const { center } = cards.get(team[4].card.id)!
@@ -39,7 +39,6 @@ export function calculateTeamStat(
         trick: 0,
     }))
 
-    const centerMultiplier = [0, 0, 0]
     const teamSisMultiplier = [0, 0, 0]
     const selfSisMultipliers = team.map(() => [0, 0, 0])
     const flatSisBonuses = team.map(() => [0, 0, 0])
@@ -64,8 +63,6 @@ export function calculateTeamStat(
         })
     )
 
-    centerMultiplier[attribute] += guestCenter
-
     const intermediate = team.map((member, i) =>
         getRawMemberStats(member, memoryGalleryBonus).map((raw, j) => {
             const accessoryBonus = member.accessory
@@ -87,16 +84,24 @@ export function calculateTeamStat(
     )
 
     intermediate.forEach((member, i) =>
-        member.forEach(({ panel, affected, base }, j) => {
+        member.forEach(({ affected, base }, j) => {
             base +=
-                base * centerMultiplier[j] +
+                applyCenter(
+                    guestCenter,
+                    member.map(({ base }) => base),
+                    j
+                ) +
                 applyCenter(
                     center,
                     member.map(({ base }) => base),
                     j
                 )
             affected +=
-                panel * centerMultiplier[j] +
+                applyCenter(
+                    guestCenter,
+                    member.map(({ panel }) => panel),
+                    j
+                ) +
                 applyCenter(
                     center,
                     member.map(({ panel }) => panel),
@@ -113,6 +118,8 @@ export function calculateTeamStat(
 }
 
 function applyCenter(center: CenterSkill, stats: number[], attribute: number) {
+    if (!center) return 0
+
     return (
         applyCenterEffect(
             center.main.type,

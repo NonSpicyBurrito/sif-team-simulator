@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useLocalStorage } from '@vueuse/core'
+import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import { computed, nextTick, ref, watch, watchEffect } from 'vue'
+import CardSelector from '../components/CardSelector.vue'
 import Field from '../components/Field.vue'
 import PresetEditor from '../components/PresetEditor.vue'
 import Result from '../components/Result.vue'
@@ -9,7 +10,8 @@ import { getChartDescription } from '../core/chart'
 import { simulateScore } from '../core/simulation'
 import { isTeamComplete, PartialTeam, Team } from '../core/Team'
 import { clone, enumKeys, sleep } from '../core/utils'
-import { charts, initDatabase, isLoading } from '../database'
+import { cards, charts, initDatabase, isLoading } from '../database'
+import { CenterSkill } from '../database/Center'
 import { Difficulty } from '../database/Chart'
 
 const mode = useLocalStorage('mode', 'normal')
@@ -18,7 +20,9 @@ const chartId = useLocalStorage('chartId', '')
 const perfectRate = useLocalStorage('perfectRate', 0.85)
 const noteSpeed = useLocalStorage('noteSpeed', 9)
 const memoryGalleryBonus = useLocalStorage('memoryGalleryBonus', [144, 78, 78])
-const guestCenter = useLocalStorage('guestCenter', 0.21)
+const guestCenter = useLocalStorage<CenterSkill>('guestCenter.1', undefined, {
+    serializer: StorageSerializers.object,
+})
 const tapScoreBonus = useLocalStorage('tapScoreBonus', 0)
 const skillChanceBonus = useLocalStorage('skillChanceBonus', 0)
 const skillChanceReduction = useLocalStorage('skillChanceReduction', 0)
@@ -35,6 +39,12 @@ watchEffect(() => {
 })
 
 const difficulties = enumKeys(Difficulty)
+
+const showSelectCenter = ref(false)
+function selectGuestCenter(id: number) {
+    guestCenter.value = cards.get(id)?.center
+    showSelectCenter.value = false
+}
 
 const showPreset = ref(false)
 function selectPresetTeam(presetTeam: PartialTeam) {
@@ -162,13 +172,19 @@ async function simulate() {
             </div>
         </Field>
         <Field label="Guest Center">
-            <input
-                v-model="guestCenter"
-                class="w-full"
-                type="number"
-                step="0.03"
-            />
+            <template v-if="guestCenter">
+                <button @click="guestCenter = undefined">Delete</button>
+                <div class="py-1">{{ guestCenter }}</div>
+            </template>
+            <template v-else>
+                <button @click="showSelectCenter = !showSelectCenter">
+                    Select
+                </button>
+            </template>
         </Field>
+        <div v-if="!guestCenter && showSelectCenter" class="surface">
+            <CardSelector @select="selectGuestCenter" />
+        </div>
         <Field label="Tap Score Bonus">
             <input
                 v-model="tapScoreBonus"

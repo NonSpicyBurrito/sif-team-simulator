@@ -10,14 +10,16 @@ export enum CenterEffectType {
     PureEmpress = 132,
 }
 
-export type CenterSkill = {
-    main: {
-        type: CenterEffectType
-        value: number
-    }
-    extra: {
-        apply?: unknown
-        type?: CenterEffectType
-        value?: number
-    }
-}
+export type CenterSkill =
+    | {
+          main: {
+              type: CenterEffectType
+              value: number
+          }
+          extra: {
+              apply?: unknown
+              type?: CenterEffectType
+              value?: number
+          }
+      }
+    | undefined
