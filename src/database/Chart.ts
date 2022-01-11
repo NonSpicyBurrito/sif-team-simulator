@@ -1,3 +1,5 @@
+import { Group } from './Card'
+
 export enum Difficulty {
     Easy = 1,
     Normal = 2,
@@ -9,11 +11,13 @@ export enum Difficulty {
 export type Chart = {
     title: string
     difficulty: Difficulty
+    group: Group
     attribute: number
     notes: {
         startTime: number
         endTime: number
         position: number
+        isStar: boolean
         isSwing: boolean
     }[]
 }

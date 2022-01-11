@@ -74,6 +74,7 @@ async function getChartData(id) {
     return {
         title,
         difficulty: live.difficulty,
+        group: live.member_category,
         attribute: notes[0].notes_attribute - 1,
         notes: notes.map((note) => {
             switch (note.effect) {
@@ -84,6 +85,7 @@ async function getChartData(id) {
                         startTime: note.timing_sec,
                         endTime: note.timing_sec,
                         position: 9 - note.position,
+                        isStar: note.effect === 4,
                         isSwing: false,
                     }
                 case 3:
@@ -92,6 +94,7 @@ async function getChartData(id) {
                         startTime: note.timing_sec,
                         endTime: note.timing_sec + note.effect_value,
                         position: 9 - note.position,
+                        isStar: false,
                         isSwing: false,
                     }
                 case 11:
@@ -99,6 +102,7 @@ async function getChartData(id) {
                         startTime: note.timing_sec,
                         endTime: note.timing_sec,
                         position: 9 - note.position,
+                        isStar: false,
                         isSwing: true,
                     }
             }
