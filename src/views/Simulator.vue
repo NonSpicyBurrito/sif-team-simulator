@@ -218,7 +218,7 @@ async function simulate() {
             </button>
         </div>
 
-        <TeamEditor :="{ team, memoryGalleryBonus, guestCenter }" />
+        <TeamEditor :="{ team, memoryGalleryBonus, chartId, guestCenter }" />
 
         <Result v-if="result" :="result" />
     </div>

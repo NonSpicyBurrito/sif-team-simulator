@@ -5,7 +5,7 @@ import { computed, ref } from 'vue'
 import { thousands } from '../core/formatting'
 import { calculateTeamStat } from '../core/stats'
 import { isTeamComplete, PartialTeam } from '../core/Team'
-import { cards } from '../database'
+import { cards, charts } from '../database'
 import CardSelector from './CardSelector.vue'
 import MemberEditor from './MemberEditor.vue'
 import TeamDisplay from './TeamDisplay.vue'
@@ -13,8 +13,11 @@ import TeamDisplay from './TeamDisplay.vue'
 const props = defineProps<{
     team: PartialTeam
     memoryGalleryBonus: number[]
+    chartId: string
     guestCenter: number
 }>()
+
+const chartAttribute = computed(() => charts.get(props.chartId)?.attribute)
 
 const teamStat = computed(() => {
     if (!isTeamComplete(props.team)) return
@@ -22,6 +25,7 @@ const teamStat = computed(() => {
     return calculateTeamStat(
         props.team,
         props.memoryGalleryBonus,
+        props.chartId,
         props.guestCenter
     )
 })
@@ -73,6 +77,11 @@ function selectCard(cardId: number) {
                 v-for="({ base }, index) in teamStat"
                 :key="index"
                 class="w-32"
+                :class="
+                    index === chartAttribute
+                        ? 'font-semibold'
+                        : 'text-sm text-gray-600'
+                "
             >
                 {{ thousands(base) }}
             </div>

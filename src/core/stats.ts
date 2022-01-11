@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { accessories, cards, sises } from '../database'
+import { accessories, cards, charts, sises } from '../database'
 import { Member, Team } from './Team'
 
 function getRawMemberStats(member: Member, memoryGalleryBonus: number[]) {
@@ -26,9 +26,11 @@ function getRawMemberStats(member: Member, memoryGalleryBonus: number[]) {
 export function calculateTeamStat(
     team: Team,
     memoryGalleryBonus: number[],
+    chartId: string,
     guestCenter: number
 ) {
-    const { attribute, center } = cards.get(team[4].card.id)!
+    const { attribute: chartAttribute } = charts.get(chartId)!
+    const { attribute: centerAttribute, center } = cards.get(team[4].card.id)!
 
     const results = [...Array(3)].map(() => ({
         base: 0,
@@ -46,23 +48,24 @@ export function calculateTeamStat(
             const sis = sises.get(name)!
             switch (sis.type) {
                 case 'self':
-                    selfSisMultipliers[i][attribute] += sis.value
+                    selfSisMultipliers[i][chartAttribute] += sis.value
                     break
                 case 'team':
-                    teamSisMultiplier[attribute] += sis.value
+                    teamSisMultiplier[chartAttribute] += sis.value
                     break
                 case 'flat':
-                    flatSisBonuses[i][attribute] += sis.value
+                    flatSisBonuses[i][chartAttribute] += sis.value
                     break
                 case 'plock':
-                    trickMultipliers[i][attribute] = sis.value
+                    trickMultipliers[i][chartAttribute] = sis.value
                     break
             }
         })
     )
 
-    centerMultiplier[attribute] +=
-        (center.main.value + (center.extra.value || 0)) / 100 + guestCenter
+    centerMultiplier[chartAttribute] += guestCenter
+    centerMultiplier[centerAttribute] +=
+        (center.main.value + (center.extra.value || 0)) / 100
 
     team.forEach((member, i) => {
         const raws = getRawMemberStats(member, memoryGalleryBonus)

@@ -107,9 +107,12 @@ export class Context {
         })
 
         const chart = charts.get(chartId)!
-        this.stat = calculateTeamStat(team, memoryGalleryBonus, guestCenter)[
-            chart.attribute
-        ]
+        this.stat = calculateTeamStat(
+            team,
+            memoryGalleryBonus,
+            chartId,
+            guestCenter
+        )[chart.attribute]
         this.noteCount = chart.notes.length
         const maxTime = Math.max(...chart.notes.map(({ endTime }) => endTime))
         const onScreenDuration =
