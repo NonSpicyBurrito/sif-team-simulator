@@ -212,6 +212,7 @@ export class Context {
 
         if (VITE_APP_DIAGNOSTICS) {
             this.log('skillInfos', this.skillInfos)
+            this.log('stat', this.stat)
             this.log('onScreenDuration', onScreenDuration)
             this.log('attributeMultipliers', this.attributeMultipliers)
             this.log('tapScoreMultiplier', this.tapScoreMultiplier)
