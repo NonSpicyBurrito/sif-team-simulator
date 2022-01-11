@@ -6,6 +6,7 @@ import Field from '../components/Field.vue'
 import PresetEditor from '../components/PresetEditor.vue'
 import Result from '../components/Result.vue'
 import TeamEditor from '../components/TeamEditor.vue'
+import { getCenterDescription } from '../core/center'
 import { getChartDescription } from '../core/chart'
 import { simulateScore } from '../core/simulation'
 import { isTeamComplete, PartialTeam, Team } from '../core/Team'
@@ -174,7 +175,9 @@ async function simulate() {
         <Field label="Guest Center">
             <template v-if="guestCenter">
                 <button @click="guestCenter = undefined">Delete</button>
-                <div class="py-1">{{ guestCenter }}</div>
+                <div class="py-1 first-letter:uppercase">
+                    {{ getCenterDescription(guestCenter) }}
+                </div>
             </template>
             <template v-else>
                 <button @click="showSelectCenter = !showSelectCenter">
