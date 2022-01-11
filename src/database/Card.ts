@@ -1,4 +1,5 @@
 import { CenterSkill } from './Center'
+import { CharacterId } from './Character'
 import { CardSkill } from './Skill'
 
 export enum Group {
@@ -27,7 +28,7 @@ export enum Rarity {
 }
 
 export type Card = {
-    character: number
+    character: CharacterId
     group: Group
     year: number
     subunit: Subunit

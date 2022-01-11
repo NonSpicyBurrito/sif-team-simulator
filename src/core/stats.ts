@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { accessories, cards, charts, sises } from '../database'
-import { CenterEffectType, CenterSkill } from '../database/Center'
+import { Card, Group, Subunit } from '../database/Card'
+import {
+    CenterApplyType,
+    CenterEffectType,
+    CenterSkill,
+} from '../database/Center'
+import { CharacterId } from '../database/Character'
 import { Member, Team } from './Team'
 
 function getRawMemberStats(member: Member, memoryGalleryBonus: number[]) {
@@ -85,28 +91,16 @@ export function calculateTeamStat(
 
     intermediate.forEach((member, i) =>
         member.forEach(({ affected, base }, j) => {
+            const card = cards.get(team[i].card.id)!
+            const bases = member.map(({ base }) => base)
+            const panels = member.map(({ panel }) => panel)
+
             base +=
-                applyCenter(
-                    guestCenter,
-                    member.map(({ base }) => base),
-                    j
-                ) +
-                applyCenter(
-                    center,
-                    member.map(({ base }) => base),
-                    j
-                )
+                applyCenter(guestCenter, card, bases, j) +
+                applyCenter(center, card, bases, j)
             affected +=
-                applyCenter(
-                    guestCenter,
-                    member.map(({ panel }) => panel),
-                    j
-                ) +
-                applyCenter(
-                    center,
-                    member.map(({ panel }) => panel),
-                    j
-                )
+                applyCenter(guestCenter, card, panels, j) +
+                applyCenter(center, card, panels, j)
 
             results[j].base += base
             results[j].param += affected
@@ -117,7 +111,12 @@ export function calculateTeamStat(
     return results
 }
 
-function applyCenter(center: CenterSkill, stats: number[], attribute: number) {
+function applyCenter(
+    center: CenterSkill,
+    card: Card,
+    stats: number[],
+    attribute: number
+) {
     if (!center) return 0
 
     return (
@@ -127,8 +126,9 @@ function applyCenter(center: CenterSkill, stats: number[], attribute: number) {
             stats,
             attribute
         ) +
-        (center.extra.type && center.extra.value
-            ? applyCenterEffect(
+        (center.extra.apply && center.extra.type && center.extra.value
+            ? (applyCenterApply(center.extra.apply, card) ? 1 : 0) *
+              applyCenterEffect(
                   center.extra.type,
                   center.extra.value / 100,
                   stats,
@@ -165,5 +165,236 @@ function applyCenterEffect(
             return [0, 1, 0][attribute] * value * stats[2]
         default:
             throw `Unsupported center effect: ${CenterEffectType[type] || type}`
+    }
+}
+
+function applyCenterApply(
+    type: CenterApplyType,
+    { character, group, year, subunit }: Card
+) {
+    switch (type) {
+        case CenterApplyType.FirstYear:
+            return year === 1
+        case CenterApplyType.SecondYear:
+            return year === 2
+        case CenterApplyType.ThirdYear:
+            return year === 3
+        case CenterApplyType.Muse:
+            return group === Group.Muse
+        case CenterApplyType.Aqours:
+            return group === Group.Aqours
+        case CenterApplyType.Printemps:
+            return subunit === Subunit.Printemps
+        case CenterApplyType.LilyWhite:
+            return subunit === Subunit.LilyWhite
+        case CenterApplyType.BiBi:
+            return subunit === Subunit.BiBi
+        case CenterApplyType.CYaRon:
+            return subunit === Subunit.CYaRon
+        case CenterApplyType.AZALEA:
+            return subunit === Subunit.AZALEA
+        case CenterApplyType.GuiltyKiss:
+            return subunit === Subunit.GuiltyKiss
+        case CenterApplyType.Nijigasaki:
+            return group === Group.Nijigasaki
+        case CenterApplyType.HonokaEli:
+            return (
+                character === CharacterId.Honoka ||
+                character === CharacterId.Eli
+            )
+        case CenterApplyType.HonokaKotori:
+            return (
+                character === CharacterId.Honoka ||
+                character === CharacterId.Kotori
+            )
+        case CenterApplyType.HonokaMaki:
+            return (
+                character === CharacterId.Honoka ||
+                character === CharacterId.Maki
+            )
+        case CenterApplyType.HonokaHanayo:
+            return (
+                character === CharacterId.Honoka ||
+                character === CharacterId.Hanayo
+            )
+        case CenterApplyType.HonokaNico:
+            return (
+                character === CharacterId.Honoka ||
+                character === CharacterId.Nico
+            )
+        case CenterApplyType.EliUmi:
+            return (
+                character === CharacterId.Eli || character === CharacterId.Umi
+            )
+        case CenterApplyType.EliMaki:
+            return (
+                character === CharacterId.Eli || character === CharacterId.Maki
+            )
+        case CenterApplyType.EliNozomi:
+            return (
+                character === CharacterId.Eli ||
+                character === CharacterId.Nozomi
+            )
+        case CenterApplyType.EliNico:
+            return (
+                character === CharacterId.Eli || character === CharacterId.Nico
+            )
+        case CenterApplyType.KotoriUmi:
+            return (
+                character === CharacterId.Kotori ||
+                character === CharacterId.Umi
+            )
+        case CenterApplyType.KotoriRin:
+            return (
+                character === CharacterId.Kotori ||
+                character === CharacterId.Rin
+            )
+        case CenterApplyType.KotoriMaki:
+            return (
+                character === CharacterId.Kotori ||
+                character === CharacterId.Maki
+            )
+        case CenterApplyType.KotoriNico:
+            return (
+                character === CharacterId.Kotori ||
+                character === CharacterId.Nico
+            )
+        case CenterApplyType.UmiRin:
+            return (
+                character === CharacterId.Umi || character === CharacterId.Rin
+            )
+        case CenterApplyType.UmiNozomi:
+            return (
+                character === CharacterId.Umi ||
+                character === CharacterId.Nozomi
+            )
+        case CenterApplyType.UmiHanayo:
+            return (
+                character === CharacterId.Umi ||
+                character === CharacterId.Hanayo
+            )
+        case CenterApplyType.RinNozomi:
+            return (
+                character === CharacterId.Rin ||
+                character === CharacterId.Nozomi
+            )
+        case CenterApplyType.RinHanayo:
+            return (
+                character === CharacterId.Rin ||
+                character === CharacterId.Hanayo
+            )
+        case CenterApplyType.MakiHanayo:
+            return (
+                character === CharacterId.Maki ||
+                character === CharacterId.Hanayo
+            )
+        case CenterApplyType.MakiNico:
+            return (
+                character === CharacterId.Maki || character === CharacterId.Nico
+            )
+        case CenterApplyType.NozomiHanayo:
+            return (
+                character === CharacterId.Nozomi ||
+                character === CharacterId.Hanayo
+            )
+        case CenterApplyType.NozomiNico:
+            return (
+                character === CharacterId.Nozomi ||
+                character === CharacterId.Nico
+            )
+        case CenterApplyType.ChikaKanan:
+            return (
+                character === CharacterId.Chika ||
+                character === CharacterId.Kanan
+            )
+        case CenterApplyType.ChikaYou:
+            return (
+                character === CharacterId.Chika || character === CharacterId.You
+            )
+        case CenterApplyType.ChikaYoshiko:
+            return (
+                character === CharacterId.Chika ||
+                character === CharacterId.Yoshiko
+            )
+        case CenterApplyType.ChikaHanamaru:
+            return (
+                character === CharacterId.Chika ||
+                character === CharacterId.Hanamaru
+            )
+        case CenterApplyType.ChikaMari:
+            return (
+                character === CharacterId.Chika ||
+                character === CharacterId.Mari
+            )
+        case CenterApplyType.RikoKanan:
+            return (
+                character === CharacterId.Riko ||
+                character === CharacterId.Kanan
+            )
+        case CenterApplyType.RikoYoshiko:
+            return (
+                character === CharacterId.Riko ||
+                character === CharacterId.Yoshiko
+            )
+        case CenterApplyType.RikoHanamaru:
+            return (
+                character === CharacterId.Riko ||
+                character === CharacterId.Hanamaru
+            )
+        case CenterApplyType.RikoMari:
+            return (
+                character === CharacterId.Riko || character === CharacterId.Mari
+            )
+        case CenterApplyType.KananDia:
+            return (
+                character === CharacterId.Kanan || character === CharacterId.Dia
+            )
+        case CenterApplyType.KananYou:
+            return (
+                character === CharacterId.Kanan || character === CharacterId.You
+            )
+        case CenterApplyType.KananMari:
+            return (
+                character === CharacterId.Kanan ||
+                character === CharacterId.Mari
+            )
+        case CenterApplyType.DiaYou:
+            return (
+                character === CharacterId.Dia || character === CharacterId.You
+            )
+        case CenterApplyType.DiaYoshiko:
+            return (
+                character === CharacterId.Dia ||
+                character === CharacterId.Yoshiko
+            )
+        case CenterApplyType.DiaMari:
+            return (
+                character === CharacterId.Dia || character === CharacterId.Mari
+            )
+        case CenterApplyType.DiaRuby:
+            return (
+                character === CharacterId.Dia || character === CharacterId.Ruby
+            )
+        case CenterApplyType.YouRuby:
+            return (
+                character === CharacterId.You || character === CharacterId.Ruby
+            )
+        case CenterApplyType.YoshikoHanamaru:
+            return (
+                character === CharacterId.Yoshiko ||
+                character === CharacterId.Hanamaru
+            )
+        case CenterApplyType.YoshikoRuby:
+            return (
+                character === CharacterId.Yoshiko ||
+                character === CharacterId.Ruby
+            )
+        case CenterApplyType.HanamaruRuby:
+            return (
+                character === CharacterId.Hanamaru ||
+                character === CharacterId.Ruby
+            )
+        default:
+            throw `Unsupported center apply: ${CenterApplyType[type] || type}`
     }
 }

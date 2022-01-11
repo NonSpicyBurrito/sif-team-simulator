@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { Accessory } from './Accessory'
 import { Card } from './Card'
-import { Character } from './Character'
+import { Character, CharacterId } from './Character'
 import { Chart, Difficulty } from './Chart'
 import { Sis } from './Sis'
 
@@ -9,7 +9,7 @@ export const isLoading = ref(true)
 
 export const accessories = new Map<string, Accessory>()
 export const cards = new Map<number, Card>()
-export const characters = new Map<number, Character>()
+export const characters = new Map<CharacterId, Character>()
 export const charts = new Map<string, Chart>()
 export const sises = new Map<string, Sis>([
     ['Charm', { type: 'score', value: 2.5 }],
