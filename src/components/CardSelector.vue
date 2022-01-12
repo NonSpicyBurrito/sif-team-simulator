@@ -109,7 +109,7 @@ const ids = useLargeArray(
             <p>
                 <span class="font-semibold">Specific Triggers:</span>
                 {{
-                    Object.keys(specificTriggers)
+                    ['', ...Object.keys(specificTriggers)]
                         .map((t) => `20${t}`)
                         .join(', ')
                 }}
