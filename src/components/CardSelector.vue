@@ -2,8 +2,9 @@
 import { useDebounce, useLocalStorage } from '@vueuse/core'
 import { computed } from 'vue'
 import { useLargeArray } from '../composables/large-array'
+import { getCharacterIds } from '../core/character'
 import { enumKeys } from '../core/utils'
-import { cards, characters } from '../database'
+import { cards } from '../database'
 import { Rarity } from '../database/Card'
 import { EffectType, TriggerType } from '../database/Skill'
 import Card from './Card.vue'
@@ -82,11 +83,7 @@ const ids = useLargeArray(
                     )
                 }
 
-                const allowedCharacters = [...characters.entries()]
-                    .filter(([, name]) =>
-                        name.toLowerCase().includes(condition)
-                    )
-                    .map(([character]) => character)
+                const allowedCharacters = getCharacterIds(condition)
                 return ids.filter((id) =>
                     allowedCharacters.includes(cards.get(id)?.character || -1)
                 )
