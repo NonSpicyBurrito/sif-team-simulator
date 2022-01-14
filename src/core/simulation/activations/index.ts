@@ -8,5 +8,5 @@ export function activate(
 ) {
     if (this.activateSelfCoverage(index)) return
     if (this.activateCardSkill(time, index, skillChanceMultiplier)) return
-    if (this.activateAccessorySkill(time, index, skillChanceMultiplier)) return
+    if (this.activateAccessorySkill(time, index)) return
 }

@@ -4,8 +4,7 @@ import { Live } from '../Live'
 export function activateAccessorySkill(
     this: Live,
     time: number,
-    index: number,
-    skillChanceMultiplier: number
+    index: number
 ) {
     const { accessory } = this.context.skillInfos[index]
     if (!accessory) return
@@ -19,13 +18,12 @@ export function activateAccessorySkill(
             'at',
             time,
             'with',
-            (trigger.chances[0] / 100) * skillChanceMultiplier,
+            trigger.chances[0] / 100,
             'accessory skill chance'
         )
     }
 
-    if (Math.random() >= (trigger.chances[0] / 100) * skillChanceMultiplier)
-        return
+    if (Math.random() >= trigger.chances[0] / 100) return
 
     const level = this.consumeAmp()
 
