@@ -2,14 +2,13 @@
 /* eslint-disable vue/no-mutating-props */
 
 import { computed, ref } from 'vue'
-import { thousands } from '../core/formatting'
-import { calculateTeamStat } from '../core/stats'
-import { isTeamComplete, PartialTeam } from '../core/Team'
-import { cards, charts } from '../database'
+import { PartialTeam } from '../core/Team'
+import { cards } from '../database'
 import { CenterSkill } from '../database/Center'
 import CardSelector from './CardSelector.vue'
 import MemberEditor from './MemberEditor.vue'
 import TeamDisplay from './TeamDisplay.vue'
+import TeamStats from './TeamStats.vue'
 
 const props = defineProps<{
     team: PartialTeam
@@ -17,19 +16,6 @@ const props = defineProps<{
     chartId: string
     guestCenter: CenterSkill
 }>()
-
-const chartAttribute = computed(() => charts.get(props.chartId)?.attribute)
-
-const teamStat = computed(() => {
-    if (!isTeamComplete(props.team)) return
-
-    return calculateTeamStat(
-        props.team,
-        props.memoryGalleryBonus,
-        props.chartId,
-        props.guestCenter
-    )
-})
 
 const selected = ref(-1)
 const member = computed(() => props.team[selected.value])
@@ -70,23 +56,7 @@ function selectCard(cardId: number) {
         <div class="flex justify-center">
             <TeamDisplay v-model="selected" :="{ team }" />
         </div>
-        <div
-            v-if="teamStat"
-            class="flex justify-center items-center my-2 text-center"
-        >
-            <div
-                v-for="({ base }, index) in teamStat"
-                :key="index"
-                class="w-32"
-                :class="
-                    index === chartAttribute
-                        ? 'font-semibold'
-                        : 'text-sm text-gray-600'
-                "
-            >
-                {{ thousands(base) }}
-            </div>
-        </div>
+        <TeamStats :="{ team, memoryGalleryBonus, chartId, guestCenter }" />
     </div>
 
     <div v-if="selected !== -1" class="surface">
