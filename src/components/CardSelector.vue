@@ -35,6 +35,11 @@ const ids = useLargeArray(
 
         return conditions.reduce(
             (ids, condition) => {
+                if (condition.startsWith('#')) {
+                    const id = +condition.slice(1)
+                    return ids.includes(id) ? [id] : []
+                }
+
                 if (rarities[condition]) {
                     return ids.filter(
                         (id) => cards.get(id)?.rarity === rarities[condition]
@@ -98,6 +103,10 @@ const ids = useLargeArray(
     <Field label="Search">
         <input v-model="search" class="w-full" type="text" />
         <div class="my-1 text-sm">
+            <p>
+                <span class="font-semibold">ID:</span>
+                #64
+            </p>
             <p>
                 <span class="font-semibold">Rarities:</span>
                 {{ Object.keys(rarities).join(', ') }}
