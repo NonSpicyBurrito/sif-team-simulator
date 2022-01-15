@@ -139,7 +139,7 @@ export function getSkillSimpleDescription({
         }
     }
 
-    descriptions.push(EffectType[effect.type].toLowerCase() || '?')
+    descriptions.push((EffectType[effect.type] || '?').toLowerCase())
 
     return descriptions.join(' ')
 }
