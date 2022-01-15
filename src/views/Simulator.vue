@@ -235,6 +235,8 @@ async function simulate() {
             @select="selectPresetTeam"
         />
 
+        <TeamEditor :="{ team, memoryGalleryBonus, chartId, guestCenter }" />
+
         <div class="flex justify-center my-8">
             <button
                 class="text-lg font-semibold"
@@ -244,8 +246,6 @@ async function simulate() {
                 Simulate
             </button>
         </div>
-
-        <TeamEditor :="{ team, memoryGalleryBonus, chartId, guestCenter }" />
 
         <Result v-if="result" :="result" />
     </div>
