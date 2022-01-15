@@ -4,7 +4,7 @@
 import { getSkillDescription } from '../core/skill'
 import { Member } from '../core/Team'
 import { accessories, cards } from '../database'
-import AccessoryIcon from './AccessoryIcon.vue'
+import Accessory from './Accessory.vue'
 import Field from './Field.vue'
 
 defineProps<{
@@ -22,7 +22,7 @@ defineProps<{
                 v-for="[id, accessory] in accessories.entries()"
                 :key="id"
             >
-                <AccessoryIcon
+                <Accessory
                     v-if="
                         accessory.character === 0 ||
                         accessory.character ===
@@ -30,6 +30,7 @@ defineProps<{
                     "
                     class="mr-1 mb-1 w-12 h-12 cursor-pointer"
                     :="{ id }"
+                    simple
                     @click="member.accessory = { id, level: 8 }"
                 />
             </template>
