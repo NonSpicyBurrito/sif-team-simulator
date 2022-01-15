@@ -133,6 +133,7 @@ const ids = useLargeArray(
             <Card
                 class="shrink-0 m-1 cursor-pointer"
                 :="{ id }"
+                simple
                 @click="$emit('select', id)"
             />
         </template>

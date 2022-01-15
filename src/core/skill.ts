@@ -104,3 +104,42 @@ export function getSkillDescription(
 
     return descriptions.join(', ') + '. '
 }
+
+export function getSkillSimpleDescription({
+    trigger,
+    effect,
+}: CardSkill | AccessorySkill) {
+    const descriptions: string[] = []
+
+    if ('type' in trigger) {
+        const triggerValue = trigger.values[0]
+
+        switch (trigger.type) {
+            case TriggerType.Time:
+                descriptions.push(`${triggerValue}s`)
+                break
+            case TriggerType.Note:
+                descriptions.push(`${triggerValue}n`)
+                break
+            case TriggerType.Combo:
+                descriptions.push(`${triggerValue}c`)
+                break
+            case TriggerType.Perfect:
+                descriptions.push(`${triggerValue}p`)
+                break
+            case TriggerType.StarPerfect:
+                descriptions.push(triggerValue.toString())
+                break
+            case TriggerType.Chain:
+                descriptions.push('chain')
+                break
+            default:
+                descriptions.push('?')
+                break
+        }
+    }
+
+    descriptions.push(EffectType[effect.type].toLowerCase() || '?')
+
+    return descriptions.join(' ')
+}

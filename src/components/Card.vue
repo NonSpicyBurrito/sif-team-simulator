@@ -1,17 +1,28 @@
 <script setup lang="ts">
 /* eslint-disable tailwindcss/no-custom-classname */
 
+import { computed } from 'vue'
+import { getSkillSimpleDescription } from '../core/skill'
 import { Member } from '../core/Team'
+import { cards } from '../database'
 import AccessoryIcon from './AccessoryIcon.vue'
 import CardIcon from './CardIcon.vue'
 
-defineProps<{
+const props = defineProps<{
     id: number
     level?: number
     sl?: number
     sisNames?: string[]
     accessory?: Member['accessory']
+    simple?: boolean
 }>()
+
+const simpleDescription = computed(() => {
+    const card = cards.get(props.id)
+    if (!card) return
+
+    return getSkillSimpleDescription(card.skill)
+})
 </script>
 
 <template>
@@ -40,6 +51,11 @@ defineProps<{
         >
             <div class="text-center tag">
                 {{ sisNames.join(' ') }}
+            </div>
+        </div>
+        <div v-if="simple" class="flex absolute bottom-0 justify-center w-full">
+            <div class="text-center tag">
+                {{ simpleDescription }}
             </div>
         </div>
     </div>
