@@ -3,13 +3,20 @@ import { computed, ref, watchEffect } from 'vue'
 import { getChartDescription } from '../core/chart'
 import { duration, percent, small, thousands } from '../core/formatting'
 import { simulateScore } from '../core/simulation'
+import { Team } from '../core/Team'
 import { charts } from '../database'
+import { CenterSkill } from '../database/Center'
 import Field from './Field.vue'
 import Histogram from './Histogram.vue'
+import TeamDisplay from './TeamDisplay.vue'
+import TeamStats from './TeamStats.vue'
 
 const props = defineProps<{
     mode: string
+    memoryGalleryBonus: number[]
     chartId: string
+    guestCenter: CenterSkill
+    team: Team
     time: number
     result: ReturnType<typeof simulateScore>
 }>()
@@ -40,6 +47,11 @@ watchEffect(() => {
 
 <template>
     <div class="surface">
+        <div class="mb-8">
+            <TeamDisplay :="{ team }" :model-value="-1" />
+            <TeamStats :="{ team, memoryGalleryBonus, chartId, guestCenter }" />
+        </div>
+
         <Field label="Chart">
             {{ getChartDescription(charts.get(chartId)!) }}
         </Field>

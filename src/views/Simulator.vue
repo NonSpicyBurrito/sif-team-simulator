@@ -58,13 +58,18 @@ const isCalculating = ref(false)
 
 const result = ref<{
     mode: string
+    memoryGalleryBonus: number[]
     chartId: string
+    guestCenter: CenterSkill
+    team: Team
     time: number
     result: ReturnType<typeof simulateScore>
 }>()
 watch(difficulty, () => (result.value = undefined))
 
 async function simulate() {
+    if (!isTeamComplete(team.value)) return
+
     isCalculating.value = true
 
     await sleep(100)
@@ -73,7 +78,7 @@ async function simulate() {
     try {
         const startTime = Date.now()
         const simulateResult = simulateScore(
-            team.value as Team,
+            team.value,
             mode.value,
             memoryGalleryBonus.value,
             guestCenter.value,
@@ -88,7 +93,10 @@ async function simulate() {
 
         result.value = {
             mode: mode.value,
+            memoryGalleryBonus: clone(memoryGalleryBonus.value),
             chartId: chartId.value,
+            guestCenter: guestCenter.value,
+            team: clone(team.value),
             time: Date.now() - startTime,
             result: simulateResult,
         }
