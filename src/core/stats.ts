@@ -375,6 +375,11 @@ function applyCenterApply(
             return (
                 character === CharacterId.Dia || character === CharacterId.Ruby
             )
+        case CenterApplyType.YouHanamaru:
+            return (
+                character === CharacterId.You ||
+                character === CharacterId.Hanamaru
+            )
         case CenterApplyType.YouRuby:
             return (
                 character === CharacterId.You || character === CharacterId.Ruby

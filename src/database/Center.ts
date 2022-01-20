@@ -61,6 +61,7 @@ export enum CenterApplyType {
     DiaYoshiko = 129,
     DiaMari = 131,
     DiaRuby = 132,
+    YouHanamaru = 134,
     YouRuby = 136,
     YoshikoHanamaru = 137,
     YoshikoRuby = 139,
