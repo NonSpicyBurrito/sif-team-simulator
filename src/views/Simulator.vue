@@ -148,7 +148,10 @@ async function simulate() {
             </div>
         </Field>
         <Field label="Chart">
-            <select v-model="chartId" class="w-full">
+            <select
+                v-model="chartId"
+                class="overflow-hidden w-full text-ellipsis"
+            >
                 <option
                     v-for="[id, info] in sortedChartEntries"
                     :key="id"
