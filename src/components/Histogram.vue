@@ -18,7 +18,7 @@ defineProps<{
             class="group flex basis-0 flex-col grow justify-end h-full"
         >
             <div
-                class="bg-gray-700 group-hover:bg-gray-600"
+                class="bg-gray-700 group-hover:bg-gray-600 transition-all"
                 :style="{ height: `${95 * value}%` }"
             />
             <div

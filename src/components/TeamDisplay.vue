@@ -17,7 +17,7 @@ defineEmits<{
         <div
             v-for="(member, index) in team"
             :key="index"
-            class="m-1 rounded-full cursor-pointer"
+            class="m-1 rounded-full transition-all cursor-pointer"
             :class="{
                 'ring-4 ring-white': modelValue === index,
                 'opacity-25': modelValue !== -1 && modelValue !== index,
