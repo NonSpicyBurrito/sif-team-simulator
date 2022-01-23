@@ -282,8 +282,5 @@ async function simulate() {
     </div>
     <div v-else class="py-8 text-center">Loading...</div>
 
-    <div
-        v-if="isCalculating"
-        class="fixed top-0 right-0 bottom-0 left-0 z-50 cursor-wait"
-    />
+    <div v-if="isCalculating" class="fixed inset-0 z-50 cursor-wait" />
 </template>
