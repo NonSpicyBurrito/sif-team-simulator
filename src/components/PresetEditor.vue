@@ -70,11 +70,7 @@ function deletePresetTeam(index: number) {
             class="flex flex-col justify-center my-2 sm:flex-row"
         >
             <button @click="$emit('select', presetTeam)">
-                <TeamDisplay
-                    class="my-1"
-                    :team="presetTeam"
-                    :model-value="-1"
-                />
+                <TeamDisplay class="my-1" :team="presetTeam" />
             </button>
             <button class="mt-2 sm:mt-0 sm:ml-2" @click="deletePresetTeam(i)">
                 <div class="sm:[writing-mode:vertical-lr]">Delete</div>

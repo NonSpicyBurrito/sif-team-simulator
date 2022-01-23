@@ -4,7 +4,7 @@ import Card from './Card.vue'
 
 defineProps<{
     team: PartialTeam
-    modelValue: number
+    modelValue?: number
 }>()
 
 defineEmits<{
@@ -17,10 +17,11 @@ defineEmits<{
         <div
             v-for="(member, index) in team"
             :key="index"
-            class="m-1 rounded-full transition-all cursor-pointer"
+            class="m-1 rounded-full transition-all"
             :class="{
+                'cursor-pointer': modelValue !== undefined,
                 'ring-4 ring-white': modelValue === index,
-                'opacity-25': modelValue !== -1 && modelValue !== index,
+                'opacity-25': ![undefined, -1, index].includes(modelValue),
             }"
             @click="
                 $emit('update:modelValue', modelValue === index ? -1 : index)

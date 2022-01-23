@@ -48,7 +48,7 @@ watchEffect(() => {
 <template>
     <div class="surface">
         <div class="mb-8">
-            <TeamDisplay :="{ team }" :model-value="-1" />
+            <TeamDisplay :="{ team }" />
             <TeamStats :="{ team, memoryGalleryBonus, chartId, guestCenter }" />
         </div>
 
