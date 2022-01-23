@@ -7,8 +7,11 @@
     @apply p-4 sm:p-8;
     @apply rounded-xl;
     @apply shadow-xl;
-    @apply bg-white;
-    @apply bg-opacity-5;
+    @apply bg-white/5;
+}
+
+.tag {
+    @apply px-1 text-xxs bg-black/75;
 }
 
 button {

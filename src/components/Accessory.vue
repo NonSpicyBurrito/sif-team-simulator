@@ -29,9 +29,3 @@ const simpleDescription = computed(() => {
         </div>
     </div>
 </template>
-
-<style scoped>
-.tag {
-    @apply px-1 text-xxs bg-black/75;
-}
-</style>
