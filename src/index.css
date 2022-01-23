@@ -24,7 +24,7 @@ input[type='text'] {
     @apply shadow-sm;
     @apply border-none;
     @apply outline-none;
-    @apply focus:ring-1 focus:ring-gray-300;
+    @apply focus:ring-1 focus:ring-white;
     @apply hover:bg-gray-600;
     @apply active:shadow-inner;
     @apply active:bg-gray-700;
