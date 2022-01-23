@@ -13,7 +13,7 @@ import { isTeamComplete, PartialTeam, Team } from '../core/Team'
 import { clone, enumKeys, sleep } from '../core/utils'
 import { cards, charts, initDatabase, isLoading } from '../database'
 import { CenterSkill } from '../database/Center'
-import { Difficulty } from '../database/Chart'
+import { Chart, Difficulty } from '../database/Chart'
 import PercentageInput from '../components/PercentageInput.vue'
 
 const mode = useLocalStorage('mode', 'normal')
@@ -31,13 +31,19 @@ const skillChanceReduction = useLocalStorage('skillChanceReduction', 0)
 const count = useLocalStorage('count', 10000)
 const team = useLocalStorage('team', Array(9).fill(null) as PartialTeam)
 
+const sortedChartEntries = ref<[string, Chart][]>([])
+
 watchEffect(() => initDatabase(difficulty.value))
 
 watchEffect(() => {
     if (isLoading.value) return
-    if (charts.get(chartId.value)) return
 
-    chartId.value = charts.keys().next().value
+    sortedChartEntries.value = [...charts.entries()].sort(([, a], [, b]) =>
+        a.title.localeCompare(b.title)
+    )
+
+    if (charts.get(chartId.value)) return
+    chartId.value = sortedChartEntries.value[0][0]
 })
 
 const difficulties = enumKeys(Difficulty)
@@ -143,7 +149,11 @@ async function simulate() {
         </Field>
         <Field label="Chart">
             <select v-model="chartId" class="w-full">
-                <option v-for="[id, info] in charts" :key="id" :value="id">
+                <option
+                    v-for="[id, info] in sortedChartEntries"
+                    :key="id"
+                    :value="id"
+                >
                     {{ getChartDescription(info) }}
                 </option>
             </select>
