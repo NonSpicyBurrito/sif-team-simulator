@@ -34,7 +34,7 @@ watch(optionValue, (value) => {
 </script>
 
 <template>
-    <div class="flex">
+    <div class="flex justify-end">
         <input
             v-if="optionValue === undefined"
             v-model="customValue"

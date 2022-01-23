@@ -14,30 +14,22 @@
     @apply px-1 text-xxs bg-black/75;
 }
 
-button {
-    @apply px-3 py-1;
-    @apply bg-gray-700;
-    @apply rounded-md;
-    @apply shadow-sm;
-    @apply hover:bg-gray-600;
-    @apply active:shadow-inner;
-    @apply active:bg-gray-700;
-    @apply disabled:bg-gray-800;
-    @apply disabled:text-gray-600;
-    @apply disabled:cursor-not-allowed;
-}
-
-select {
-    @apply px-2 py-1;
-    @apply bg-gray-700;
-    @apply rounded-md;
-    @apply shadow-sm;
-}
-
+button,
+select,
 input[type='number'],
 input[type='text'] {
     @apply px-3 py-1;
     @apply bg-gray-700;
     @apply rounded-md;
     @apply shadow-sm;
+    @apply border-none;
+    @apply outline-none;
+    @apply focus:ring-1 focus:ring-gray-300;
+    @apply hover:bg-gray-600;
+    @apply active:shadow-inner;
+    @apply active:bg-gray-700;
+    @apply disabled:bg-gray-800;
+    @apply disabled:text-gray-600;
+    @apply disabled:cursor-not-allowed;
+    @apply transition-all;
 }
