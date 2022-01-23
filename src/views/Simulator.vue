@@ -236,7 +236,7 @@ async function simulate() {
                 :step="0.05"
             />
         </Field>
-        <Field label="Skill Chance Reduction">
+        <Field label="Skill Rate Down">
             <PercentageInput
                 v-model="skillChanceReduction"
                 :options="{
