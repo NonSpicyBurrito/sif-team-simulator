@@ -14,6 +14,7 @@ import { clone, enumKeys, sleep } from '../core/utils'
 import { cards, charts, initDatabase, isLoading } from '../database'
 import { CenterSkill } from '../database/Center'
 import { Difficulty } from '../database/Chart'
+import PercentageInput from '../components/PercentageInput.vue'
 
 const mode = useLocalStorage('mode', 'normal')
 const difficulty = useLocalStorage('difficulty', Difficulty.Master)
@@ -148,11 +149,19 @@ async function simulate() {
             </select>
         </Field>
         <Field label="Perfect Rate">
-            <input
+            <PercentageInput
                 v-model="perfectRate"
-                class="w-full"
-                type="number"
-                step="0.01"
+                :options="{
+                    '100%': 1,
+                    '95%': 0.95,
+                    '90%': 0.9,
+                    '85%': 0.85,
+                    '80%': 0.8,
+                    '75%': 0.75,
+                }"
+                :min="0"
+                :max="1"
+                :step="0.05"
             />
         </Field>
         <Field label="Note Speed">
@@ -197,27 +206,49 @@ async function simulate() {
             </div>
         </Field>
         <Field label="Tap Score Bonus">
-            <input
+            <PercentageInput
                 v-model="tapScoreBonus"
-                class="w-full"
-                type="number"
-                step="0.1"
+                :options="{
+                    '0%': 0,
+                    '5%': 0.05,
+                    '10%': 0.1,
+                    '15%': 0.15,
+                    '20%': 0.2,
+                    '25%': 0.25,
+                    '30%': 0.3,
+                    '35%': 0.35,
+                    '40%': 0.4,
+                }"
+                :min="0"
+                :max="1"
+                :step="0.05"
             />
         </Field>
         <Field label="Skill Chance Bonus">
-            <input
+            <PercentageInput
                 v-model="skillChanceBonus"
-                class="w-full"
-                type="number"
-                step="0.1"
+                :options="{
+                    '0%': 0,
+                    '10%': 0.1,
+                }"
+                :min="0"
+                :max="1"
+                :step="0.05"
             />
         </Field>
         <Field label="Skill Chance Reduction">
-            <input
+            <PercentageInput
                 v-model="skillChanceReduction"
-                class="w-full"
-                type="number"
-                step="0.05"
+                :options="{
+                    '0%': 0,
+                    '5%': 0.05,
+                    '10%': 0.1,
+                    '15%': 0.15,
+                    '20%': 0.2,
+                }"
+                :min="0"
+                :max="1"
+                :step="0.05"
             />
         </Field>
         <Field label="Count">
