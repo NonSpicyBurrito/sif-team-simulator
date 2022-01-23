@@ -21,8 +21,12 @@ const current = ref<keyof typeof tabs>('Simulator')
             <a
                 v-for="(value, name) in tabs"
                 :key="name"
-                class="basis-0 grow p-2 text-center cursor-pointer sm:p-4"
-                :class="{ 'border-b-2 ': current === name }"
+                class="basis-0 grow p-2 text-center border-b-2 border-white/0 transition-all cursor-pointer sm:p-4"
+                :class="
+                    current === name
+                        ? 'border-white/100'
+                        : 'hover:border-white/50 active:border-white/25'
+                "
                 @click="current = name"
             >
                 {{ name }}
