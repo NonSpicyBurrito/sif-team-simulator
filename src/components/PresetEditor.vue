@@ -44,6 +44,15 @@ function exportPreset() {
 function deletePresetTeam(index: number) {
     presetTeams.value.splice(index, 1)
 }
+
+function movePresetTeam(index: number, direction: -1 | 1) {
+    const newIndex = index + direction
+    if (newIndex < 0 || newIndex >= presetTeams.value.length) return
+
+    const team = presetTeams.value[index]
+    presetTeams.value[index] = presetTeams.value[newIndex]
+    presetTeams.value[newIndex] = team
+}
 </script>
 
 <template>
@@ -72,9 +81,18 @@ function deletePresetTeam(index: number) {
             <button @click="$emit('select', presetTeam)">
                 <TeamDisplay class="my-1" :team="presetTeam" />
             </button>
-            <button class="mt-2 sm:mt-0 sm:ml-2" @click="deletePresetTeam(i)">
-                <div class="sm:[writing-mode:vertical-lr]">Delete</div>
-            </button>
+            <div
+                class="flex justify-center mt-2 text-sm sm:flex-col sm:mt-0 sm:ml-2"
+            >
+                <button @click="movePresetTeam(i, -1)">▲</button>
+                <button
+                    class="mx-1 sm:my-1 sm:mx-0"
+                    @click="deletePresetTeam(i)"
+                >
+                    ✗
+                </button>
+                <button @click="movePresetTeam(i, 1)">▼</button>
+            </div>
         </div>
     </div>
 </template>
