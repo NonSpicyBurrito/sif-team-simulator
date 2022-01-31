@@ -62,9 +62,9 @@ function selectCard(cardId: number) {
     <div v-if="selected !== -1" class="surface">
         <template v-if="member">
             <div class="flex justify-center mb-8">
-                <button class="mx-1" @click="moveMember(-1)">Move Left</button>
-                <button class="mx-1" @click="deleteMember()">Delete</button>
-                <button class="mx-1" @click="moveMember(1)">Move Right</button>
+                <button class="mx-1" @click="moveMember(-1)">◄</button>
+                <button class="mx-1" @click="deleteMember()">✗</button>
+                <button class="mx-1" @click="moveMember(1)">►</button>
             </div>
             <MemberEditor :="{ member }" />
         </template>

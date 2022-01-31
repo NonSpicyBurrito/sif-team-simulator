@@ -204,7 +204,7 @@ async function simulate() {
         </Field>
         <Field label="Guest Center">
             <button v-if="guestCenter" @click="guestCenter = undefined">
-                Delete
+                ✗
             </button>
             <button v-else @click="showSelectCenter = !showSelectCenter">
                 Select

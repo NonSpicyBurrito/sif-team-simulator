@@ -15,7 +15,7 @@ defineProps<{
 <template>
     <Field label="Accessory">
         <template v-if="member.accessory">
-            <button @click="member.accessory = undefined">Delete</button>
+            <button @click="member.accessory = undefined">✗</button>
         </template>
         <div v-else class="flex flex-wrap -mb-1">
             <template
