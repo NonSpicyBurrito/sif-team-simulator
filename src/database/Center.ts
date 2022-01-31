@@ -39,6 +39,7 @@ export enum CenterApplyType {
     UmiRin = 92,
     UmiNozomi = 94,
     UmiHanayo = 95,
+    RinMaki = 97,
     RinNozomi = 98,
     RinHanayo = 99,
     MakiHanayo = 102,

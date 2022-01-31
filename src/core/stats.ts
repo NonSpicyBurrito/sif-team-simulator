@@ -273,6 +273,10 @@ function applyCenterApply(
                 character === CharacterId.Umi ||
                 character === CharacterId.Hanayo
             )
+        case CenterApplyType.RinMaki:
+            return (
+                character === CharacterId.Rin || character === CharacterId.Maki
+            )
         case CenterApplyType.RinNozomi:
             return (
                 character === CharacterId.Rin ||

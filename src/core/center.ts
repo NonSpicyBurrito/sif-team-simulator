@@ -115,6 +115,8 @@ function getApplyDescription(apply: CenterApplyType) {
             return 'Umi and Nozomi'
         case CenterApplyType.UmiHanayo:
             return 'Umi and Hanayo'
+        case CenterApplyType.RinMaki:
+            return 'Rin and Maki'
         case CenterApplyType.RinNozomi:
             return 'Rin and Nozomi'
         case CenterApplyType.RinHanayo:
