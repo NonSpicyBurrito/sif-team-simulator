@@ -21,7 +21,7 @@ const difficulty = useLocalStorage('difficulty', Difficulty.Master)
 const chartId = useLocalStorage('chartId', '')
 const perfectRate = useLocalStorage('perfectRate', 0.85)
 const noteSpeed = useLocalStorage('noteSpeed', 9)
-const memoryGalleryBonus = useLocalStorage('memoryGalleryBonus', [144, 78, 78])
+const memoryGalleryBonus = useLocalStorage('memoryGalleryBonus', [222, 150, 78])
 const guestCenter = useLocalStorage<CenterSkill>('guestCenter.1', undefined, {
     serializer: StorageSerializers.object,
 })
