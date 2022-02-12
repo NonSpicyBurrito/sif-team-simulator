@@ -64,16 +64,16 @@ watchEffect(() => {
                 v-if="key !== 'survivedNotes' || mode === 'afk'"
                 :label="label"
             >
-                <button class="w-full" @click="selected = key">
-                    <template v-if="title">
+                <button class="w-full select-text" @click="selected = key">
+                    <div v-if="title">
                         {{ title }}
-                    </template>
-                    <template v-else>
+                    </div>
+                    <div v-else>
                         <span>{{ formatter(result[key].mean) }}</span>
                         <span class="ml-2 text-sm text-gray-500">
                             ± {{ formatter(result[key].stdev) }}
                         </span>
-                    </template>
+                    </div>
                 </button>
             </Field>
         </template>
