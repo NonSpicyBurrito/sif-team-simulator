@@ -9,7 +9,7 @@ const props = defineProps<{
     team: PartialTeam
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
     (e: 'select', team: PartialTeam): void
 }>()
 
@@ -19,6 +19,10 @@ const canSave = computed(() => !isTeamEmpty(props.team))
 
 function saveTeam() {
     presetTeams.value.push(clone(props.team))
+}
+
+function resetTeam() {
+    emit('select', Array(9).fill(null) as PartialTeam)
 }
 
 function importPreset() {
@@ -72,6 +76,7 @@ function movePresetTeam(index: number, direction: -1 | 1) {
             <button class="mx-1" :disabled="!canSave" @click="saveTeam()">
                 Save Team
             </button>
+            <button class="mx-1" @click="resetTeam()">Reset Team</button>
         </div>
         <div
             v-for="(presetTeam, i) in presetTeams"
