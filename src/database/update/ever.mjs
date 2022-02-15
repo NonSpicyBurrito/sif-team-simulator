@@ -46,7 +46,7 @@ async function getData() {
             data,
             index,
         }))
-        .filter(({ data }) => !!data && data[4] === 4)
+        .filter(({ data }) => !!data && (data[4] === 4 || data[4] === 5))
         .map(({ data: [, , , id, , cardId, effectType], index }) => ({
             id,
             effectType,
