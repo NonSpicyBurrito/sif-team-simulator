@@ -6,10 +6,10 @@ export function activateSelfCoverage(this: Live, index: number) {
 
     if (VITE_APP_DIAGNOSTICS) {
         this.context.log(
-            'Member',
+            selfCoverage.endTime.toFixed(4),
+            ': Member',
             index,
-            'activates self coverage retrigger at',
-            selfCoverage.endTime
+            'activates self coverage retrigger'
         )
     }
 

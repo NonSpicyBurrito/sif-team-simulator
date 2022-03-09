@@ -13,7 +13,7 @@ export function doSRU(
 
         if (VITE_APP_DIAGNOSTICS) {
             this.context.log(
-                'Member',
+                '⠀⠀⠀⠀⠀⠀⠀ Member',
                 index,
                 'activates SRU',
                 value,
