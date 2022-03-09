@@ -41,8 +41,8 @@ async function getData() {
     const accessories = JSON.parse(extract(html, 'var accessories=', ';'))
     const cards = JSON.parse(extract(html, 'var cards=', ';'))
 
-    return accessories
-        .map((data, index) => ({
+    return Object.entries(accessories)
+        .map(([index, data]) => ({
             data,
             index,
         }))
