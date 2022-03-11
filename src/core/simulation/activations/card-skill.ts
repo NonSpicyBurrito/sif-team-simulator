@@ -13,13 +13,12 @@ export function activateCardSkill(
 
     if (VITE_APP_DIAGNOSTICS) {
         this.context.log(
-            'Attempts to activate member',
+            time.toFixed(4),
+            ': Attempts to activate member',
             index,
-            'at',
-            time,
             'with',
-            (trigger.chances[0] / 100 - this.context.skillChanceReduction) *
-                skillChanceMultiplier,
+            ((trigger.chances[0] / 100 - this.context.skillChanceReduction) *
+                skillChanceMultiplier).toFixed(4),
             'card skill chance'
         )
     }
