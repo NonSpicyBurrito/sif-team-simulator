@@ -40,7 +40,7 @@ export function tickSkills(this: Live, time: number, triggers: [number][]) {
 
     if (!this.ampState && this.tempAmp) {
         if (VITE_APP_DIAGNOSTICS) {
-            this.context.log('Amp', this.tempAmp, 'activates')
+            this.context.log('⠀⠀⠀⠀⠀⠀⠀ Amp', this.tempAmp, 'activates')
         }
 
         this.ampState = this.tempAmp

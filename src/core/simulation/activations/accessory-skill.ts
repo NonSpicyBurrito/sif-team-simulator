@@ -13,12 +13,11 @@ export function activateAccessorySkill(
 
     if (VITE_APP_DIAGNOSTICS) {
         this.context.log(
-            'Attempts to activate member',
+            time.toFixed(4),
+            ': Attempts to activate member',
             index,
-            'at',
-            time,
             'with',
-            trigger.chances[0] / 100,
+            (trigger.chances[0] / 100).toFixed(4),
             'accessory skill chance'
         )
     }
