@@ -3,6 +3,7 @@ import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import { computed, nextTick, ref, watch, watchEffect } from 'vue'
 import CardSelector from '../components/CardSelector.vue'
 import Field from '../components/Field.vue'
+import PercentageInput from '../components/PercentageInput.vue'
 import PresetEditor from '../components/PresetEditor.vue'
 import Result from '../components/Result.vue'
 import TeamEditor from '../components/TeamEditor.vue'
@@ -14,7 +15,6 @@ import { clone, enumKeys, sleep } from '../core/utils'
 import { cards, charts, initDatabase, isLoading } from '../database'
 import { CenterSkill } from '../database/Center'
 import { Chart, Difficulty } from '../database/Chart'
-import PercentageInput from '../components/PercentageInput.vue'
 
 const mode = useLocalStorage('mode', 'normal')
 const difficulty = useLocalStorage('difficulty', Difficulty.Master)
