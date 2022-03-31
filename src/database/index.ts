@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { Accessory } from './Accessory'
 import { Card } from './Card'
 import { Character, CharacterId } from './Character'
@@ -57,7 +57,7 @@ async function initCards() {
     if (cards.size) return
 
     Object.entries(await loadJson('cards')).forEach(([id, card]) =>
-        cards.set(+id, card as Card)
+        cards.set(+id, reactive(card as Card))
     )
 }
 

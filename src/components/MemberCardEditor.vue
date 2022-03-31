@@ -13,11 +13,26 @@ const props = defineProps<{
 function viewDetails() {
     window.open(`https://sif.kirara.ca/card/${props.member.card.id}`, '_blank')
 }
+
+function editData() {
+    try {
+        const card = cards.get(props.member.card.id)
+        if (!card) return
+
+        const data = prompt('Edit card data:', JSON.stringify(card))
+        if (!data) throw 'No data'
+
+        Object.assign(card, JSON.parse(data))
+    } catch (error) {
+        alert('Invalid data')
+    }
+}
 </script>
 
 <template>
     <Field label="Card">
         <button @click="viewDetails">View Details</button>
+        <button class="ml-2" @click="editData">Edit Data</button>
     </Field>
     <Field label="Card Level">
         <input
