@@ -17,8 +17,10 @@ export function activateCardSkill(
             ': Attempts to activate member',
             index,
             'with',
-            ((trigger.chances[0] / 100 - this.context.skillChanceReduction) *
-                skillChanceMultiplier).toFixed(4),
+            (
+                (trigger.chances[0] / 100 - this.context.skillChanceReduction) *
+                skillChanceMultiplier
+            ).toFixed(4),
             'card skill chance'
         )
     }
