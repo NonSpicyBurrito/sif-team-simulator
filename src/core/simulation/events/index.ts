@@ -13,7 +13,7 @@ export function processEvent(live: Live, event: Event) {
     tickSelfCoverage(live, event.time)
 
     if (VITE_APP_DIAGNOSTICS) {
-        const args = [event.time, 'Event', event.type]
+        const args: unknown[] = ['Event', event.type]
         if ('note' in event) args.push('for note', event.note)
 
         live.context.log(event.time, ...args)
