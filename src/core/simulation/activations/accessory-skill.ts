@@ -74,6 +74,15 @@ export function activateAccessorySkill(
                 effect.values[level] - 1
             )
             break
+        case EffectType.Spark:
+            this.doSpark(
+                time,
+                index,
+                trigger.values[level],
+                effect.durations[level],
+                effect.values[level]
+            )
+            break
         default:
             throw `Unsupported accessory effect: ${
                 EffectType[effect.type] || effect.type

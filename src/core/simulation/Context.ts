@@ -89,6 +89,10 @@ export class Context {
                         accessory.skill.trigger.chances,
                         accessorySl
                     ),
+                    values: processSkill(
+                        accessory.skill.trigger.values,
+                        accessorySl
+                    ),
                 },
                 effect: {
                     type: accessory.skill.effect.type,

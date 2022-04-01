@@ -16,6 +16,7 @@ export function processHitEvent(this: Live, event: HitEvent) {
 
     const isPlockActive = this.plockState.value > 0
     const paramMultiplier = this.paramState.value
+    const sparkBonus = this.sparkState.value
     const psuBonus = this.psuState.value
     const cfBonus = this.cfState.value
 
@@ -92,6 +93,8 @@ export function processHitEvent(this: Live, event: HitEvent) {
         plockMultiplier *
         heartMultiplier *
         this.context.tapScoreMultiplier
+
+    this.score += sparkBonus
 
     if (isPerfect) this.score += psuBonus
 

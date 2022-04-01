@@ -17,6 +17,7 @@ import { doPlock } from './skills/plock'
 import { doPSU } from './skills/psu'
 import { doScore } from './skills/score'
 import { setSelfCoverage } from './skills/self-coverage'
+import { doSpark } from './skills/spark'
 import { doSRU } from './skills/sru'
 import { ExclusiveState } from './states/ExclusiveState'
 import { StackedState } from './states/StackedState'
@@ -53,8 +54,11 @@ export class Live {
     public ampState = 0
     public tempAmp = 0
 
+    public encoreActivated = 0
+
     public sruState = new ExclusiveState()
     public paramState = new ExclusiveState()
+    public sparkState = new ExclusiveState()
 
     public plockState = new StackedState()
     public psuState = new StackedState()
@@ -84,6 +88,7 @@ export class Live {
     public doCF = doCF
     public doAmp = doAmp
     public doParam = doParam
+    public doSpark = doSpark
     public consumeAmp = consumeAmp
     public setSelfCoverage = setSelfCoverage
 
