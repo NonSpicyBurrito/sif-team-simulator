@@ -1,6 +1,10 @@
-import { Live } from '../Live'
+import { Live, reduceHealth } from '../Live'
 import { getCFMultiplier } from '../skills/cf'
-import { getComboMultiplier, getHeartBonus } from '../tap-score'
+import {
+    getComboMultiplier,
+    getHeartBonus,
+    judgmentMultiplier,
+} from '../tap-score'
 
 export type HitEvent = {
     time: number
@@ -20,31 +24,43 @@ export function processHitEvent(live: Live, event: HitEvent) {
     const psuBonus = live.psuState.value
     const cfBonus = live.cfState.value
 
-    const baseJudgments = event.perfectJudgments.map(
-        () => Math.random() < live.context.perfectRate
+    const baseJudgments = event.perfectJudgments.map(() =>
+        live.context.getRandomJudgment(live.notes + 1)
     )
-    const judgments = isPlockActive ? event.perfectJudgments : baseJudgments
+    const judgments = isPlockActive
+        ? baseJudgments.map((judgment) => (judgment <= 2 ? 0 : judgment))
+        : baseJudgments
 
-    const isPerfect = !judgments.includes(false)
+    const finalJudgment = Math.max(...judgments)
+
     const plockMultiplier =
-        isPlockActive && !baseJudgments.includes(false) ? 1.08 : 1
+        isPlockActive && baseJudgments.every((judgment) => judgment === 0)
+            ? 1.08
+            : 1
     const trickMultiplier = isPlockActive ? 1 : 0
     const heartMultiplier = 1 + live.hearts * getHeartBonus(live.context.maxHp)
 
     live.notes++
-    live.combo++
     if (isPlockActive) live.covered++
 
-    live.context.comboTriggers.forEach(([i, count]) => {
-        live.triggerCounters[i]++
+    if (finalJudgment <= 1) {
+        live.combo++
+        live.context.comboTriggers.forEach(([i, count]) => {
+            live.triggerCounters[i]++
 
-        if (live.triggerCounters[i] < count) return
-        live.triggerCounters[i] -= count
+            if (live.triggerCounters[i] < count) return
+            live.triggerCounters[i] -= count
 
-        triggers.push([i])
-    })
+            triggers.push([i])
+        })
+    } else {
+        live.combo = 0
+        live.context.comboTriggers.forEach(([i]) => {
+            live.triggerCounters[i] = 0
+        })
+    }
 
-    if (isPerfect) {
+    if (finalJudgment === 0) {
         live.context.perfectTriggers.forEach(([i, count]) => {
             live.triggerCounters[i]++
 
@@ -66,8 +82,16 @@ export function processHitEvent(live: Live, event: HitEvent) {
         }
     }
 
-    const judgmentMultiplier = judgments.reduce(
-        (acc, judgment) => acc * (judgment ? 1.25 : 1.1),
+    if (finalJudgment === 3) {
+        reduceHealth(live, 1)
+    }
+
+    if (finalJudgment === 4) {
+        reduceHealth(live, 2)
+    }
+
+    const totalJudgmentMultiplier = judgments.reduce(
+        (acc, judgment) => acc * judgmentMultiplier[judgment],
         1
     )
     const comboMultiplier = getComboMultiplier(live.combo)
@@ -85,7 +109,7 @@ export function processHitEvent(live: Live, event: HitEvent) {
     live.score +=
         totalStat *
         0.01 *
-        judgmentMultiplier *
+        totalJudgmentMultiplier *
         comboMultiplier *
         groupMultiplier *
         attributeMultiplier *
@@ -96,7 +120,7 @@ export function processHitEvent(live: Live, event: HitEvent) {
 
     live.score += sparkBonus
 
-    if (isPerfect) live.score += psuBonus
+    if (finalJudgment === 0) live.score += psuBonus
 
     live.score += Math.min(1000, cfBonus * cfMultiplier)
 

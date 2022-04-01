@@ -4,12 +4,17 @@ import { computed, nextTick, ref, watch, watchEffect } from 'vue'
 import CardSelector from '../components/CardSelector.vue'
 import Field from '../components/Field.vue'
 import PercentageInput from '../components/PercentageInput.vue'
+import PerformanceEditor from '../components/PerformanceEditor.vue'
 import PresetEditor from '../components/PresetEditor.vue'
 import Result from '../components/Result.vue'
 import TeamEditor from '../components/TeamEditor.vue'
 import { getCenterDescription } from '../core/center'
 import { getChartDescription } from '../core/chart'
 import { simulateScore } from '../core/simulation'
+import {
+    getPerformanceDescription,
+    Performance,
+} from '../core/simulation/performance'
 import { isTeamComplete, PartialTeam, Team } from '../core/Team'
 import { clone, enumKeys, sleep } from '../core/utils'
 import { cards, charts, initDatabase, isLoading } from '../database'
@@ -19,7 +24,14 @@ import { Chart, Difficulty } from '../database/Chart'
 const mode = useLocalStorage('mode', 'normal')
 const difficulty = useLocalStorage('difficulty', Difficulty.Master)
 const chartId = useLocalStorage('chartId', '')
-const perfectRate = useLocalStorage('perfectRate', 0.85)
+const performance = useLocalStorage<Performance>('performance', {
+    perfect: 0.85,
+    great: 0,
+    good: 0,
+    bad: 0,
+    miss: 0,
+    overwrites: {},
+})
 const noteSpeed = useLocalStorage('noteSpeed', 9)
 const memoryGalleryBonus = useLocalStorage(
     'memoryGalleryBonus',
@@ -50,6 +62,8 @@ watchEffect(() => {
 })
 
 const difficulties = enumKeys(Difficulty)
+
+const showPerformance = ref(false)
 
 const showSelectCenter = ref(false)
 function selectGuestCenter(id: number) {
@@ -93,7 +107,7 @@ async function simulate() {
             memoryGalleryBonus.value,
             guestCenter.value,
             chartId.value,
-            perfectRate.value,
+            performance.value,
             noteSpeed.value,
             tapScoreBonus.value,
             skillChanceBonus.value,
@@ -164,23 +178,15 @@ async function simulate() {
                 </option>
             </select>
         </Field>
-        <Field label="Perfect Rate">
-            <PercentageInput
-                v-model="perfectRate"
-                :options="{
-                    '100%': 1,
-                    '95%': 0.95,
-                    '90%': 0.9,
-                    '85%': 0.85,
-                    '80%': 0.8,
-                    '75%': 0.75,
-                    '0%': 0,
-                }"
-                :min="0"
-                :max="1"
-                :step="0.05"
-            />
+        <Field label="Performance">
+            <button @click="showPerformance = !showPerformance">Edit</button>
+            <span class="ml-2">
+                {{ getPerformanceDescription(performance) }}
+            </span>
         </Field>
+        <div v-if="showPerformance" class="surface">
+            <PerformanceEditor :="{ performance }" />
+        </div>
         <Field label="Note Speed">
             <div class="flex flex-wrap -mb-1">
                 <button

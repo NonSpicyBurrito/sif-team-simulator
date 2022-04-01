@@ -1,3 +1,5 @@
+export const judgmentMultiplier = [1.25, 1.1, 1, 0.5, 0]
+
 export function getComboMultiplier(combo: number) {
     return combo <= 50
         ? 1

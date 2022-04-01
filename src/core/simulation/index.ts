@@ -2,6 +2,7 @@ import { CenterSkill } from '../../database/Center'
 import { summarize } from '../presentation'
 import { Team } from '../Team'
 import { Context } from './Context'
+import { Performance } from './performance'
 
 export function simulateScore(
     team: Team,
@@ -9,7 +10,7 @@ export function simulateScore(
     memoryGalleryBonus: number[],
     guestCenter: CenterSkill,
     chartId: string,
-    perfectRate: number,
+    performance: Performance,
     noteSpeed: number,
     tapScoreBonus: number,
     skillChanceBonus: number,
@@ -22,7 +23,7 @@ export function simulateScore(
         memoryGalleryBonus,
         guestCenter,
         chartId,
-        perfectRate,
+        performance,
         noteSpeed,
         tapScoreBonus,
         skillChanceBonus,
