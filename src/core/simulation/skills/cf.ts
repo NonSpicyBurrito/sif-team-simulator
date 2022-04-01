@@ -1,16 +1,17 @@
 import { Live } from '../Live'
+import { setSelfCoverage } from './self-coverage'
 import { doSkill } from './utils'
 
 export function doCF(
-    this: Live,
+    live: Live,
     time: number,
     index: number,
     duration: number,
     value: number
 ) {
-    doSkill(this, time, index, (time, index) => {
+    doSkill(live, time, index, (time, index) => {
         if (VITE_APP_DIAGNOSTICS) {
-            this.context.log(
+            live.context.log(
                 time,
                 'Member',
                 index,
@@ -21,8 +22,8 @@ export function doCF(
             )
         }
 
-        this.cfState.add(time + duration, value)
-        this.setSelfCoverage(time + duration, index)
+        live.cfState.add(time + duration, value)
+        setSelfCoverage(live, time + duration, index)
     })
 }
 

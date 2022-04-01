@@ -1,21 +1,22 @@
 import { EffectType } from '../../../database/Skill'
+import { activate } from '../activations'
 import { Live } from '../Live'
 
-export function tickSkills(this: Live, time: number, triggers: [number][]) {
-    this.purgeLastSkill = false
-    this.tempLastSkill = undefined
-    this.tempAmp = 0
+export function tickSkills(live: Live, time: number, triggers: [number][]) {
+    live.purgeLastSkill = false
+    live.tempLastSkill = undefined
+    live.tempAmp = 0
 
     const skillChanceMultiplier =
-        (1 + this.context.skillChanceBonus) * (1 + this.sruState.value)
+        (1 + live.context.skillChanceBonus) * (1 + live.sruState.value)
 
-    if (this.coinFlip && triggers.length >= 3) {
+    if (live.coinFlip && triggers.length >= 3) {
         let hasAmp = false
         let hasEncore = false
         let hasNormal = false
 
         triggers.forEach(([i]) => {
-            switch (this.context.skillInfos[i].card.effect.type) {
+            switch (live.context.skillInfos[i].card.effect.type) {
                 case EffectType.Amp:
                     hasAmp = true
                     break
@@ -29,20 +30,20 @@ export function tickSkills(this: Live, time: number, triggers: [number][]) {
         })
 
         if (hasAmp && hasEncore && hasNormal) {
-            this.context.sortTriggers(triggers, this.context.coinFlipPriorities)
+            live.context.sortTriggers(triggers, live.context.coinFlipPriorities)
         }
     }
 
-    triggers.forEach(([i]) => this.activate(time, i, skillChanceMultiplier))
+    triggers.forEach(([i]) => activate(live, time, i, skillChanceMultiplier))
 
-    this.lastSkill =
-        this.tempLastSkill || (this.purgeLastSkill ? undefined : this.lastSkill)
+    live.lastSkill =
+        live.tempLastSkill || (live.purgeLastSkill ? undefined : live.lastSkill)
 
-    if (!this.ampState && this.tempAmp) {
+    if (!live.ampState && live.tempAmp) {
         if (VITE_APP_DIAGNOSTICS) {
-            this.context.log(time, 'Amp', this.tempAmp, 'activates')
+            live.context.log(time, 'Amp', live.tempAmp, 'activates')
         }
 
-        this.ampState = this.tempAmp
+        live.ampState = live.tempAmp
     }
 }

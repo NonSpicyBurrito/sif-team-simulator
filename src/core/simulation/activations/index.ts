@@ -1,12 +1,15 @@
 import { Live } from '../Live'
+import { activateAccessorySkill } from './accessory-skill'
+import { activateCardSkill } from './card-skill'
+import { activateSelfCoverage } from './self-coverage'
 
 export function activate(
-    this: Live,
+    live: Live,
     time: number,
     index: number,
     skillChanceMultiplier: number
 ) {
-    if (this.activateSelfCoverage(index)) return
-    if (this.activateCardSkill(time, index, skillChanceMultiplier)) return
-    if (this.activateAccessorySkill(time, index)) return
+    if (activateSelfCoverage(live, index)) return
+    if (activateCardSkill(live, time, index, skillChanceMultiplier)) return
+    if (activateAccessorySkill(live, time, index)) return
 }

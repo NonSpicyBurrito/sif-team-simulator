@@ -1,13 +1,13 @@
 import { Live } from '../Live'
 
-export function doEncore(this: Live, time: number, index: number) {
-    const skill = this.tempLastSkill || this.lastSkill
+export function doEncore(live: Live, time: number, index: number) {
+    const skill = live.tempLastSkill || live.lastSkill
 
     if (VITE_APP_DIAGNOSTICS) {
         if (skill) {
-            this.context.log(time, 'Member', index, 'activates encore')
+            live.context.log(time, 'Member', index, 'activates encore')
         } else {
-            this.context.log(
+            live.context.log(
                 time,
                 'Member',
                 index,
@@ -17,9 +17,9 @@ export function doEncore(this: Live, time: number, index: number) {
     }
 
     if (skill) {
-        this.encoreActivated++
+        live.encoreActivated++
         skill(time, index)
     }
 
-    this.purgeLastSkill = true
+    live.purgeLastSkill = true
 }

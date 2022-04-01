@@ -1,16 +1,17 @@
 import { Live } from '../Live'
+import { setSelfCoverage } from './self-coverage'
 import { doSkill } from './utils'
 
 export function doPSU(
-    this: Live,
+    live: Live,
     time: number,
     index: number,
     duration: number,
     value: number
 ) {
-    doSkill(this, time, index, (time, index) => {
+    doSkill(live, time, index, (time, index) => {
         if (VITE_APP_DIAGNOSTICS) {
-            this.context.log(
+            live.context.log(
                 time,
                 'Member',
                 index,
@@ -21,7 +22,7 @@ export function doPSU(
             )
         }
 
-        this.psuState.add(time + duration, value)
-        this.setSelfCoverage(time + duration, index)
+        live.psuState.add(time + duration, value)
+        setSelfCoverage(live, time + duration, index)
     })
 }

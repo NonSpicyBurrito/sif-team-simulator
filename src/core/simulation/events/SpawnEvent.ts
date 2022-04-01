@@ -5,14 +5,14 @@ export type SpawnEvent = {
     type: 'spawn'
 }
 
-export function processSpawnEvent(this: Live) {
+export function processSpawnEvent(live: Live) {
     const triggers: [number][] = []
 
-    this.context.noteTriggers.forEach(([i, count]) => {
-        this.triggerCounters[i]++
+    live.context.noteTriggers.forEach(([i, count]) => {
+        live.triggerCounters[i]++
 
-        if (this.triggerCounters[i] < count) return
-        this.triggerCounters[i] -= count
+        if (live.triggerCounters[i] < count) return
+        live.triggerCounters[i] -= count
 
         triggers.push([i])
     })

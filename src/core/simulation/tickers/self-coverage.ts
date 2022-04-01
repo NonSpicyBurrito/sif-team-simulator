@@ -1,13 +1,15 @@
 import { Live } from '../Live'
+import { tickBuffs } from './buffs'
+import { tickSkills } from './skills'
 
-export function tickSelfCoverage(this: Live, time: number) {
+export function tickSelfCoverage(live: Live, time: number) {
     const triggersByTime = new Map<number, [number][]>()
 
-    this.selfCoverages.forEach((selfCoverage, index) => {
+    live.selfCoverages.forEach((selfCoverage, index) => {
         if (!selfCoverage) return
         if (selfCoverage.endTime > time) return
 
-        this.selfCoverages[index] = undefined
+        live.selfCoverages[index] = undefined
 
         if (!selfCoverage.retrigger) return
 
@@ -20,7 +22,7 @@ export function tickSelfCoverage(this: Live, time: number) {
     ;[...triggersByTime.entries()]
         .sort(([a], [b]) => a - b)
         .forEach(([time, triggers]) => {
-            this.tickBuffs(time)
-            this.tickSkills(time, triggers)
+            tickBuffs(live, time)
+            tickSkills(live, time, triggers)
         })
 }

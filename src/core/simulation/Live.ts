@@ -1,29 +1,7 @@
-import { activate } from './activations'
-import { activateAccessorySkill } from './activations/accessory-skill'
-import { activateCardSkill } from './activations/card-skill'
-import { activateSelfCoverage } from './activations/self-coverage'
 import { Context } from './Context'
 import { processEvent } from './events'
-import { processHitEvent } from './events/HitEvent'
-import { processMissEvent } from './events/MissEvent'
-import { processSpawnEvent } from './events/SpawnEvent'
-import { processTimeSkillEvent } from './events/TimeSkillEvent'
-import { consumeAmp, doAmp } from './skills/amp'
-import { doCF } from './skills/cf'
-import { doEncore } from './skills/encore'
-import { doHeal } from './skills/heal'
-import { doParam } from './skills/param'
-import { doPlock } from './skills/plock'
-import { doPSU } from './skills/psu'
-import { doScore } from './skills/score'
-import { setSelfCoverage } from './skills/self-coverage'
-import { doSpark } from './skills/spark'
-import { doSRU } from './skills/sru'
 import { ExclusiveState } from './states/ExclusiveState'
 import { StackedState } from './states/StackedState'
-import { tickBuffs } from './tickers/buffs'
-import { tickSelfCoverage } from './tickers/self-coverage'
-import { tickSkills } from './tickers/skills'
 import { fill } from './utils'
 
 type SelfCoverage = {
@@ -64,34 +42,6 @@ export class Live {
     public psuState = new StackedState()
     public cfState = new StackedState()
 
-    public processEvent = processEvent
-    public processSpawnEvent = processSpawnEvent
-    public processHitEvent = processHitEvent
-    public processMissEvent = processMissEvent
-    public processTimeSkillEvent = processTimeSkillEvent
-
-    public tickSelfCoverage = tickSelfCoverage
-    public tickBuffs = tickBuffs
-    public tickSkills = tickSkills
-
-    public activate = activate
-    public activateSelfCoverage = activateSelfCoverage
-    public activateCardSkill = activateCardSkill
-    public activateAccessorySkill = activateAccessorySkill
-
-    public doPlock = doPlock
-    public doHeal = doHeal
-    public doScore = doScore
-    public doSRU = doSRU
-    public doEncore = doEncore
-    public doPSU = doPSU
-    public doCF = doCF
-    public doAmp = doAmp
-    public doParam = doParam
-    public doSpark = doSpark
-    public consumeAmp = consumeAmp
-    public setSelfCoverage = setSelfCoverage
-
     public constructor(public readonly context: Context) {
         if (VITE_APP_DIAGNOSTICS) {
             this.context.log(undefined, 'coinFlip', this.coinFlip)
@@ -100,7 +50,7 @@ export class Live {
 
     public simulate() {
         for (const event of this.context.events) {
-            this.processEvent(event)
+            processEvent(this, event)
         }
 
         return {

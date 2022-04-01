@@ -6,6 +6,6 @@ export type TimeSkillEvent = {
     index: number
 }
 
-export function processTimeSkillEvent(this: Live, event: TimeSkillEvent) {
+export function processTimeSkillEvent(live: Live, event: TimeSkillEvent) {
     return [[event.index]] as [number][]
 }

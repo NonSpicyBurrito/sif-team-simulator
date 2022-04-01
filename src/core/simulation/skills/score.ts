@@ -2,16 +2,16 @@ import { Live } from '../Live'
 import { doSkill } from './utils'
 
 export function doScore(
-    this: Live,
+    live: Live,
     time: number,
     index: number,
     value: number
 ) {
-    const multiplier = this.context.sisScoreMultipliers[index]
+    const multiplier = live.context.sisScoreMultipliers[index]
 
-    doSkill(this, time, index, (time, index) => {
+    doSkill(live, time, index, (time, index) => {
         if (VITE_APP_DIAGNOSTICS) {
-            this.context.log(
+            live.context.log(
                 time,
                 'Member',
                 index,
@@ -20,6 +20,6 @@ export function doScore(
             )
         }
 
-        this.score += value * multiplier
+        live.score += value * multiplier
     })
 }

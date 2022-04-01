@@ -1,18 +1,19 @@
 import { Live } from '../Live'
+import { setSelfCoverage } from './self-coverage'
 import { doSkill } from './utils'
 
 export function doSRU(
-    this: Live,
+    live: Live,
     time: number,
     index: number,
     duration: number,
     value: number
 ) {
-    doSkill(this, time, index, (time, index) => {
-        if (this.sruState.value) return
+    doSkill(live, time, index, (time, index) => {
+        if (live.sruState.value) return
 
         if (VITE_APP_DIAGNOSTICS) {
-            this.context.log(
+            live.context.log(
                 time,
                 'Member',
                 index,
@@ -23,7 +24,7 @@ export function doSRU(
             )
         }
 
-        this.sruState.set(time + duration, value)
-        this.setSelfCoverage(time + duration, index)
+        live.sruState.set(time + duration, value)
+        setSelfCoverage(live, time + duration, index)
     })
 }
