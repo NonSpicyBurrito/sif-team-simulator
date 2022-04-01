@@ -13,7 +13,11 @@ export function doEncore(this: Live, time: number, index: number) {
         }
     }
 
-    ;(this.tempLastSkill || this.lastSkill)?.(time, index)
+    const skill = this.tempLastSkill || this.lastSkill
+    if (skill) {
+        this.encoreActivated++
+        skill(time, index)
+    }
 
     this.purgeLastSkill = true
 }

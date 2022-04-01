@@ -18,6 +18,7 @@ export enum EffectType {
     Sync = 2400,
     Amp = 2500,
     Param = 2600,
+    Spark = 2800,
 }
 
 export type CardSkill = {
@@ -36,6 +37,7 @@ export type CardSkill = {
 export type AccessorySkill = {
     trigger: {
         chances: number[]
+        values: number[]
     }
     effect: {
         type: EffectType

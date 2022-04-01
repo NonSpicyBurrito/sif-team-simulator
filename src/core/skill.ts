@@ -12,9 +12,10 @@ export function getSkillDescription(
 ) {
     const descriptions: string[] = []
 
-    if ('type' in trigger) {
-        const triggerValue = trigger.values[level - 1]
+    const triggerChance = trigger.chances[level - 1]
+    const triggerValue = trigger.values[level - 1]
 
+    if ('type' in trigger) {
         switch (trigger.type) {
             case TriggerType.Time:
                 descriptions.push(`every ${triggerValue} seconds`)
@@ -42,7 +43,6 @@ export function getSkillDescription(
         }
     }
 
-    const triggerChance = trigger.chances[level - 1]
     descriptions.push(`${percent(triggerChance / 100, 0)} chance`)
 
     const effectDuration = effect.durations[level - 1]
@@ -93,6 +93,14 @@ export function getSkillDescription(
                     'type' in trigger ? effectValue / 100 : effectValue - 1,
                     0
                 )}`,
+                `for ${effectDuration} seconds`
+            )
+            break
+        case EffectType.Spark:
+            descriptions.push(
+                `add ${thousands(
+                    effectValue * triggerValue
+                )} tap score for every ${triggerValue} encore activations`,
                 `for ${effectDuration} seconds`
             )
             break

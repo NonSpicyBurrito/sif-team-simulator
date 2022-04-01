@@ -72,6 +72,7 @@ async function getAccessoryData(index, effectType, character) {
         skill: {
             trigger: {
                 chances: data.map(([, , , , , chance]) => chance),
+                values: data.map(([, , , , , , , value]) => value),
             },
             effect: {
                 type: effectType,
