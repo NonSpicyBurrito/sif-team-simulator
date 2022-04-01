@@ -13,8 +13,8 @@ export function activateCardSkill(
 
     if (VITE_APP_DIAGNOSTICS) {
         this.context.log(
-            time.toFixed(4),
-            ': Attempts to activate member',
+            time,
+            'Attempts to activate member',
             index,
             'with',
             (

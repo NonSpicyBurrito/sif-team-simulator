@@ -93,7 +93,7 @@ watchEffect(() => {
             <div
                 v-for="(line, index) in result.diagnostics"
                 :key="index"
-                class="p-1 border-b-[1px] border-gray-700"
+                class="p-1 whitespace-pre-wrap border-b-[1px] border-gray-700"
             >
                 {{ line }}
             </div>

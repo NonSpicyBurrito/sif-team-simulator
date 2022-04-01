@@ -13,7 +13,8 @@ export function doParam(
 
         if (VITE_APP_DIAGNOSTICS) {
             this.context.log(
-                '⠀⠀⠀⠀⠀⠀⠀ Member',
+                time,
+                'Member',
                 index,
                 'activates Param until',
                 time + duration

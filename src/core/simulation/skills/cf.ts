@@ -11,7 +11,8 @@ export function doCF(
     doSkill(this, time, index, (time, index) => {
         if (VITE_APP_DIAGNOSTICS) {
             this.context.log(
-                '⠀⠀⠀⠀⠀⠀⠀ Member',
+                time,
+                'Member',
                 index,
                 'activates CF',
                 value,

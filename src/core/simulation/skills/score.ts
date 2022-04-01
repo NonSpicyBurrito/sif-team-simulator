@@ -12,7 +12,8 @@ export function doScore(
     doSkill(this, time, index, (time, index) => {
         if (VITE_APP_DIAGNOSTICS) {
             this.context.log(
-                '⠀⠀⠀⠀⠀⠀⠀ Member',
+                time,
+                'Member',
                 index,
                 'scores',
                 value * multiplier

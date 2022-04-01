@@ -10,7 +10,7 @@ export function processEvent(this: Live, event: Event) {
     this.tickSelfCoverage(event.time)
 
     if (VITE_APP_DIAGNOSTICS) {
-        this.context.log(event.time.toFixed(4), ': Event', event.type)
+        this.context.log(event.time, 'Event', event.type)
     }
 
     this.tickBuffs(event.time)

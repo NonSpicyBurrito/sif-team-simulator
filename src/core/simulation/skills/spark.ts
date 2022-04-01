@@ -19,7 +19,8 @@ export function doSpark(
 
         if (VITE_APP_DIAGNOSTICS) {
             this.context.log(
-                '⠀⠀⠀⠀⠀⠀⠀ Member',
+                time,
+                'Member',
                 index,
                 'activates Spark',
                 bonus,

@@ -94,7 +94,7 @@ export class Live {
 
     public constructor(public readonly context: Context) {
         if (VITE_APP_DIAGNOSTICS) {
-            this.context.log('coinFlip', this.coinFlip)
+            this.context.log(undefined, 'coinFlip', this.coinFlip)
         }
     }
 
