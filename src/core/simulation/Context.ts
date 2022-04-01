@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
+import { toRaw } from 'vue'
 import { accessories, cards, charts, sises } from '../../database'
 import { CenterSkill } from '../../database/Center'
 import {
@@ -41,7 +42,7 @@ export class Context {
     public readonly events: Event[] = []
     public readonly skillChanceBonus: number
     public readonly skillChanceReduction: number
-    public readonly getRandomJudgment: () => number
+    public readonly getRandomJudgment: (note: number) => number
 
     private readonly diagnostics: [number | undefined, string][] | undefined
 
@@ -226,7 +227,11 @@ export class Context {
         const distribution = normalized.map((_, i) =>
             normalized.slice(0, i + 1).reduce((a, b) => a + b)
         )
-        this.getRandomJudgment = () => {
+        const overwrites = toRaw(performance.overwrites)
+        this.getRandomJudgment = (note) => {
+            const judgment = overwrites[note]
+            if (judgment !== undefined) return judgment
+
             const value = Math.random()
             return distribution.findIndex((v) => v >= value)
         }

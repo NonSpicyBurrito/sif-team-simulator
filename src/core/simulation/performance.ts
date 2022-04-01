@@ -6,6 +6,7 @@ export type Performance = {
     good: number
     bad: number
     miss: number
+    overwrites: Record<number, number>
 }
 
 export function normalize({ perfect, great, good, bad, miss }: Performance) {
@@ -19,6 +20,17 @@ export function normalize({ perfect, great, good, bad, miss }: Performance) {
 }
 
 export function getPerformanceDescription(performance: Performance) {
+    const descriptions: string[] = []
+
     const normalized = normalize(performance)
-    return normalized.map((value) => percent(value)).join('/')
+    descriptions.push(normalized.map((value) => percent(value)).join('/'))
+
+    const count = Object.keys(performance.overwrites).length
+    if (count) {
+        descriptions.push(
+            `${Object.keys(performance.overwrites).length} overwrites`
+        )
+    }
+
+    return descriptions.join(', ')
 }

@@ -24,8 +24,8 @@ export function processHitEvent(live: Live, event: HitEvent) {
     const psuBonus = live.psuState.value
     const cfBonus = live.cfState.value
 
-    const baseJudgments = event.perfectJudgments.map(
-        live.context.getRandomJudgment
+    const baseJudgments = event.perfectJudgments.map(() =>
+        live.context.getRandomJudgment(live.notes + 1)
     )
     const judgments = isPlockActive
         ? baseJudgments.map((judgment) => (judgment <= 2 ? 0 : judgment))

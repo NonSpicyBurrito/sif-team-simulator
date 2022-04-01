@@ -30,6 +30,7 @@ const performance = useLocalStorage<Performance>('performance', {
     good: 0,
     bad: 0,
     miss: 0,
+    overwrites: {},
 })
 const noteSpeed = useLocalStorage('noteSpeed', 9)
 const memoryGalleryBonus = useLocalStorage(
