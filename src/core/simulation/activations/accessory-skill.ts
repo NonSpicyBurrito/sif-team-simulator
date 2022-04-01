@@ -1,20 +1,30 @@
 import { EffectType } from '../../../database/Skill'
 import { Live } from '../Live'
+import { consumeAmp, doAmp } from '../skills/amp'
+import { doCF } from '../skills/cf'
+import { doEncore } from '../skills/encore'
+import { doHeal } from '../skills/heal'
+import { doParam } from '../skills/param'
+import { doPlock } from '../skills/plock'
+import { doPSU } from '../skills/psu'
+import { doScore } from '../skills/score'
+import { doSpark } from '../skills/spark'
+import { doSRU } from '../skills/sru'
 
 export function activateAccessorySkill(
-    this: Live,
+    live: Live,
     time: number,
     index: number
 ) {
-    const { accessory } = this.context.skillInfos[index]
+    const { accessory } = live.context.skillInfos[index]
     if (!accessory) return
 
     const { effect, trigger } = accessory
 
     if (VITE_APP_DIAGNOSTICS) {
-        this.context.log(
-            time.toFixed(4),
-            ': Attempts to activate member',
+        live.context.log(
+            time,
+            'Attempts to activate member',
             index,
             'with',
             (trigger.chances[0] / 100).toFixed(4),
@@ -24,20 +34,21 @@ export function activateAccessorySkill(
 
     if (Math.random() >= trigger.chances[0] / 100) return
 
-    const level = this.consumeAmp()
+    const level = consumeAmp(live)
 
     switch (effect.type) {
         case EffectType.Plock:
-            this.doPlock(time, index, effect.durations[level])
+            doPlock(live, time, index, effect.durations[level])
             break
         case EffectType.Heal:
-            this.doHeal(time, index, effect.values[level])
+            doHeal(live, time, index, effect.values[level])
             break
         case EffectType.Score:
-            this.doScore(time, index, effect.values[level])
+            doScore(live, time, index, effect.values[level])
             break
         case EffectType.SRU:
-            this.doSRU(
+            doSRU(
+                live,
                 time,
                 index,
                 effect.durations[level],
@@ -45,10 +56,11 @@ export function activateAccessorySkill(
             )
             break
         case EffectType.Encore:
-            this.doEncore(time, index)
+            doEncore(live, time, index)
             break
         case EffectType.PSU:
-            this.doPSU(
+            doPSU(
+                live,
                 time,
                 index,
                 effect.durations[level],
@@ -56,7 +68,8 @@ export function activateAccessorySkill(
             )
             break
         case EffectType.CF:
-            this.doCF(
+            doCF(
+                live,
                 time,
                 index,
                 effect.durations[level],
@@ -64,10 +77,11 @@ export function activateAccessorySkill(
             )
             break
         case EffectType.Amp:
-            this.doAmp(effect.values[level])
+            doAmp(live, effect.values[level])
             break
         case EffectType.Param:
-            this.doParam(
+            doParam(
+                live,
                 time,
                 index,
                 effect.durations[level],
@@ -75,7 +89,8 @@ export function activateAccessorySkill(
             )
             break
         case EffectType.Spark:
-            this.doSpark(
+            doSpark(
+                live,
                 time,
                 index,
                 trigger.values[level],

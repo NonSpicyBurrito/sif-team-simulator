@@ -1,37 +1,40 @@
 import { Live } from '../Live'
-import { HitEvent } from './HitEvent'
-import { MissEvent } from './MissEvent'
-import { SpawnEvent } from './SpawnEvent'
-import { TimeSkillEvent } from './TimeSkillEvent'
+import { tickBuffs } from '../tickers/buffs'
+import { tickSelfCoverage } from '../tickers/self-coverage'
+import { tickSkills } from '../tickers/skills'
+import { HitEvent, processHitEvent } from './HitEvent'
+import { MissEvent, processMissEvent } from './MissEvent'
+import { processSpawnEvent, SpawnEvent } from './SpawnEvent'
+import { processTimeSkillEvent, TimeSkillEvent } from './TimeSkillEvent'
 
 export type Event = SpawnEvent | HitEvent | MissEvent | TimeSkillEvent
 
-export function processEvent(this: Live, event: Event) {
-    this.tickSelfCoverage(event.time)
+export function processEvent(live: Live, event: Event) {
+    tickSelfCoverage(live, event.time)
 
     if (VITE_APP_DIAGNOSTICS) {
-        this.context.log(event.time.toFixed(4), ': Event', event.type)
+        live.context.log(event.time, 'Event', event.type)
     }
 
-    this.tickBuffs(event.time)
+    tickBuffs(live, event.time)
 
     let triggers: [number][]
 
     switch (event.type) {
         case 'spawn':
-            triggers = this.processSpawnEvent()
+            triggers = processSpawnEvent(live)
             break
         case 'hit':
-            triggers = this.processHitEvent(event)
+            triggers = processHitEvent(live, event)
             break
         case 'miss':
-            triggers = this.processMissEvent()
+            triggers = processMissEvent(live)
             break
         case 'timeSkill':
-            triggers = this.processTimeSkillEvent(event)
+            triggers = processTimeSkillEvent(live, event)
             break
     }
 
     if (!triggers.length) return
-    this.tickSkills(event.time, triggers)
+    tickSkills(live, event.time, triggers)
 }

@@ -1,13 +1,13 @@
 import { Live } from '../Live'
 
-export function activateSelfCoverage(this: Live, index: number) {
-    const selfCoverage = this.selfCoverages[index]
+export function activateSelfCoverage(live: Live, index: number) {
+    const selfCoverage = live.selfCoverages[index]
     if (!selfCoverage) return false
 
     if (VITE_APP_DIAGNOSTICS) {
-        this.context.log(
-            selfCoverage.endTime.toFixed(4),
-            ': Member',
+        live.context.log(
+            selfCoverage.endTime,
+            'Member',
             index,
             'activates self coverage retrigger'
         )

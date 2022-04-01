@@ -1,10 +1,10 @@
 import { Live } from '../Live'
 
-export function tickBuffs(this: Live, time: number) {
-    this.sruState.update(time)
-    this.paramState.update(time)
+export function tickBuffs(live: Live, time: number) {
+    live.sruState.update(time)
+    live.paramState.update(time)
 
-    this.plockState.update(time)
-    this.psuState.update(time)
-    this.cfState.update(time)
+    live.plockState.update(time)
+    live.psuState.update(time)
+    live.cfState.update(time)
 }

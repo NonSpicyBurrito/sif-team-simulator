@@ -42,7 +42,7 @@ export class Context {
     public readonly skillChanceBonus: number
     public readonly skillChanceReduction: number
 
-    private readonly diagnostics: string[] | undefined
+    private readonly diagnostics: [number | undefined, string][] | undefined
 
     public constructor(
         team: Team,
@@ -225,19 +225,23 @@ export class Context {
         this.diagnostics = enableDiagnostics ? [] : undefined
 
         if (VITE_APP_DIAGNOSTICS) {
-            this.log('skillInfos', this.skillInfos)
-            this.log('stat', this.stat)
-            this.log('onScreenDuration', onScreenDuration)
-            this.log('groupMultipliers', this.groupMultipliers)
-            this.log('attributeMultipliers', this.attributeMultipliers)
-            this.log('tapScoreMultiplier', this.tapScoreMultiplier)
-            this.log('maxHp', this.maxHp)
-            this.log('noteTriggers', this.noteTriggers)
-            this.log('comboTriggers', this.comboTriggers)
-            this.log('perfectTriggers', this.perfectTriggers)
-            this.log('starPerfectTriggers', this.starPerfectTriggers)
-            this.log('sisScoreMultipliers', this.sisScoreMultipliers)
-            this.log('sisHealMultipliers', this.sisHealMultipliers)
+            this.log(undefined, 'skillInfos', this.skillInfos)
+            this.log(undefined, 'stat', this.stat)
+            this.log(undefined, 'onScreenDuration', onScreenDuration)
+            this.log(undefined, 'groupMultipliers', this.groupMultipliers)
+            this.log(
+                undefined,
+                'attributeMultipliers',
+                this.attributeMultipliers
+            )
+            this.log(undefined, 'tapScoreMultiplier', this.tapScoreMultiplier)
+            this.log(undefined, 'maxHp', this.maxHp)
+            this.log(undefined, 'noteTriggers', this.noteTriggers)
+            this.log(undefined, 'comboTriggers', this.comboTriggers)
+            this.log(undefined, 'perfectTriggers', this.perfectTriggers)
+            this.log(undefined, 'starPerfectTriggers', this.starPerfectTriggers)
+            this.log(undefined, 'sisScoreMultipliers', this.sisScoreMultipliers)
+            this.log(undefined, 'sisHealMultipliers', this.sisHealMultipliers)
         }
     }
 
@@ -254,7 +258,7 @@ export class Context {
                 results.filter(
                     ({ survivedNotes }) => survivedNotes === this.noteCount
                 ).length / count,
-            diagnostics: this.diagnostics || [],
+            diagnostics: this.formattedDiagnostics,
         }
     }
 
@@ -265,11 +269,12 @@ export class Context {
         triggers.sort(([a], [b]) => priorities[a] - priorities[b])
     }
 
-    public log(...args: unknown[]) {
+    public log(time: number | undefined, ...args: unknown[]) {
         if (!this.diagnostics) return
 
-        console.log(...args)
-        this.diagnostics.push(
+        console.log(time, ...args)
+        this.diagnostics.push([
+            time,
             args
                 .map((arg) => {
                     switch (typeof arg) {
@@ -278,11 +283,31 @@ export class Context {
                         case 'number':
                             return arg.toString()
                         default:
-                            return JSON.stringify(arg, null, 1)
+                            return JSON.stringify(arg, null, 2)
                     }
                 })
-                .join(' ')
-        )
+                .join(' '),
+        ])
+    }
+
+    private get formattedDiagnostics() {
+        if (!this.diagnostics) return []
+
+        let currentTime: number | undefined
+        return this.diagnostics.map(([time, message]) => {
+            if (time === undefined) {
+                currentTime = time
+                return message
+            }
+
+            const formattedTime = time.toFixed(3)
+            if (time === currentTime) {
+                return `${' '.repeat(formattedTime.length)}   ${message}`
+            } else {
+                currentTime = time
+                return `${formattedTime} : ${message}`
+            }
+        })
     }
 
     private getPriorities(amp: number, encore: number, others: number) {

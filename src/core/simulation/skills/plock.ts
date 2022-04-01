@@ -1,23 +1,25 @@
 import { Live } from '../Live'
+import { setSelfCoverage } from './self-coverage'
 import { doSkill } from './utils'
 
 export function doPlock(
-    this: Live,
+    live: Live,
     time: number,
     index: number,
     duration: number
 ) {
-    doSkill(this, time, index, (time, index) => {
+    doSkill(live, time, index, (time, index) => {
         if (VITE_APP_DIAGNOSTICS) {
-            this.context.log(
-                '⠀⠀⠀⠀⠀⠀⠀ Member',
+            live.context.log(
+                time,
+                'Member',
                 index,
                 'activates Plock until',
                 time + duration
             )
         }
 
-        this.plockState.add(time + duration, 1)
-        this.setSelfCoverage(time + duration, index)
+        live.plockState.add(time + duration, 1)
+        setSelfCoverage(live, time + duration, index)
     })
 }

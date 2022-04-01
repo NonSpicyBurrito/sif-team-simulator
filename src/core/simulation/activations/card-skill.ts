@@ -1,24 +1,33 @@
 import { EffectType } from '../../../database/Skill'
 import { Live } from '../Live'
+import { consumeAmp, doAmp } from '../skills/amp'
+import { doCF } from '../skills/cf'
+import { doEncore } from '../skills/encore'
+import { doHeal } from '../skills/heal'
+import { doParam } from '../skills/param'
+import { doPlock } from '../skills/plock'
+import { doPSU } from '../skills/psu'
+import { doScore } from '../skills/score'
+import { doSRU } from '../skills/sru'
 
 export function activateCardSkill(
-    this: Live,
+    live: Live,
     time: number,
     index: number,
     skillChanceMultiplier: number
 ) {
     const {
         card: { trigger, effect },
-    } = this.context.skillInfos[index]
+    } = live.context.skillInfos[index]
 
     if (VITE_APP_DIAGNOSTICS) {
-        this.context.log(
-            time.toFixed(4),
-            ': Attempts to activate member',
+        live.context.log(
+            time,
+            'Attempts to activate member',
             index,
             'with',
             (
-                (trigger.chances[0] / 100 - this.context.skillChanceReduction) *
+                (trigger.chances[0] / 100 - live.context.skillChanceReduction) *
                 skillChanceMultiplier
             ).toFixed(4),
             'card skill chance'
@@ -27,25 +36,26 @@ export function activateCardSkill(
 
     if (
         Math.random() >=
-        (trigger.chances[0] / 100 - this.context.skillChanceReduction) *
+        (trigger.chances[0] / 100 - live.context.skillChanceReduction) *
             skillChanceMultiplier
     )
         return false
 
-    const level = this.consumeAmp()
+    const level = consumeAmp(live)
 
     switch (effect.type) {
         case EffectType.Plock:
-            this.doPlock(time, index, effect.durations[level])
+            doPlock(live, time, index, effect.durations[level])
             break
         case EffectType.Heal:
-            this.doHeal(time, index, effect.values[level])
+            doHeal(live, time, index, effect.values[level])
             break
         case EffectType.Score:
-            this.doScore(time, index, effect.values[level])
+            doScore(live, time, index, effect.values[level])
             break
         case EffectType.SRU:
-            this.doSRU(
+            doSRU(
+                live,
                 time,
                 index,
                 effect.durations[level],
@@ -53,10 +63,11 @@ export function activateCardSkill(
             )
             break
         case EffectType.Encore:
-            this.doEncore(time, index)
+            doEncore(live, time, index)
             break
         case EffectType.PSU:
-            this.doPSU(
+            doPSU(
+                live,
                 time,
                 index,
                 effect.durations[level],
@@ -64,7 +75,8 @@ export function activateCardSkill(
             )
             break
         case EffectType.CF:
-            this.doCF(
+            doCF(
+                live,
                 time,
                 index,
                 effect.durations[level],
@@ -72,10 +84,11 @@ export function activateCardSkill(
             )
             break
         case EffectType.Amp:
-            this.doAmp(effect.values[level])
+            doAmp(live, effect.values[level])
             break
         case EffectType.Param:
-            this.doParam(
+            doParam(
+                live,
                 time,
                 index,
                 effect.durations[level],

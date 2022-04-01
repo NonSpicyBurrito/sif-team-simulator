@@ -1,25 +1,27 @@
 import { Live } from '../Live'
+import { setSelfCoverage } from './self-coverage'
 import { doSkill } from './utils'
 
 export function doSpark(
-    this: Live,
+    live: Live,
     time: number,
     index: number,
     count: number,
     duration: number,
     value: number
 ) {
-    doSkill(this, time, index, (time, index) => {
-        if (this.sparkState.value) return
+    doSkill(live, time, index, (time, index) => {
+        if (live.sparkState.value) return
 
-        const multiplier = Math.floor(this.encoreActivated / count)
-        this.encoreActivated -= multiplier * count
+        const multiplier = Math.floor(live.encoreActivated / count)
+        live.encoreActivated -= multiplier * count
 
         const bonus = count * value * multiplier
 
         if (VITE_APP_DIAGNOSTICS) {
-            this.context.log(
-                '⠀⠀⠀⠀⠀⠀⠀ Member',
+            live.context.log(
+                time,
+                'Member',
                 index,
                 'activates Spark',
                 bonus,
@@ -28,7 +30,7 @@ export function doSpark(
             )
         }
 
-        this.sparkState.set(time + duration, bonus)
-        this.setSelfCoverage(time + duration, index)
+        live.sparkState.set(time + duration, bonus)
+        setSelfCoverage(live, time + duration, index)
     })
 }

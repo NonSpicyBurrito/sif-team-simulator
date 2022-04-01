@@ -11,17 +11,17 @@ export type HitEvent = {
     perfectJudgments: true[]
 }
 
-export function processHitEvent(this: Live, event: HitEvent) {
+export function processHitEvent(live: Live, event: HitEvent) {
     const triggers: [number][] = []
 
-    const isPlockActive = this.plockState.value > 0
-    const paramMultiplier = this.paramState.value
-    const sparkBonus = this.sparkState.value
-    const psuBonus = this.psuState.value
-    const cfBonus = this.cfState.value
+    const isPlockActive = live.plockState.value > 0
+    const paramMultiplier = live.paramState.value
+    const sparkBonus = live.sparkState.value
+    const psuBonus = live.psuState.value
+    const cfBonus = live.cfState.value
 
     const baseJudgments = event.perfectJudgments.map(
-        () => Math.random() < this.context.perfectRate
+        () => Math.random() < live.context.perfectRate
     )
     const judgments = isPlockActive ? event.perfectJudgments : baseJudgments
 
@@ -29,37 +29,37 @@ export function processHitEvent(this: Live, event: HitEvent) {
     const plockMultiplier =
         isPlockActive && !baseJudgments.includes(false) ? 1.08 : 1
     const trickMultiplier = isPlockActive ? 1 : 0
-    const heartMultiplier = 1 + this.hearts * getHeartBonus(this.context.maxHp)
+    const heartMultiplier = 1 + live.hearts * getHeartBonus(live.context.maxHp)
 
-    this.notes++
-    this.combo++
-    if (isPlockActive) this.covered++
+    live.notes++
+    live.combo++
+    if (isPlockActive) live.covered++
 
-    this.context.comboTriggers.forEach(([i, count]) => {
-        this.triggerCounters[i]++
+    live.context.comboTriggers.forEach(([i, count]) => {
+        live.triggerCounters[i]++
 
-        if (this.triggerCounters[i] < count) return
-        this.triggerCounters[i] -= count
+        if (live.triggerCounters[i] < count) return
+        live.triggerCounters[i] -= count
 
         triggers.push([i])
     })
 
     if (isPerfect) {
-        this.context.perfectTriggers.forEach(([i, count]) => {
-            this.triggerCounters[i]++
+        live.context.perfectTriggers.forEach(([i, count]) => {
+            live.triggerCounters[i]++
 
-            if (this.triggerCounters[i] < count) return
-            this.triggerCounters[i] -= count
+            if (live.triggerCounters[i] < count) return
+            live.triggerCounters[i] -= count
 
             triggers.push([i])
         })
 
         if (event.isStar) {
-            this.context.starPerfectTriggers.forEach(([i, count]) => {
-                this.triggerCounters[i]++
+            live.context.starPerfectTriggers.forEach(([i, count]) => {
+                live.triggerCounters[i]++
 
-                if (this.triggerCounters[i] < count) return
-                this.triggerCounters[i] -= count
+                if (live.triggerCounters[i] < count) return
+                live.triggerCounters[i] -= count
 
                 triggers.push([i])
             })
@@ -70,19 +70,19 @@ export function processHitEvent(this: Live, event: HitEvent) {
         (acc, judgment) => acc * (judgment ? 1.25 : 1.1),
         1
     )
-    const comboMultiplier = getComboMultiplier(this.combo)
-    const groupMultiplier = this.context.groupMultipliers[event.position]
+    const comboMultiplier = getComboMultiplier(live.combo)
+    const groupMultiplier = live.context.groupMultipliers[event.position]
     const attributeMultiplier =
-        this.context.attributeMultipliers[event.position]
+        live.context.attributeMultipliers[event.position]
     const noteMultiplier = event.isSwing ? 0.5 : 1
-    const cfMultiplier = getCFMultiplier(this.combo)
+    const cfMultiplier = getCFMultiplier(live.combo)
 
     const totalStat =
-        this.context.stat.base +
-        this.context.stat.trick * trickMultiplier +
-        this.context.stat.param * paramMultiplier
+        live.context.stat.base +
+        live.context.stat.trick * trickMultiplier +
+        live.context.stat.param * paramMultiplier
 
-    this.score +=
+    live.score +=
         totalStat *
         0.01 *
         judgmentMultiplier *
@@ -92,13 +92,13 @@ export function processHitEvent(this: Live, event: HitEvent) {
         noteMultiplier *
         plockMultiplier *
         heartMultiplier *
-        this.context.tapScoreMultiplier
+        live.context.tapScoreMultiplier
 
-    this.score += sparkBonus
+    live.score += sparkBonus
 
-    if (isPerfect) this.score += psuBonus
+    if (isPerfect) live.score += psuBonus
 
-    this.score += Math.min(1000, cfBonus * cfMultiplier)
+    live.score += Math.min(1000, cfBonus * cfMultiplier)
 
     return triggers
 }
