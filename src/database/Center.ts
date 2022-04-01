@@ -69,16 +69,14 @@ export enum CenterApplyType {
     HanamaruRuby = 141,
 }
 
-export type CenterSkill =
-    | {
-          main: {
-              type: CenterEffectType
-              value: number
-          }
-          extra: {
-              apply?: CenterApplyType
-              type?: CenterEffectType
-              value?: number
-          }
-      }
-    | undefined
+export type CenterSkill = {
+    main: {
+        type: CenterEffectType
+        value: number
+    }
+    extra: {
+        apply?: CenterApplyType
+        type?: CenterEffectType
+        value?: number
+    }
+} | null
