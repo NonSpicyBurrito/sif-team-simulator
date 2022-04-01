@@ -65,3 +65,11 @@ export class Live {
         }
     }
 }
+
+export function reduceHealth(live: Live, value: number) {
+    if (live.overheal > 0) {
+        live.overheal = -value
+    } else {
+        live.overheal -= value
+    }
+}

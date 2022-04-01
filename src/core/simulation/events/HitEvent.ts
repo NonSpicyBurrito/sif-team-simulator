@@ -1,4 +1,4 @@
-import { Live } from '../Live'
+import { Live, reduceHealth } from '../Live'
 import { getCFMultiplier } from '../skills/cf'
 import {
     getComboMultiplier,
@@ -80,6 +80,14 @@ export function processHitEvent(live: Live, event: HitEvent) {
                 triggers.push([i])
             })
         }
+    }
+
+    if (finalJudgment === 3) {
+        reduceHealth(live, 1)
+    }
+
+    if (finalJudgment === 4) {
+        reduceHealth(live, 2)
     }
 
     const totalJudgmentMultiplier = judgments.reduce(

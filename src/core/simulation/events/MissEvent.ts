@@ -1,4 +1,4 @@
-import { Live } from '../Live'
+import { Live, reduceHealth } from '../Live'
 
 export type MissEvent = {
     time: number
@@ -11,11 +11,7 @@ export function processMissEvent(live: Live) {
     live.notes++
     if (isPlockActive) live.covered++
 
-    if (live.overheal > 0) {
-        live.overheal = -2
-    } else {
-        live.overheal -= 2
-    }
+    reduceHealth(live, 2)
 
     if (
         live.survivedNotes === Number.POSITIVE_INFINITY &&
