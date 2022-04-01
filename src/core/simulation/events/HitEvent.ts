@@ -41,17 +41,24 @@ export function processHitEvent(live: Live, event: HitEvent) {
     const heartMultiplier = 1 + live.hearts * getHeartBonus(live.context.maxHp)
 
     live.notes++
-    live.combo++
     if (isPlockActive) live.covered++
 
-    live.context.comboTriggers.forEach(([i, count]) => {
-        live.triggerCounters[i]++
+    if (finalJudgment <= 1) {
+        live.combo++
+        live.context.comboTriggers.forEach(([i, count]) => {
+            live.triggerCounters[i]++
 
-        if (live.triggerCounters[i] < count) return
-        live.triggerCounters[i] -= count
+            if (live.triggerCounters[i] < count) return
+            live.triggerCounters[i] -= count
 
-        triggers.push([i])
-    })
+            triggers.push([i])
+        })
+    } else {
+        live.combo = 0
+        live.context.comboTriggers.forEach(([i]) => {
+            live.triggerCounters[i] = 0
+        })
+    }
 
     if (finalJudgment === 0) {
         live.context.perfectTriggers.forEach(([i, count]) => {
