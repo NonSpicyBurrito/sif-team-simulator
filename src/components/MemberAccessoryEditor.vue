@@ -12,14 +12,14 @@ const props = defineProps<{
 }>()
 
 function editData() {
+    if (!props.member.accessory) return
+
+    const accessory = accessories.get(props.member.accessory.id)
+    if (!accessory) return
+
     try {
-        if (!props.member.accessory) return
-
-        const accessory = accessories.get(props.member.accessory.id)
-        if (!accessory) return
-
         const data = prompt('Edit accessory data:', JSON.stringify(accessory))
-        if (!data) throw 'No data'
+        if (!data) return
 
         Object.assign(accessory, JSON.parse(data))
     } catch (error) {

@@ -15,12 +15,12 @@ function viewDetails() {
 }
 
 function editData() {
-    try {
-        const card = cards.get(props.member.card.id)
-        if (!card) return
+    const card = cards.get(props.member.card.id)
+    if (!card) return
 
+    try {
         const data = prompt('Edit card data:', JSON.stringify(card))
-        if (!data) throw 'No data'
+        if (!data) return
 
         Object.assign(card, JSON.parse(data))
     } catch (error) {

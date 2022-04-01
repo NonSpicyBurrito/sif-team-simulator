@@ -28,7 +28,7 @@ function resetTeam() {
 function importPreset() {
     try {
         const data = prompt('Paste preset data:', '[]')
-        if (!data) throw 'No data'
+        if (!data) return
 
         presetTeams.value.push(...JSON.parse(data))
     } catch (error) {
@@ -39,9 +39,9 @@ function importPreset() {
 function exportPreset() {
     try {
         navigator.clipboard.writeText(JSON.stringify(presetTeams.value))
-        alert('Preset exported to clipboard')
+        alert('Preset copied to clipboard')
     } catch (error) {
-        alert('Failed to copy to clipboard')
+        alert('Failed to copy preset to clipboard')
     }
 }
 
