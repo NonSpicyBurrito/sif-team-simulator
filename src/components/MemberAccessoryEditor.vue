@@ -7,15 +7,32 @@ import { accessories, cards } from '../database'
 import Accessory from './Accessory.vue'
 import Field from './Field.vue'
 
-defineProps<{
+const props = defineProps<{
     member: Member
 }>()
+
+function editData() {
+    try {
+        if (!props.member.accessory) return
+
+        const accessory = accessories.get(props.member.accessory.id)
+        if (!accessory) return
+
+        const data = prompt('Edit accessory data:', JSON.stringify(accessory))
+        if (!data) throw 'No data'
+
+        Object.assign(accessory, JSON.parse(data))
+    } catch (error) {
+        alert('Invalid data')
+    }
+}
 </script>
 
 <template>
     <Field label="Accessory">
         <template v-if="member.accessory">
             <button @click="member.accessory = undefined">✗</button>
+            <button class="ml-2" @click="editData">Edit Data</button>
         </template>
         <div v-else class="flex flex-wrap -mb-1">
             <template
