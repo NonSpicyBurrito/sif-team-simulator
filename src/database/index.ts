@@ -49,7 +49,7 @@ async function initAccessories() {
     if (accessories.size) return
 
     Object.entries(await loadJson('accessories')).forEach(([id, accessory]) =>
-        accessories.set(id, accessory as Accessory)
+        accessories.set(id, reactive(accessory as Accessory))
     )
 }
 

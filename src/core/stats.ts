@@ -34,7 +34,7 @@ export function calculateTeamStat(
     team: Team,
     memoryGalleryBonus: number[],
     chartId: string,
-    guestCenter?: CenterSkill
+    guestCenter: CenterSkill
 ) {
     const { attribute } = charts.get(chartId)!
     const { center } = cards.get(team[4].card.id)!

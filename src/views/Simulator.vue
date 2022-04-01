@@ -25,7 +25,7 @@ const memoryGalleryBonus = useLocalStorage(
     'memoryGalleryBonus',
     [222, 222, 156]
 )
-const guestCenter = useLocalStorage<CenterSkill>('guestCenter.1', undefined, {
+const guestCenter = useLocalStorage<CenterSkill>('guestCenter.1', null, {
     serializer: StorageSerializers.object,
 })
 const tapScoreBonus = useLocalStorage('tapScoreBonus', 0)
@@ -207,9 +207,7 @@ async function simulate() {
             </div>
         </Field>
         <Field label="Guest Center">
-            <button v-if="guestCenter" @click="guestCenter = undefined">
-                ✗
-            </button>
+            <button v-if="guestCenter" @click="guestCenter = null">✗</button>
             <button v-else @click="showSelectCenter = !showSelectCenter">
                 Select
             </button>
