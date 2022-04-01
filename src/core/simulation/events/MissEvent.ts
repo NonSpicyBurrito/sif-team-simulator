@@ -3,6 +3,7 @@ import { Live, reduceHealth } from '../Live'
 export type MissEvent = {
     time: number
     type: 'miss'
+    note: number
 }
 
 export function processMissEvent(live: Live) {

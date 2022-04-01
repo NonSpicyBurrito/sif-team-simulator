@@ -3,6 +3,7 @@ import { Live } from '../Live'
 export type SpawnEvent = {
     time: number
     type: 'spawn'
+    note: number
 }
 
 export function processSpawnEvent(live: Live) {

@@ -9,6 +9,7 @@ import {
 export type HitEvent = {
     time: number
     type: 'hit'
+    note: number
     position: number
     isStar: boolean
     isSwing: boolean
