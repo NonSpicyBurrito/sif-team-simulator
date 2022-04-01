@@ -31,7 +31,8 @@ export function processHitEvent(live: Live, event: HitEvent) {
         ? baseJudgments.map((judgment) => (judgment <= 2 ? 0 : judgment))
         : baseJudgments
 
-    const isPerfect = judgments.every((judgment) => judgment === 0)
+    const finalJudgment = Math.max(...judgments)
+
     const plockMultiplier =
         isPlockActive && baseJudgments.every((judgment) => judgment === 0)
             ? 1.08
@@ -52,7 +53,7 @@ export function processHitEvent(live: Live, event: HitEvent) {
         triggers.push([i])
     })
 
-    if (isPerfect) {
+    if (finalJudgment === 0) {
         live.context.perfectTriggers.forEach(([i, count]) => {
             live.triggerCounters[i]++
 
@@ -104,7 +105,7 @@ export function processHitEvent(live: Live, event: HitEvent) {
 
     live.score += sparkBonus
 
-    if (isPerfect) live.score += psuBonus
+    if (finalJudgment === 0) live.score += psuBonus
 
     live.score += Math.min(1000, cfBonus * cfMultiplier)
 
