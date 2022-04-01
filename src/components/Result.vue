@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
 import { getChartDescription } from '../core/chart'
 import { duration, percent, small, thousands } from '../core/formatting'
 import { simulateScore } from '../core/simulation'
@@ -43,6 +43,20 @@ watchEffect(() => {
         selected.value = 'score'
     }
 })
+
+const isExpanded = ref<number[]>([])
+watch(
+    () => props.result.diagnostics,
+    () => (isExpanded.value = [])
+)
+
+function toggleDiagnosticExpansion(index: number) {
+    if (isExpanded.value.includes(index)) {
+        isExpanded.value = isExpanded.value.filter((i) => i !== index)
+    } else {
+        isExpanded.value.push(index)
+    }
+}
 </script>
 
 <template>
@@ -91,11 +105,26 @@ watchEffect(() => {
     <div v-if="result.diagnostics.length" class="surface">
         <div class="overflow-y-auto h-[75vh] font-mono">
             <div
-                v-for="(line, index) in result.diagnostics"
+                v-for="(message, index) in result.diagnostics"
                 :key="index"
-                class="p-1 whitespace-pre-wrap border-b-[1px] border-gray-700"
+                class="p-1 border-b-[1px] border-gray-700"
+                @click="toggleDiagnosticExpansion(index)"
             >
-                {{ line }}
+                <template v-if="message.includes('\n')">
+                    <template v-if="isExpanded.includes(index)">
+                        ▼ <span class="whitespace-pre-wrap">{{ message }}</span>
+                    </template>
+                    <template v-else>
+                        ►
+                        <span class="whitespace-pre-wrap">{{
+                            message.split('\n')[0]
+                        }}</span
+                        >...
+                    </template>
+                </template>
+                <template v-else>
+                    <span class="whitespace-pre-wrap">{{ message }}</span>
+                </template>
             </div>
         </div>
     </div>
