@@ -1,6 +1,10 @@
 import { Live } from '../Live'
 import { getCFMultiplier } from '../skills/cf'
-import { getComboMultiplier, getHeartBonus } from '../tap-score'
+import {
+    getComboMultiplier,
+    getHeartBonus,
+    judgmentMultiplier,
+} from '../tap-score'
 
 export type HitEvent = {
     time: number
@@ -21,13 +25,17 @@ export function processHitEvent(live: Live, event: HitEvent) {
     const cfBonus = live.cfState.value
 
     const baseJudgments = event.perfectJudgments.map(
-        () => Math.random() < live.context.perfectRate
+        live.context.getRandomJudgment
     )
-    const judgments = isPlockActive ? event.perfectJudgments : baseJudgments
+    const judgments = isPlockActive
+        ? baseJudgments.map((judgment) => (judgment <= 2 ? 0 : judgment))
+        : baseJudgments
 
-    const isPerfect = !judgments.includes(false)
+    const isPerfect = judgments.every((judgment) => judgment === 0)
     const plockMultiplier =
-        isPlockActive && !baseJudgments.includes(false) ? 1.08 : 1
+        isPlockActive && baseJudgments.every((judgment) => judgment === 0)
+            ? 1.08
+            : 1
     const trickMultiplier = isPlockActive ? 1 : 0
     const heartMultiplier = 1 + live.hearts * getHeartBonus(live.context.maxHp)
 
@@ -66,8 +74,8 @@ export function processHitEvent(live: Live, event: HitEvent) {
         }
     }
 
-    const judgmentMultiplier = judgments.reduce(
-        (acc, judgment) => acc * (judgment ? 1.25 : 1.1),
+    const totalJudgmentMultiplier = judgments.reduce(
+        (acc, judgment) => acc * judgmentMultiplier[judgment],
         1
     )
     const comboMultiplier = getComboMultiplier(live.combo)
@@ -85,7 +93,7 @@ export function processHitEvent(live: Live, event: HitEvent) {
     live.score +=
         totalStat *
         0.01 *
-        judgmentMultiplier *
+        totalJudgmentMultiplier *
         comboMultiplier *
         groupMultiplier *
         attributeMultiplier *

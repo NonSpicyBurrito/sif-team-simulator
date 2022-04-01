@@ -12,6 +12,7 @@ import { calculateTeamStat } from '../stats'
 import { Team } from '../Team'
 import { Event } from './events'
 import { Live } from './Live'
+import { normalize, Performance } from './performance'
 import { fill } from './utils'
 
 const missTiming = 0.256
@@ -38,9 +39,9 @@ export class Context {
     public readonly sisScoreMultipliers = fill(1)
     public readonly sisHealMultipliers = fill(0)
     public readonly events: Event[] = []
-    public readonly perfectRate: number
     public readonly skillChanceBonus: number
     public readonly skillChanceReduction: number
+    public readonly getRandomJudgment: () => number
 
     private readonly diagnostics: [number | undefined, string][] | undefined
 
@@ -50,7 +51,7 @@ export class Context {
         memoryGalleryBonus: number[],
         guestCenter: CenterSkill,
         chartId: string,
-        perfectRate: number,
+        performance: Performance,
         noteSpeed: number,
         tapScoreBonus: number,
         skillChanceBonus: number,
@@ -218,9 +219,17 @@ export class Context {
         })
         this.events.sort((a, b) => a.time - b.time)
 
-        this.perfectRate = perfectRate
         this.skillChanceBonus = skillChanceBonus
         this.skillChanceReduction = skillChanceReduction
+
+        const normalized = normalize(performance)
+        const distribution = normalized.map((_, i) =>
+            normalized.slice(0, i + 1).reduce((a, b) => a + b)
+        )
+        this.getRandomJudgment = () => {
+            const value = Math.random()
+            return distribution.findIndex((v) => v >= value)
+        }
 
         this.diagnostics = enableDiagnostics ? [] : undefined
 
