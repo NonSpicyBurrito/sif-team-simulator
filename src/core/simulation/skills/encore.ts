@@ -5,13 +5,13 @@ export function doEncore(live: Live, time: number, index: number) {
 
     if (VITE_APP_DIAGNOSTICS) {
         if (skill) {
-            live.context.log(time, 'Member', index, 'activates encore')
+            live.context.log(time, 'Member', index, 'activates Encore')
         } else {
             live.context.log(
                 time,
                 'Member',
                 index,
-                'activates encore but no skill to copy'
+                'activates Encore but no skill to copy'
             )
         }
     }
