@@ -21,5 +21,9 @@ export function doEncore(live: Live, time: number, index: number) {
         skill(time, index)
     }
 
+    if (VITE_APP_DIAGNOSTICS) {
+        live.context.log(time, live.encoreActivated, 'encore charges')
+    }
+
     live.purgeLastSkill = true
 }
