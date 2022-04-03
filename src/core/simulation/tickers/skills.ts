@@ -39,11 +39,5 @@ export function tickSkills(live: Live, time: number, triggers: [number][]) {
     live.lastSkill =
         live.tempLastSkill || (live.purgeLastSkill ? undefined : live.lastSkill)
 
-    if (!live.ampState && live.tempAmp) {
-        if (VITE_APP_DIAGNOSTICS) {
-            live.context.log(time, 'Amp', live.tempAmp, 'activates')
-        }
-
-        live.ampState = live.tempAmp
-    }
+    live.ampState = live.tempAmp || live.ampState
 }

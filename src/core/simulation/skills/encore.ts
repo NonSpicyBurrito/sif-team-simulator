@@ -16,14 +16,12 @@ export function doEncore(live: Live, time: number, index: number) {
         }
     }
 
-    if (skill) {
+    if (skill && !skill(time, index)) {
         live.sparkCharges++
-        skill(time, index)
+        live.purgeLastSkill = true
     }
 
     if (VITE_APP_DIAGNOSTICS) {
         live.context.log(time, live.sparkCharges, 'Spark charges')
     }
-
-    live.purgeLastSkill = true
 }
