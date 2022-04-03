@@ -35,7 +35,7 @@ const performance = useLocalStorage<Performance>('performance', {
 const noteSpeed = useLocalStorage('noteSpeed', 9)
 const memoryGalleryBonus = useLocalStorage(
     'memoryGalleryBonus',
-    [222, 222, 156]
+    [228, 294, 228]
 )
 const guestCenter = useLocalStorage<CenterSkill>('guestCenter.1', null, {
     serializer: StorageSerializers.object,
@@ -178,15 +178,19 @@ async function simulate() {
                 </option>
             </select>
         </Field>
-        <Field label="Performance">
-            <button @click="showPerformance = !showPerformance">Edit</button>
-            <span class="ml-2">
-                {{ getPerformanceDescription(performance) }}
-            </span>
-        </Field>
-        <div v-if="showPerformance" class="surface">
-            <PerformanceEditor :="{ performance }" />
-        </div>
+        <template v-if="mode !== 'afk'">
+            <Field label="Performance">
+                <button @click="showPerformance = !showPerformance">
+                    Edit
+                </button>
+                <span class="ml-2">
+                    {{ getPerformanceDescription(performance) }}
+                </span>
+            </Field>
+            <div v-if="showPerformance" class="surface">
+                <PerformanceEditor :="{ performance }" />
+            </div>
+        </template>
         <Field label="Note Speed">
             <div class="flex flex-wrap -mb-1">
                 <button

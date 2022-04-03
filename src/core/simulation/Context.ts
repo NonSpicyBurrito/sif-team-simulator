@@ -191,16 +191,18 @@ export class Context {
             })
         )
 
-        chart.notes.forEach((note) => {
+        chart.notes.forEach((note, index) => {
             this.events.push({
                 time: note.startTime - onScreenDuration,
                 type: 'spawn',
+                note: index + 1,
             })
             switch (mode) {
                 case 'normal':
                     this.events.push({
                         time: note.endTime,
                         type: 'hit',
+                        note: index + 1,
                         position: note.position,
                         isStar: note.isStar,
                         isSwing: note.isSwing,
@@ -214,6 +216,7 @@ export class Context {
                     this.events.push({
                         time: note.startTime + missTiming,
                         type: 'miss',
+                        note: index + 1,
                     })
                     break
             }

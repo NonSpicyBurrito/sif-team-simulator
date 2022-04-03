@@ -32,7 +32,7 @@ export class Live {
     public ampState = 0
     public tempAmp = 0
 
-    public encoreActivated = 0
+    public sparkCharges = 0
 
     public sruState = new ExclusiveState()
     public paramState = new ExclusiveState()

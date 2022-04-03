@@ -13,8 +13,8 @@ export function doSpark(
     doSkill(live, time, index, (time, index) => {
         if (live.sparkState.value) return
 
-        const multiplier = Math.floor(live.encoreActivated / count)
-        live.encoreActivated -= multiplier * count
+        const multiplier = Math.floor(live.sparkCharges / count)
+        live.sparkCharges -= multiplier * count
 
         const bonus = count * value * multiplier
 
