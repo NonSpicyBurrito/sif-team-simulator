@@ -9,7 +9,7 @@ export function activate(
     index: number,
     skillChanceMultiplier: number
 ) {
-    if (activateSelfCoverage(live, index)) return
+    if (activateSelfCoverage(live, time, index)) return
     if (activateCardSkill(live, time, index, skillChanceMultiplier)) return
     if (activateAccessorySkill(live, time, index)) return
 }
