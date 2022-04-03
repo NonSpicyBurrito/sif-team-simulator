@@ -21,9 +21,9 @@ export function processHitEvent(live: Live, event: HitEvent) {
 
     const isPlockActive = live.plockState.value > 0
     const paramMultiplier = live.paramState.value
-    const sparkBonus = live.sparkState.value
     const psuBonus = live.psuState.value
     const cfBonus = live.cfState.value
+    const sparkBonus = live.sparkState.value
 
     const baseJudgments = event.perfectJudgments.map(() =>
         live.context.getRandomJudgment(live.notes + 1)
@@ -119,11 +119,11 @@ export function processHitEvent(live: Live, event: HitEvent) {
         heartMultiplier *
         live.context.tapScoreMultiplier
 
-    live.score += sparkBonus
-
     if (finalJudgment === 0) live.score += psuBonus
 
     live.score += Math.min(1000, cfBonus * cfMultiplier)
+
+    live.score += sparkBonus
 
     return triggers
 }

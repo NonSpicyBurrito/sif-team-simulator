@@ -36,11 +36,11 @@ export class Live {
 
     public sruState = new ExclusiveState()
     public paramState = new ExclusiveState()
-    public sparkState = new ExclusiveState()
 
     public plockState = new StackedState()
     public psuState = new StackedState()
     public cfState = new StackedState()
+    public sparkState = new StackedState()
 
     public constructor(public readonly context: Context) {
         if (VITE_APP_DIAGNOSTICS) {

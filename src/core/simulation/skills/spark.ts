@@ -11,8 +11,6 @@ export function doSpark(
     value: number
 ) {
     doSkill(live, time, index, (time, index) => {
-        if (live.sparkState.value) return
-
         const multiplier = Math.floor(live.sparkCharges / count)
         live.sparkCharges -= multiplier * count
 
@@ -30,7 +28,7 @@ export function doSpark(
             )
         }
 
-        live.sparkState.set(time + duration, bonus)
+        live.sparkState.add(time + duration, bonus)
         setSelfCoverage(live, time + duration, index)
     })
 }
