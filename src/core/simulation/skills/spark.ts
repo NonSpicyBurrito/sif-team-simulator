@@ -10,6 +10,8 @@ export function doSpark(
     duration: number,
     value: number
 ) {
+    if (live.sparkCharges < count) return
+
     doSkill(live, time, index, (time, index) => {
         const multiplier = Math.floor(live.sparkCharges / count)
         live.sparkCharges -= multiplier * count
