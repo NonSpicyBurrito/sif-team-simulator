@@ -5,19 +5,21 @@ export function doHeal(live: Live, time: number, index: number, value: number) {
     const multiplier = live.context.sisHealMultipliers[index]
 
     doSkill(live, time, index, (time, index) => {
+        const score = value * multiplier * (live.overheal >= 0 ? 1 : 0)
+
         if (VITE_APP_DIAGNOSTICS) {
             live.context.log(
                 time,
                 'Member',
                 index,
-                'heals',
+                'activates Heal',
                 value,
                 'scores',
-                value * multiplier * (live.overheal >= 0 ? 1 : 0)
+                score
             )
         }
 
-        live.score += value * multiplier * (live.overheal >= 0 ? 1 : 0)
+        live.score += score
         live.overheal += value
 
         if (live.overheal < live.context.maxHp) return

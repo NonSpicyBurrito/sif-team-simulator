@@ -1,10 +1,10 @@
-import { Live } from '../Live'
+import { LastSkill, Live } from '../Live'
 
 export function doSkill(
     live: Live,
     time: number,
     index: number,
-    skill: (time: number, index: number) => void
+    skill: LastSkill
 ) {
     live.tempLastSkill = live.tempLastSkill || skill
     skill(time, index)

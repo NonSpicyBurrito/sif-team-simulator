@@ -17,7 +17,9 @@ export function doParam(
                 time,
                 'Member',
                 index,
-                'activates Param until',
+                'activates Param',
+                value,
+                'until',
                 time + duration
             )
         }

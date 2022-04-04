@@ -10,16 +10,12 @@ export function doScore(
     const multiplier = live.context.sisScoreMultipliers[index]
 
     doSkill(live, time, index, (time, index) => {
+        const score = value * multiplier
+
         if (VITE_APP_DIAGNOSTICS) {
-            live.context.log(
-                time,
-                'Member',
-                index,
-                'scores',
-                value * multiplier
-            )
+            live.context.log(time, 'Member', index, 'activates Score', score)
         }
 
-        live.score += value * multiplier
+        live.score += score
     })
 }

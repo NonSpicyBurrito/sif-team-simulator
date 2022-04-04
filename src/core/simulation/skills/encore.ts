@@ -5,25 +5,23 @@ export function doEncore(live: Live, time: number, index: number) {
 
     if (VITE_APP_DIAGNOSTICS) {
         if (skill) {
-            live.context.log(time, 'Member', index, 'activates encore')
+            live.context.log(time, 'Member', index, 'activates Encore')
         } else {
             live.context.log(
                 time,
                 'Member',
                 index,
-                'activates encore but no skill to copy'
+                'activates Encore but no skill to copy'
             )
         }
     }
 
-    if (skill) {
+    if (skill && !skill(time, index)) {
         live.sparkCharges++
-        skill(time, index)
+        live.purgeLastSkill = true
     }
 
     if (VITE_APP_DIAGNOSTICS) {
         live.context.log(time, live.sparkCharges, 'Spark charges')
     }
-
-    live.purgeLastSkill = true
 }

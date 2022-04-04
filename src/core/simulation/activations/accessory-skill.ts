@@ -34,19 +34,24 @@ export function activateAccessorySkill(
 
     if (Math.random() >= trigger.chances[0] / 100) return
 
-    const level = consumeAmp(live)
-
     switch (effect.type) {
-        case EffectType.Plock:
+        case EffectType.Plock: {
+            const level = consumeAmp(live)
             doPlock(live, time, index, effect.durations[level])
             break
-        case EffectType.Heal:
+        }
+        case EffectType.Heal: {
+            const level = consumeAmp(live)
             doHeal(live, time, index, effect.values[level])
             break
-        case EffectType.Score:
+        }
+        case EffectType.Score: {
+            const level = consumeAmp(live)
             doScore(live, time, index, effect.values[level])
             break
-        case EffectType.SRU:
+        }
+        case EffectType.SRU: {
+            const level = consumeAmp(live)
             doSRU(
                 live,
                 time,
@@ -55,10 +60,12 @@ export function activateAccessorySkill(
                 effect.values[level] - 1
             )
             break
+        }
         case EffectType.Encore:
             doEncore(live, time, index)
             break
-        case EffectType.PSU:
+        case EffectType.PSU: {
+            const level = consumeAmp(live)
             doPSU(
                 live,
                 time,
@@ -67,7 +74,9 @@ export function activateAccessorySkill(
                 effect.values[level]
             )
             break
-        case EffectType.CF:
+        }
+        case EffectType.CF: {
+            const level = consumeAmp(live)
             doCF(
                 live,
                 time,
@@ -76,10 +85,14 @@ export function activateAccessorySkill(
                 effect.values[level]
             )
             break
-        case EffectType.Amp:
-            doAmp(live, effect.values[level])
+        }
+        case EffectType.Amp: {
+            const level = consumeAmp(live)
+            doAmp(live, time, index, effect.values[level])
             break
-        case EffectType.Param:
+        }
+        case EffectType.Param: {
+            const level = consumeAmp(live)
             doParam(
                 live,
                 time,
@@ -88,7 +101,9 @@ export function activateAccessorySkill(
                 effect.values[level] - 1
             )
             break
-        case EffectType.Spark:
+        }
+        case EffectType.Spark: {
+            const level = consumeAmp(live)
             doSpark(
                 live,
                 time,
@@ -98,6 +113,7 @@ export function activateAccessorySkill(
                 effect.values[level]
             )
             break
+        }
         default:
             throw `Unsupported accessory effect: ${
                 EffectType[effect.type] || effect.type
