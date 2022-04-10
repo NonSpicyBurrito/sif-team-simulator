@@ -7,4 +7,5 @@ export function tickBuffs(live: Live, time: number) {
     live.plockState.update(time)
     live.psuState.update(time)
     live.cfState.update(time)
+    live.sparkState.update(time)
 }
