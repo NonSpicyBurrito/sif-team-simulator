@@ -97,7 +97,9 @@ function toggleDiagnosticExpansion(index: number) {
         </template>
 
         <Field label="Time">
-            {{ duration(time) }}
+            <div class="py-1">
+                {{ duration(time) }}
+            </div>
         </Field>
 
         <Field label="Data">
