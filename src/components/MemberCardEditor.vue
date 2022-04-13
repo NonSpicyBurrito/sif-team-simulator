@@ -45,7 +45,7 @@ function editData() {
         />
     </Field>
     <Field label="Card Skill Level">
-        <div class="flex flex-wrap -mb-1">
+        <div class="-mb-1 flex flex-wrap">
             <button
                 v-for="sl in 8"
                 :key="sl"

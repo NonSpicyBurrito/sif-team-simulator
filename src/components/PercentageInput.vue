@@ -38,7 +38,7 @@ watch(optionValue, (value) => {
         <input
             v-if="optionValue === undefined"
             v-model="customValue"
-            class="grow mr-1"
+            class="mr-1 grow"
             type="number"
             :min="min * 100"
             :max="max * 100"

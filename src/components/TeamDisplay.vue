@@ -35,7 +35,7 @@ defineEmits<{
                 :sis-names="member.sisNames"
                 :accessory="member.accessory"
             />
-            <div v-else class="w-16 h-16 bg-white/10 rounded-full" />
+            <div v-else class="h-16 w-16 rounded-full bg-white/10" />
         </div>
     </div>
 </template>

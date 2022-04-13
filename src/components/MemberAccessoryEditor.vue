@@ -34,7 +34,7 @@ function editData() {
             <button @click="member.accessory = undefined">✗</button>
             <button class="ml-2" @click="editData">Edit Data</button>
         </template>
-        <div v-else class="flex flex-wrap -mb-1">
+        <div v-else class="-mb-1 flex flex-wrap">
             <template
                 v-for="[id, accessory] in accessories.entries()"
                 :key="id"
@@ -45,7 +45,7 @@ function editData() {
                         accessory.character ===
                             cards.get(member.card.id)?.character
                     "
-                    class="mr-1 mb-1 w-12 h-12 cursor-pointer"
+                    class="mr-1 mb-1 h-12 w-12 cursor-pointer"
                     :="{ id }"
                     simple
                     @click="member.accessory = { id, level: 8 }"
@@ -55,7 +55,7 @@ function editData() {
     </Field>
     <template v-if="member.accessory">
         <Field label="Accessory Level">
-            <div class="flex flex-wrap -mb-1">
+            <div class="-mb-1 flex flex-wrap">
                 <button
                     v-for="level in 8"
                     :key="level"

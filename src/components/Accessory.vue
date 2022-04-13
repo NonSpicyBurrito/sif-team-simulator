@@ -22,8 +22,8 @@ const simpleDescription = computed(() => {
 <template>
     <div class="relative">
         <AccessoryIcon :="{ id }" />
-        <div v-if="simple" class="flex absolute bottom-0 justify-center w-full">
-            <div class="text-center tag">
+        <div v-if="simple" class="absolute bottom-0 flex w-full justify-center">
+            <div class="tag text-center">
                 {{ simpleDescription }}
             </div>
         </div>

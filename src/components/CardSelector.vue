@@ -137,10 +137,10 @@ const ids = useLargeArray(
             </p>
         </div>
     </Field>
-    <div class="flex flex-wrap justify-center mt-8 mb-4">
+    <div class="mt-8 mb-4 flex flex-wrap justify-center">
         <template v-for="id in ids" :key="id">
             <Card
-                class="shrink-0 m-1 cursor-pointer"
+                class="m-1 shrink-0 cursor-pointer"
                 :="{ id }"
                 simple
                 @click="$emit('select', id)"

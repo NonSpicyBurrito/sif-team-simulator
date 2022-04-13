@@ -30,7 +30,7 @@ const teamStat = computed(() => {
 <template>
     <div
         v-if="teamStat"
-        class="flex justify-around items-center my-2 mx-auto max-w-md text-center"
+        class="my-2 mx-auto flex max-w-md items-center justify-around text-center"
     >
         <div
             v-for="({ base }, index) in teamStat"
