@@ -45,7 +45,14 @@ watchEffect(() => {
 })
 
 function exportData() {
-    console.log(props.result.raw)
+    console.log(toCSV(props.result.raw))
+}
+
+function toCSV(rows: Record<string, number>[]) {
+    const keys = [...new Set(rows.map(Object.keys).flat())]
+    return [keys, ...rows.map((row) => keys.map((key) => row[key]))]
+        .map((row) => row.join(','))
+        .join('\n')
 }
 
 const isExpanded = ref<number[]>([])
