@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { saveAs } from 'file-saver'
 import { computed, ref, watch, watchEffect } from 'vue'
 import { getChartDescription } from '../core/chart'
 import { duration, percent, small, thousands } from '../core/formatting'
@@ -45,7 +46,8 @@ watchEffect(() => {
 })
 
 function exportData() {
-    console.log(toCSV(props.result.raw))
+    const blob = new Blob([toCSV(props.result.raw)], { type: 'text/csv' })
+    saveAs(blob, 'data.csv')
 }
 
 function toCSV(rows: Record<string, number>[]) {
