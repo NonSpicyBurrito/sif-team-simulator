@@ -32,6 +32,7 @@ export function simulateScore(
     ).simulate(count)
 
     return {
+        raw: results,
         ...summarize(results),
         survivalRate,
         diagnostics,

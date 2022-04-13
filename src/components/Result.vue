@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { saveAs } from 'file-saver'
 import { computed, ref, watch, watchEffect } from 'vue'
 import { getChartDescription } from '../core/chart'
 import { duration, percent, small, thousands } from '../core/formatting'
@@ -43,6 +44,18 @@ watchEffect(() => {
         selected.value = 'score'
     }
 })
+
+function exportData() {
+    const blob = new Blob([toCSV(props.result.raw)], { type: 'text/csv' })
+    saveAs(blob, 'data.csv')
+}
+
+function toCSV(rows: Record<string, number>[]) {
+    const keys = [...new Set(rows.map(Object.keys).flat())]
+    return [keys, ...rows.map((row) => keys.map((key) => row[key]))]
+        .map((row) => row.join(','))
+        .join('\n')
+}
 
 const isExpanded = ref<number[]>([])
 watch(
@@ -93,7 +106,13 @@ function toggleDiagnosticExpansion(index: number) {
         </template>
 
         <Field label="Time">
-            {{ duration(time) }}
+            <div class="py-1">
+                {{ duration(time) }}
+            </div>
+        </Field>
+
+        <Field label="Data">
+            <button @click="exportData">Export</button>
         </Field>
 
         <Histogram
