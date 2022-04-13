@@ -12,16 +12,16 @@ const current = ref<keyof typeof tabs>('Simulator')
 </script>
 
 <template>
-    <div class="pt-4 bg-white/5 shadow-lg sm:pt-8 sm:mb-4">
-        <div class="text-2xl font-bold text-center sm:text-5xl">
+    <div class="bg-white/5 pt-4 shadow-lg sm:mb-4 sm:pt-8">
+        <div class="text-center text-2xl font-bold sm:text-5xl">
             SIF Team Simulator
         </div>
 
-        <div class="flex mx-auto mt-4 max-w-lg sm:mt-8">
+        <div class="mx-auto mt-4 flex max-w-lg sm:mt-8">
             <a
                 v-for="(value, name) in tabs"
                 :key="name"
-                class="basis-0 grow p-2 text-center border-b-2 border-white/0 transition-all cursor-pointer sm:p-4"
+                class="grow basis-0 cursor-pointer border-b-2 border-white/0 p-2 text-center transition-all sm:p-4"
                 :class="
                     current === name
                         ? 'border-white/100'

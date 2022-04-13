@@ -14,7 +14,7 @@ const diagnostics = VITE_APP_DIAGNOSTICS
         <Field label="Source Code">
             <div class="py-1 sm:text-center">
                 <a
-                    class="underline cursor-pointer"
+                    class="cursor-pointer underline"
                     href="https://github.com/NonSpicyBurrito/sif-team-simulator"
                     target="__blank"
                 >
@@ -28,7 +28,7 @@ const diagnostics = VITE_APP_DIAGNOSTICS
             </div>
         </Field>
         <Field label="SHA1">
-            <div class="py-1 break-all sm:text-center">
+            <div class="break-all py-1 sm:text-center">
                 {{ sha1 }}
             </div>
         </Field>

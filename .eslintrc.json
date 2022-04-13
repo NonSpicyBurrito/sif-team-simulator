@@ -28,6 +28,7 @@
         "defineEmits": "readonly"
     },
     "rules": {
-        "prettier/prettier": "error"
+        "prettier/prettier": "error",
+        "tailwindcss/classnames-order": "off"
     }
 }

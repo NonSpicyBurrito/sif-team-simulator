@@ -122,11 +122,11 @@ function toggleDiagnosticExpansion(index: number) {
     </div>
 
     <div v-if="result.diagnostics.length" class="surface">
-        <div class="overflow-y-auto h-[75vh] font-mono">
+        <div class="h-[75vh] overflow-y-auto font-mono">
             <div
                 v-for="(message, index) in result.diagnostics"
                 :key="index"
-                class="p-1 border-b-[1px] border-gray-700"
+                class="border-b-[1px] border-gray-700 p-1"
                 @click="toggleDiagnosticExpansion(index)"
             >
                 <template v-if="message.includes('\n')">

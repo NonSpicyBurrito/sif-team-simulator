@@ -139,7 +139,7 @@ async function simulate() {
         :class="{ 'opacity-25': isCalculating }"
     >
         <Field label="Mode">
-            <div class="flex flex-wrap -mb-1">
+            <div class="-mb-1 flex flex-wrap">
                 <button
                     v-for="(value, key) in { normal: 'Normal', afk: 'AFK' }"
                     :key="key"
@@ -152,7 +152,7 @@ async function simulate() {
             </div>
         </Field>
         <Field label="Difficulty">
-            <div class="flex flex-wrap -mb-1">
+            <div class="-mb-1 flex flex-wrap">
                 <button
                     v-for="(value, key) in difficulties"
                     :key="value"
@@ -167,7 +167,7 @@ async function simulate() {
         <Field label="Chart">
             <select
                 v-model="chartId"
-                class="overflow-hidden w-full text-ellipsis"
+                class="w-full overflow-hidden text-ellipsis"
             >
                 <option
                     v-for="[id, info] in sortedChartEntries"
@@ -192,7 +192,7 @@ async function simulate() {
             </div>
         </template>
         <Field label="Note Speed">
-            <div class="flex flex-wrap -mb-1">
+            <div class="-mb-1 flex flex-wrap">
                 <button
                     v-for="speed in 10"
                     :key="speed"
@@ -205,7 +205,7 @@ async function simulate() {
             </div>
         </Field>
         <Field label="Memory Gallery Bonus">
-            <div class="flex flex-wrap -mb-1">
+            <div class="-mb-1 flex flex-wrap">
                 <input
                     v-for="index in 3"
                     :key="index"
@@ -300,7 +300,7 @@ async function simulate() {
 
         <TeamEditor :="{ team, memoryGalleryBonus, chartId, guestCenter }" />
 
-        <div class="flex justify-center my-8">
+        <div class="my-8 flex justify-center">
             <button
                 class="text-lg font-semibold"
                 :disabled="!canCalculate || isCalculating"

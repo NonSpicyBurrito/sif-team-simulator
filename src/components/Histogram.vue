@@ -10,19 +10,19 @@ defineProps<{
 
 <template>
     <div
-        class="flex relative mt-16 h-48 border-b-2 border-l-2 border-gray-300 sm:h-96"
+        class="relative mt-16 flex h-48 border-b-2 border-l-2 border-gray-300 sm:h-96"
     >
         <div
             v-for="({ value, percentile }, i) in data.histogram"
             :key="i"
-            class="group flex basis-0 flex-col grow justify-end h-full"
+            class="group flex h-full grow basis-0 flex-col justify-end"
         >
             <div
-                class="bg-gray-700 group-hover:bg-gray-600 transition-all"
+                class="bg-gray-700 transition-all group-hover:bg-gray-600"
                 :style="{ height: `${95 * value}%` }"
             />
             <div
-                class="hidden group-hover:block absolute top-0 right-0 text-right"
+                class="absolute top-0 right-0 hidden text-right group-hover:block"
             >
                 <div>
                     {{
@@ -39,7 +39,7 @@ defineProps<{
             </div>
         </div>
     </div>
-    <div class="flex justify-between my-2">
+    <div class="my-2 flex justify-between">
         <div>
             {{ formatter(data.min) }}
         </div>

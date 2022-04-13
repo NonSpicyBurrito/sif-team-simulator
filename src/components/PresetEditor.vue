@@ -60,7 +60,7 @@ function movePresetTeam(index: number, direction: -1 | 1) {
 </script>
 
 <template>
-    <div class="flex flex-col items-center surface">
+    <div class="surface flex flex-col items-center">
         <div
             class="flex justify-center"
             :class="{ 'mb-8': presetTeams.length }"
@@ -81,13 +81,13 @@ function movePresetTeam(index: number, direction: -1 | 1) {
         <div
             v-for="(presetTeam, i) in presetTeams"
             :key="i"
-            class="flex flex-col justify-center my-2 sm:flex-row"
+            class="my-2 flex flex-col justify-center sm:flex-row"
         >
             <button @click="$emit('select', presetTeam)">
                 <TeamDisplay class="my-1" :team="presetTeam" />
             </button>
             <div
-                class="flex justify-center mt-2 text-sm sm:flex-col sm:mt-0 sm:ml-2"
+                class="mt-2 flex justify-center text-sm sm:mt-0 sm:ml-2 sm:flex-col"
             >
                 <button @click="movePresetTeam(i, -1)">▲</button>
                 <button
