@@ -44,6 +44,10 @@ watchEffect(() => {
     }
 })
 
+function exportData() {
+    console.log(props.result.raw)
+}
+
 const isExpanded = ref<number[]>([])
 watch(
     () => props.result.diagnostics,
@@ -94,6 +98,10 @@ function toggleDiagnosticExpansion(index: number) {
 
         <Field label="Time">
             {{ duration(time) }}
+        </Field>
+
+        <Field label="Data">
+            <button @click="exportData">Export</button>
         </Field>
 
         <Histogram
