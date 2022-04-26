@@ -20,10 +20,6 @@ export function doHeal(live: Live, time: number, index: number, value: number) {
         }
 
         live.score += score
-        live.overheal += value
-
-        if (live.overheal < live.context.maxHp) return
-        live.hearts++
-        live.overheal -= live.context.maxHp
+        live.increaseHp(value)
     })
 }

@@ -64,12 +64,20 @@ export class Live {
                     : this.survivedNotes,
         }
     }
-}
 
-export function reduceHealth(live: Live, value: number) {
-    if (live.overheal > 0) {
-        live.overheal = -value
-    } else {
-        live.overheal -= value
+    public increaseHp(value: number) {
+        this.overheal += value
+
+        if (this.overheal < this.context.maxHp) return
+        this.hearts++
+        this.overheal -= this.context.maxHp
+    }
+
+    public decreaseHp(value: number) {
+        if (this.overheal > 0) {
+            this.overheal = -value
+        } else {
+            this.overheal -= value
+        }
     }
 }

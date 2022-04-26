@@ -1,4 +1,4 @@
-import { Live, reduceHealth } from '../Live'
+import { Live } from '../Live'
 import { getCFMultiplier } from '../skills/cf'
 import { getComboMultiplier, judgmentMultiplier } from '../tap-score'
 
@@ -80,11 +80,11 @@ export function processHitEvent(live: Live, event: HitEvent) {
     }
 
     if (finalJudgment === 3) {
-        reduceHealth(live, 1)
+        live.decreaseHp(1)
     }
 
     if (finalJudgment === 4) {
-        reduceHealth(live, 2)
+        live.decreaseHp(2)
     }
 
     const totalJudgmentMultiplier = judgments.reduce(
