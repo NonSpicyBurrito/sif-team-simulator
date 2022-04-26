@@ -15,7 +15,7 @@ defineProps<{
         <div
             v-for="({ value, percentile }, i) in data.histogram"
             :key="i"
-            class="group flex h-full grow basis-0 flex-col justify-end"
+            class="peer group flex h-full grow basis-0 flex-col justify-end"
         >
             <div
                 class="bg-gray-700 transition-all group-hover:bg-gray-600"
@@ -38,16 +38,18 @@ defineProps<{
                 </div>
             </div>
         </div>
-        <div class="absolute top-0 left-2">
-            <div
+        <div class="absolute top-0 right-0 text-right peer-hover:hidden">
+            <template
                 v-for="[percentile, value] in data.percentiles"
                 :key="percentile"
             >
-                {{ formatter(value) }}
-                <span class="text-sm text-gray-500">
+                <div>
+                    {{ formatter(value) }}
+                </div>
+                <div class="mb-2 text-sm text-gray-500">
                     ≥ {{ percent(percentile) }}
-                </span>
-            </div>
+                </div>
+            </template>
         </div>
     </div>
     <div class="my-2 flex justify-between">
