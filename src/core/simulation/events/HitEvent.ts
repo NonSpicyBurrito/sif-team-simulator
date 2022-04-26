@@ -1,10 +1,6 @@
 import { Live, reduceHealth } from '../Live'
 import { getCFMultiplier } from '../skills/cf'
-import {
-    getComboMultiplier,
-    getHeartBonus,
-    judgmentMultiplier,
-} from '../tap-score'
+import { getComboMultiplier, judgmentMultiplier } from '../tap-score'
 
 export type HitEvent = {
     time: number
@@ -39,7 +35,7 @@ export function processHitEvent(live: Live, event: HitEvent) {
             ? 1.08
             : 1
     const trickMultiplier = isPlockActive ? 1 : 0
-    const heartMultiplier = 1 + live.hearts * getHeartBonus(live.context.maxHp)
+    const heartMultiplier = 1 + live.hearts * live.context.heartBonus
 
     live.notes++
     if (isPlockActive) live.covered++

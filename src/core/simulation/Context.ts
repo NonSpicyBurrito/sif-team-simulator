@@ -14,6 +14,7 @@ import { Team } from '../Team'
 import { Event } from './events'
 import { Live } from './Live'
 import { normalize, Performance } from './performance'
+import { getHeartBonus } from './tap-score'
 import { fill } from './utils'
 
 const missTiming = 0.256
@@ -31,6 +32,7 @@ export class Context {
     public readonly attributeMultipliers: number[]
     public readonly tapScoreMultiplier: number
     public readonly maxHp: number
+    public readonly heartBonus: number
     public readonly priorities: [number[], number[]]
     public readonly noteTriggers: [number, number][] = []
     public readonly comboTriggers: [number, number][] = []
@@ -136,6 +138,7 @@ export class Context {
         this.maxHp = team
             .map(({ card: { id } }) => cards.get(id)!.hp)
             .reduce((a, b) => a + b, 0)
+        this.heartBonus = getHeartBonus(this.maxHp)
 
         this.priorities = [this.getPriorities(true), this.getPriorities(false)]
 
