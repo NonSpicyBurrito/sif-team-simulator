@@ -31,8 +31,7 @@ export class Context {
     public readonly attributeMultipliers: number[]
     public readonly tapScoreMultiplier: number
     public readonly maxHp: number
-    public readonly normalPriorities: number[]
-    public readonly coinFlipPriorities: number[]
+    public readonly priorities: [number[], number[]]
     public readonly noteTriggers: [number, number][] = []
     public readonly comboTriggers: [number, number][] = []
     public readonly perfectTriggers: [number, number][] = []
@@ -138,8 +137,7 @@ export class Context {
             .map(({ card: { id } }) => cards.get(id)!.hp)
             .reduce((a, b) => a + b, 0)
 
-        this.normalPriorities = this.getPriorities(2, 1, 0)
-        this.coinFlipPriorities = this.getPriorities(0, 1, 2)
+        this.priorities = [this.getPriorities(true), this.getPriorities(false)]
 
         this.skillInfos.forEach(({ card: { trigger } }, i) => {
             switch (trigger.type) {
@@ -170,11 +168,6 @@ export class Context {
                     }`
             }
         })
-
-        this.sortTriggers(this.noteTriggers, this.normalPriorities)
-        this.sortTriggers(this.comboTriggers, this.normalPriorities)
-        this.sortTriggers(this.perfectTriggers, this.normalPriorities)
-        this.sortTriggers(this.starPerfectTriggers, this.normalPriorities)
 
         team.forEach((member, i) =>
             member.sisNames.forEach((name) => {
@@ -279,13 +272,6 @@ export class Context {
         }
     }
 
-    public sortTriggers(
-        triggers: [number, ...unknown[]][],
-        priorities: number[]
-    ) {
-        triggers.sort(([a], [b]) => priorities[a] - priorities[b])
-    }
-
     public log(time: number | undefined, ...args: unknown[]) {
         if (!this.diagnostics) return
 
@@ -327,18 +313,25 @@ export class Context {
         })
     }
 
-    private getPriorities(amp: number, encore: number, others: number) {
+    private getPriorities(coinFlip: boolean) {
         return this.skillInfos.map((skillInfo, index) => {
             switch (skillInfo.card.effect.type) {
-                case EffectType.Amp:
-                    return amp * 100 - index
                 case EffectType.Encore:
-                    return encore * 100 - index
+                    return 200 - index
+                case EffectType.Amp:
+                    return (coinFlip ? 1 : 0) * 100 - index
                 default:
-                    return others * 100 - index
+                    return (coinFlip ? 0 : 1) * 100 - index
             }
         })
     }
+}
+
+export function sortTriggers(
+    triggers: [number, ...unknown[]][],
+    priorities: number[]
+) {
+    triggers.sort(([a], [b]) => priorities[a] - priorities[b])
 }
 
 function processSkill<T>(values: T[], level: number) {
