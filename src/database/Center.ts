@@ -46,12 +46,14 @@ export enum CenterApplyType {
     MakiNico = 103,
     NozomiHanayo = 104,
     NozomiNico = 105,
+    HanayoNico = 106,
     ChikaKanan = 108,
     ChikaYou = 110,
     ChikaYoshiko = 111,
     ChikaHanamaru = 112,
     ChikaMari = 113,
     RikoKanan = 115,
+    RikoDia = 116,
     RikoYoshiko = 118,
     RikoHanamaru = 119,
     RikoMari = 120,
@@ -63,10 +65,12 @@ export enum CenterApplyType {
     DiaMari = 131,
     DiaRuby = 132,
     YouHanamaru = 134,
+    YouMari = 135,
     YouRuby = 136,
     YoshikoHanamaru = 137,
     YoshikoRuby = 139,
     HanamaruRuby = 141,
+    Liella = 143,
 }
 
 export type CenterSkill = {

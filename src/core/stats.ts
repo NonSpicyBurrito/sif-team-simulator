@@ -306,6 +306,11 @@ function applyCenterApply(
                 character === CharacterId.Nozomi ||
                 character === CharacterId.Nico
             )
+        case CenterApplyType.HanayoNico:
+            return (
+                character === CharacterId.Hanayo ||
+                character === CharacterId.Nico
+            )
         case CenterApplyType.ChikaKanan:
             return (
                 character === CharacterId.Chika ||
@@ -334,6 +339,10 @@ function applyCenterApply(
             return (
                 character === CharacterId.Riko ||
                 character === CharacterId.Kanan
+            )
+        case CenterApplyType.RikoDia:
+            return (
+                character === CharacterId.Riko || character === CharacterId.Dia
             )
         case CenterApplyType.RikoYoshiko:
             return (
@@ -384,6 +393,10 @@ function applyCenterApply(
                 character === CharacterId.You ||
                 character === CharacterId.Hanamaru
             )
+        case CenterApplyType.YouMari:
+            return (
+                character === CharacterId.You || character === CharacterId.Mari
+            )
         case CenterApplyType.YouRuby:
             return (
                 character === CharacterId.You || character === CharacterId.Ruby
@@ -403,6 +416,8 @@ function applyCenterApply(
                 character === CharacterId.Hanamaru ||
                 character === CharacterId.Ruby
             )
+        case CenterApplyType.Liella:
+            return group === Group.Liella
         default:
             throw `Unsupported center apply: ${CenterApplyType[type] || type}`
     }
