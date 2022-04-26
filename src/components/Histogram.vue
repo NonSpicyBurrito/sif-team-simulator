@@ -29,7 +29,7 @@ defineProps<{
                         formatter(
                             data.min +
                                 ((data.max - data.min) * i) /
-                                    (data.histogram.length - 1)
+                                    data.histogram.length
                         )
                     }}
                 </div>
