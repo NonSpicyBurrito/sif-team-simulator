@@ -129,6 +129,8 @@ function getApplyDescription(apply: CenterApplyType) {
             return 'Nozomi and Hanayo'
         case CenterApplyType.NozomiNico:
             return 'Nozomi and Nico'
+        case CenterApplyType.HanayoNico:
+            return 'Hanayo and Nico'
         case CenterApplyType.ChikaKanan:
             return 'Chika and Kanan'
         case CenterApplyType.ChikaYou:
@@ -141,6 +143,8 @@ function getApplyDescription(apply: CenterApplyType) {
             return 'Chika and Mari'
         case CenterApplyType.RikoKanan:
             return 'Riko and Kanan'
+        case CenterApplyType.RikoDia:
+            return 'Riko and Dia'
         case CenterApplyType.RikoYoshiko:
             return 'Riko and Yoshiko'
         case CenterApplyType.RikoHanamaru:
@@ -163,6 +167,8 @@ function getApplyDescription(apply: CenterApplyType) {
             return 'Dia and Ruby'
         case CenterApplyType.YouHanamaru:
             return 'You and Hanamaru'
+        case CenterApplyType.YouMari:
+            return 'You and Mari'
         case CenterApplyType.YouRuby:
             return 'You and Ruby'
         case CenterApplyType.YoshikoHanamaru:
@@ -171,6 +177,8 @@ function getApplyDescription(apply: CenterApplyType) {
             return 'Yoshiko and Ruby'
         case CenterApplyType.HanamaruRuby:
             return 'Hanamaru and Ruby'
+        case CenterApplyType.Liella:
+            return 'Liella'
         default:
             return `unsupported center apply: ${
                 CenterApplyType[apply] || apply

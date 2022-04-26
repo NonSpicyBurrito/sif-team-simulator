@@ -40,7 +40,7 @@ function editData() {
             class="w-full"
             type="number"
             min="100"
-            max="200"
+            max="350"
             step="10"
         />
     </Field>

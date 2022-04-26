@@ -10,15 +10,42 @@ import {
 import { CharacterId } from '../database/Character'
 import { Member, Team } from './Team'
 
+const jewelBonus = [
+    [100, 0],
+    [20, 16],
+    [20, 17],
+    [20, 18],
+    [20, 19],
+    [20, 20],
+    [10, 21],
+    [10, 22],
+    [10, 23],
+    [10, 24],
+    [10, 25],
+    [10, 26],
+    [10, 27],
+    [10, 28],
+    [10, 29],
+    [10, 30],
+    [10, 31],
+    [10, 32],
+    [10, 33],
+    [10, 34],
+    [10, 35],
+].map(([max, perLevel], i, self) => [
+    self.slice(0, i).reduce((sum, [levels]) => sum + levels, 0),
+    max,
+    perLevel,
+])
+
 function getRawMemberStats(member: Member, memoryGalleryBonus: number[]) {
     const card = cards.get(member.card.id)
     if (!card) throw 'Card not found'
 
-    const bonus = [16, 17, 18, 19, 20]
+    const bonus = jewelBonus
         .map(
-            (amount, index) =>
-                amount *
-                Math.max(0, Math.min(20, member.card.level - 100 - index * 20))
+            ([from, max, perLevel]) =>
+                Math.max(0, Math.min(max, member.card.level - from)) * perLevel
         )
         .reduce((sum, value) => sum + value, 0)
 
@@ -306,6 +333,11 @@ function applyCenterApply(
                 character === CharacterId.Nozomi ||
                 character === CharacterId.Nico
             )
+        case CenterApplyType.HanayoNico:
+            return (
+                character === CharacterId.Hanayo ||
+                character === CharacterId.Nico
+            )
         case CenterApplyType.ChikaKanan:
             return (
                 character === CharacterId.Chika ||
@@ -334,6 +366,10 @@ function applyCenterApply(
             return (
                 character === CharacterId.Riko ||
                 character === CharacterId.Kanan
+            )
+        case CenterApplyType.RikoDia:
+            return (
+                character === CharacterId.Riko || character === CharacterId.Dia
             )
         case CenterApplyType.RikoYoshiko:
             return (
@@ -384,6 +420,10 @@ function applyCenterApply(
                 character === CharacterId.You ||
                 character === CharacterId.Hanamaru
             )
+        case CenterApplyType.YouMari:
+            return (
+                character === CharacterId.You || character === CharacterId.Mari
+            )
         case CenterApplyType.YouRuby:
             return (
                 character === CharacterId.You || character === CharacterId.Ruby
@@ -403,6 +443,8 @@ function applyCenterApply(
                 character === CharacterId.Hanamaru ||
                 character === CharacterId.Ruby
             )
+        case CenterApplyType.Liella:
+            return group === Group.Liella
         default:
             throw `Unsupported center apply: ${CenterApplyType[type] || type}`
     }

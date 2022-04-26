@@ -1,3 +1,5 @@
+const significantPercentiles = [0.01, 0.05, 0.1] as const
+
 export function summarize<T extends string>(results: Record<T, number>[]) {
     const summary = Object.fromEntries(
         Object.keys(results[0]).map((key) => [
@@ -35,6 +37,7 @@ export function summarize<T extends string>(results: Record<T, number>[]) {
 
             const range = (max - min) / bars
             const values = results.map((result) => result[key])
+            const sortedValues = [...values].sort((a, b) => b - a)
 
             const histogram = [...Array(bars + 1).keys()].map((i) => {
                 const from = min + (i - 0.5) * range
@@ -58,6 +61,15 @@ export function summarize<T extends string>(results: Record<T, number>[]) {
                         value: count / maxCount || 0,
                         percentile,
                     })),
+                    percentiles: significantPercentiles.map((percentile) => [
+                        percentile,
+                        sortedValues[
+                            Math.max(
+                                0,
+                                Math.floor(percentile * sortedValues.length) - 1
+                            )
+                        ],
+                    ]),
                 },
             ]
         })
@@ -72,6 +84,7 @@ export function summarize<T extends string>(results: Record<T, number>[]) {
                 value: number
                 percentile: number
             }[]
+            percentiles: [number, number][]
         }
     >
 }
