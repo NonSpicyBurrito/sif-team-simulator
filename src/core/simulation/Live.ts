@@ -66,13 +66,19 @@ export class Live {
     }
 
     public increaseHp(value: number) {
-        this.overheal += value
+        if (this.hearts >= this.context.maxHearts) return
 
+        this.overheal += value
         if (this.overheal < this.context.maxHp) return
 
         const hearts = Math.floor(this.overheal / this.context.maxHp)
         this.hearts += hearts
         this.overheal -= hearts * this.context.maxHp
+
+        if (this.hearts >= this.context.maxHearts) {
+            this.hearts = this.context.maxHearts
+            this.overheal = 0
+        }
     }
 
     public decreaseHp(value: number) {

@@ -33,6 +33,7 @@ export class Context {
     public readonly tapScoreMultiplier: number
     public readonly maxHp: number
     public readonly heartBonus: number
+    public readonly maxHearts: number
     public readonly priorities: [number[], number[]]
     public readonly noteTriggers: [number, number][] = []
     public readonly comboTriggers: [number, number][] = []
@@ -139,6 +140,7 @@ export class Context {
             .map(({ card: { id } }) => cards.get(id)!.hp)
             .reduce((a, b) => a + b, 0)
         this.heartBonus = getHeartBonus(this.maxHp)
+        this.maxHearts = Math.ceil(2 / this.heartBonus)
 
         this.priorities = [this.getPriorities(true), this.getPriorities(false)]
 
