@@ -1,5 +1,5 @@
-import { EffectType } from '../../../database/Skill'
 import { activate } from '../activations'
+import { sortTriggers } from '../Context'
 import { Live } from '../Live'
 
 export function tickSkills(live: Live, time: number, triggers: [number][]) {
@@ -10,30 +10,7 @@ export function tickSkills(live: Live, time: number, triggers: [number][]) {
     const skillChanceMultiplier =
         (1 + live.context.skillChanceBonus) * (1 + live.sruState.value)
 
-    if (live.coinFlip && triggers.length >= 3) {
-        let hasAmp = false
-        let hasEncore = false
-        let hasNormal = false
-
-        triggers.forEach(([i]) => {
-            switch (live.context.skillInfos[i].card.effect.type) {
-                case EffectType.Amp:
-                    hasAmp = true
-                    break
-                case EffectType.Encore:
-                    hasEncore = true
-                    break
-                default:
-                    hasNormal = true
-                    break
-            }
-        })
-
-        if (hasAmp && hasEncore && hasNormal) {
-            live.context.sortTriggers(triggers, live.context.coinFlipPriorities)
-        }
-    }
-
+    sortTriggers(triggers, live.context.priorities[live.coinFlip ? 0 : 1])
     triggers.forEach(([i]) => activate(live, time, i, skillChanceMultiplier))
 
     live.lastSkill =
