@@ -38,6 +38,17 @@ defineProps<{
                 </div>
             </div>
         </div>
+        <div class="absolute top-0 left-2">
+            <div
+                v-for="[percentile, value] in data.percentiles"
+                :key="percentile"
+            >
+                {{ formatter(value) }}
+                <span class="text-sm text-gray-500">
+                    ≥ {{ percent(percentile) }}
+                </span>
+            </div>
+        </div>
     </div>
     <div class="my-2 flex justify-between">
         <div>
