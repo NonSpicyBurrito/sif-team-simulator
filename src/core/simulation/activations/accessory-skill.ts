@@ -14,7 +14,8 @@ import { doSRU } from '../skills/sru'
 export function activateAccessorySkill(
     live: Live,
     time: number,
-    index: number
+    index: number,
+    skillChanceMultiplier: number
 ) {
     const { accessory } = live.context.skillInfos[index]
     if (!accessory) return
@@ -27,12 +28,13 @@ export function activateAccessorySkill(
             'Attempts to activate member',
             index,
             'with',
-            (trigger.chances[0] / 100).toFixed(4),
+            ((trigger.chances[0] / 100) * skillChanceMultiplier).toFixed(4),
             'accessory skill chance'
         )
     }
 
-    if (Math.random() >= trigger.chances[0] / 100) return
+    if (Math.random() >= (trigger.chances[0] / 100) * skillChanceMultiplier)
+        return
 
     switch (effect.type) {
         case EffectType.Plock: {

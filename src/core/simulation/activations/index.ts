@@ -11,5 +11,5 @@ export function activate(
 ) {
     if (activateSelfCoverage(live, time, index)) return
     if (activateCardSkill(live, time, index, skillChanceMultiplier)) return
-    if (activateAccessorySkill(live, time, index)) return
+    if (activateAccessorySkill(live, time, index, skillChanceMultiplier)) return
 }
