@@ -87,5 +87,10 @@ export class Live {
         } else {
             this.overheal -= value
         }
+
+        if (this.survivedNotes !== Number.POSITIVE_INFINITY) return
+        if (this.context.maxHp + this.overheal > 0) return
+
+        this.survivedNotes = this.notes - 1
     }
 }
