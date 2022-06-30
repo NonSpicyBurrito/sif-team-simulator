@@ -117,7 +117,7 @@ export function processHitEvent(live: Live, event: HitEvent) {
 
     if (finalJudgment === 0) live.score += psuBonus
 
-    live.score += Math.min(1000, cfBonus * cfMultiplier)
+    live.score += cfBonus * cfMultiplier
 
     live.score += sparkBonus
 
