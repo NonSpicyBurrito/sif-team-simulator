@@ -157,6 +157,8 @@ function getApplyDescription(apply: CenterApplyType) {
             return 'Kanan and You'
         case CenterApplyType.KananMari:
             return 'Kanan and Mari'
+        case CenterApplyType.KananRuby:
+            return 'Kanan and Ruby'
         case CenterApplyType.DiaYou:
             return 'Dia and You'
         case CenterApplyType.DiaYoshiko:

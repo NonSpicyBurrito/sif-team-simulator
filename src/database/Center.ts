@@ -60,6 +60,7 @@ export enum CenterApplyType {
     KananDia = 122,
     KananYou = 123,
     KananMari = 126,
+    KananRuby = 127,
     DiaYou = 128,
     DiaYoshiko = 129,
     DiaMari = 131,
