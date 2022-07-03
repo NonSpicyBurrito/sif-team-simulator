@@ -398,6 +398,11 @@ function applyCenterApply(
                 character === CharacterId.Kanan ||
                 character === CharacterId.Mari
             )
+        case CenterApplyType.KananRuby:
+            return (
+                character === CharacterId.Kanan ||
+                character === CharacterId.Ruby
+            )
         case CenterApplyType.DiaYou:
             return (
                 character === CharacterId.Dia || character === CharacterId.You
