@@ -35,7 +35,7 @@ const performance = useLocalStorage<Performance>('performance', {
 const noteSpeed = useLocalStorage('noteSpeed', 9)
 const memoryGalleryBonus = useLocalStorage(
     'memoryGalleryBonus',
-    [308, 302, 464]
+    [372, 372, 456]
 )
 const guestCenter = useLocalStorage<CenterSkill>('guestCenter.1', null, {
     serializer: StorageSerializers.object,
