@@ -7,7 +7,7 @@
     "lint": "vue-tsc --noEmit && eslint --ext .mjs,.ts,.vue src/",
     "build": "vite build",
     "serve": "vite preview",
-    "update": "node src/database/update/kirara.mjs && node src/database/update/nico.mjs && node src/database/update/ever.mjs"
+    "update": "node src/database/update/kirara.mjs && node src/database/update/moe.mjs && node src/database/update/ever.mjs"
   },
   "dependencies": {
     "@vueuse/core": "^8.2.5",

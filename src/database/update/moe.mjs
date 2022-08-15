@@ -40,7 +40,7 @@ Object.entries(chartsByDifficulty).forEach(([difficulty, charts]) =>
 
 async function getChartIds() {
     const html = (
-        await axios.get('https://card.niconi.co.ni/live', {
+        await axios.get('https://card.llsif.moe/live', {
             headers: {
                 'accept-encoding': 'gzip',
             },
@@ -64,7 +64,7 @@ async function getChartIds() {
 
 async function getChartData(id) {
     const html = (
-        await axios.get(`https://card.niconi.co.ni/live/${id}`, {
+        await axios.get(`https://card.llsif.moe/live/${id}`, {
             responseType: 'text',
         })
     ).data
