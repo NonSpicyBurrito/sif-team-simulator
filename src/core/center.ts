@@ -107,6 +107,8 @@ function getApplyDescription(apply: CenterApplyType) {
             return 'Kotori and Rin'
         case CenterApplyType.KotoriMaki:
             return 'Kotori and Maki'
+        case CenterApplyType.KotoriHanayo:
+            return 'Kotori and Hanayo'
         case CenterApplyType.KotoriNico:
             return 'Kotori and Nico'
         case CenterApplyType.UmiRin:
@@ -145,6 +147,8 @@ function getApplyDescription(apply: CenterApplyType) {
             return 'Riko and Kanan'
         case CenterApplyType.RikoDia:
             return 'Riko and Dia'
+        case CenterApplyType.RikoYou:
+            return 'Riko and You'
         case CenterApplyType.RikoYoshiko:
             return 'Riko and Yoshiko'
         case CenterApplyType.RikoHanamaru:
