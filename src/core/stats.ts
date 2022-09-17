@@ -281,6 +281,11 @@ function applyCenterApply(
                 character === CharacterId.Kotori ||
                 character === CharacterId.Maki
             )
+        case CenterApplyType.KotoriHanayo:
+            return (
+                character === CharacterId.Kotori ||
+                character === CharacterId.Hanayo
+            )
         case CenterApplyType.KotoriNico:
             return (
                 character === CharacterId.Kotori ||
@@ -370,6 +375,10 @@ function applyCenterApply(
         case CenterApplyType.RikoDia:
             return (
                 character === CharacterId.Riko || character === CharacterId.Dia
+            )
+        case CenterApplyType.RikoYou:
+            return (
+                character === CharacterId.Riko || character === CharacterId.You
             )
         case CenterApplyType.RikoYoshiko:
             return (
