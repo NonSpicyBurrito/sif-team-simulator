@@ -234,10 +234,25 @@ function applyCenterApply(
                 character === CharacterId.Honoka ||
                 character === CharacterId.Kotori
             )
+        case CenterApplyType.HonokaUmi:
+            return (
+                character === CharacterId.Honoka ||
+                character === CharacterId.Umi
+            )
+        case CenterApplyType.HonokaRin:
+            return (
+                character === CharacterId.Honoka ||
+                character === CharacterId.Rin
+            )
         case CenterApplyType.HonokaMaki:
             return (
                 character === CharacterId.Honoka ||
                 character === CharacterId.Maki
+            )
+        case CenterApplyType.HonokaNozomi:
+            return (
+                character === CharacterId.Honoka ||
+                character === CharacterId.Nozomi
             )
         case CenterApplyType.HonokaHanayo:
             return (
@@ -249,9 +264,18 @@ function applyCenterApply(
                 character === CharacterId.Honoka ||
                 character === CharacterId.Nico
             )
+        case CenterApplyType.EliKotori:
+            return (
+                character === CharacterId.Eli ||
+                character === CharacterId.Kotori
+            )
         case CenterApplyType.EliUmi:
             return (
                 character === CharacterId.Eli || character === CharacterId.Umi
+            )
+        case CenterApplyType.EliRin:
+            return (
+                character === CharacterId.Eli || character === CharacterId.Rin
             )
         case CenterApplyType.EliMaki:
             return (
@@ -261,6 +285,11 @@ function applyCenterApply(
             return (
                 character === CharacterId.Eli ||
                 character === CharacterId.Nozomi
+            )
+        case CenterApplyType.EliHanayo:
+            return (
+                character === CharacterId.Eli ||
+                character === CharacterId.Hanayo
             )
         case CenterApplyType.EliNico:
             return (
@@ -281,6 +310,11 @@ function applyCenterApply(
                 character === CharacterId.Kotori ||
                 character === CharacterId.Maki
             )
+        case CenterApplyType.KotoriNozomi:
+            return (
+                character === CharacterId.Kotori ||
+                character === CharacterId.Nozomi
+            )
         case CenterApplyType.KotoriHanayo:
             return (
                 character === CharacterId.Kotori ||
@@ -295,6 +329,10 @@ function applyCenterApply(
             return (
                 character === CharacterId.Umi || character === CharacterId.Rin
             )
+        case CenterApplyType.UmiMaki:
+            return (
+                character === CharacterId.Umi || character === CharacterId.Maki
+            )
         case CenterApplyType.UmiNozomi:
             return (
                 character === CharacterId.Umi ||
@@ -304,6 +342,10 @@ function applyCenterApply(
             return (
                 character === CharacterId.Umi ||
                 character === CharacterId.Hanayo
+            )
+        case CenterApplyType.UmiNico:
+            return (
+                character === CharacterId.Umi || character === CharacterId.Nico
             )
         case CenterApplyType.RinMaki:
             return (
@@ -318,6 +360,15 @@ function applyCenterApply(
             return (
                 character === CharacterId.Rin ||
                 character === CharacterId.Hanayo
+            )
+        case CenterApplyType.RinNico:
+            return (
+                character === CharacterId.Rin || character === CharacterId.Nico
+            )
+        case CenterApplyType.MakiNozomi:
+            return (
+                character === CharacterId.Maki ||
+                character === CharacterId.Nozomi
             )
         case CenterApplyType.MakiHanayo:
             return (
@@ -343,10 +394,19 @@ function applyCenterApply(
                 character === CharacterId.Hanayo ||
                 character === CharacterId.Nico
             )
+        case CenterApplyType.ChikaRiko:
+            return (
+                character === CharacterId.Chika ||
+                character === CharacterId.Riko
+            )
         case CenterApplyType.ChikaKanan:
             return (
                 character === CharacterId.Chika ||
                 character === CharacterId.Kanan
+            )
+        case CenterApplyType.ChikaDia:
+            return (
+                character === CharacterId.Chika || character === CharacterId.Dia
             )
         case CenterApplyType.ChikaYou:
             return (
@@ -366,6 +426,11 @@ function applyCenterApply(
             return (
                 character === CharacterId.Chika ||
                 character === CharacterId.Mari
+            )
+        case CenterApplyType.ChikaRuby:
+            return (
+                character === CharacterId.Chika ||
+                character === CharacterId.Ruby
             )
         case CenterApplyType.RikoKanan:
             return (
@@ -394,6 +459,10 @@ function applyCenterApply(
             return (
                 character === CharacterId.Riko || character === CharacterId.Mari
             )
+        case CenterApplyType.RikoRuby:
+            return (
+                character === CharacterId.Riko || character === CharacterId.Ruby
+            )
         case CenterApplyType.KananDia:
             return (
                 character === CharacterId.Kanan || character === CharacterId.Dia
@@ -401,6 +470,16 @@ function applyCenterApply(
         case CenterApplyType.KananYou:
             return (
                 character === CharacterId.Kanan || character === CharacterId.You
+            )
+        case CenterApplyType.KananYoshiko:
+            return (
+                character === CharacterId.Kanan ||
+                character === CharacterId.Yoshiko
+            )
+        case CenterApplyType.KananHanamaru:
+            return (
+                character === CharacterId.Kanan ||
+                character === CharacterId.Hanamaru
             )
         case CenterApplyType.KananMari:
             return (
@@ -421,6 +500,11 @@ function applyCenterApply(
                 character === CharacterId.Dia ||
                 character === CharacterId.Yoshiko
             )
+        case CenterApplyType.DiaHanamaru:
+            return (
+                character === CharacterId.Dia ||
+                character === CharacterId.Hanamaru
+            )
         case CenterApplyType.DiaMari:
             return (
                 character === CharacterId.Dia || character === CharacterId.Mari
@@ -428,6 +512,11 @@ function applyCenterApply(
         case CenterApplyType.DiaRuby:
             return (
                 character === CharacterId.Dia || character === CharacterId.Ruby
+            )
+        case CenterApplyType.YouYoshiko:
+            return (
+                character === CharacterId.You ||
+                character === CharacterId.Yoshiko
             )
         case CenterApplyType.YouHanamaru:
             return (
@@ -447,15 +536,29 @@ function applyCenterApply(
                 character === CharacterId.Yoshiko ||
                 character === CharacterId.Hanamaru
             )
+        case CenterApplyType.YoshikoMari:
+            return (
+                character === CharacterId.Yoshiko ||
+                character === CharacterId.Mari
+            )
         case CenterApplyType.YoshikoRuby:
             return (
                 character === CharacterId.Yoshiko ||
                 character === CharacterId.Ruby
             )
+        case CenterApplyType.HanamaruMari:
+            return (
+                character === CharacterId.Hanamaru ||
+                character === CharacterId.Mari
+            )
         case CenterApplyType.HanamaruRuby:
             return (
                 character === CharacterId.Hanamaru ||
                 character === CharacterId.Ruby
+            )
+        case CenterApplyType.MariRuby:
+            return (
+                character === CharacterId.Mari || character === CharacterId.Ruby
             )
         case CenterApplyType.Liella:
             return group === Group.Liella
