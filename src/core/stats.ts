@@ -32,6 +32,11 @@ const jewelBonus = [
     [10, 33],
     [10, 34],
     [10, 35],
+    [10, 36],
+    [10, 37],
+    [10, 38],
+    [10, 39],
+    [10, 40],
 ].map(([max, perLevel], i, self) => [
     self.slice(0, i).reduce((sum, [levels]) => sum + levels, 0),
     max,
