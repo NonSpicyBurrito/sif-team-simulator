@@ -1,10 +1,9 @@
-import * as Axios from 'axios'
+import axios from 'axios'
 import { readFileSync, writeFileSync } from 'fs'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const axios = Axios.default
 
 const cardsPath = `${__dirname}/../../../public/database/cards.json`
 const charactersPath = `${__dirname}/../../../public/database/characters.json`

@@ -1,11 +1,10 @@
-import * as Axios from 'axios'
+import axios from 'axios'
 import { readFileSync, writeFileSync } from 'fs'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { extract } from './utils.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const axios = Axios.default
 
 const pathBase = `${__dirname}/../../../public/database/charts`
 
