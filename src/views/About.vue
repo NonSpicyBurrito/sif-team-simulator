@@ -4,9 +4,7 @@ import Field from '../components/Field.vue'
 const branch = VITE_APP_BRANCH
 const sha1 = VITE_APP_SHA1
 const buildTime = new Date(VITE_APP_BUILD_TIME).toLocaleString()
-const diagnostics = VITE_APP_DIAGNOSTICS
-    ? 'Enabled, to use it set Count to 1'
-    : 'Disabled'
+const diagnostics = VITE_APP_DIAGNOSTICS ? 'Enabled, to use it set Count to 1' : 'Disabled'
 </script>
 
 <template>

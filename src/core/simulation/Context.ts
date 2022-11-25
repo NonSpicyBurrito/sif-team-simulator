@@ -3,12 +3,7 @@
 import { toRaw } from 'vue'
 import { accessories, cards, charts, sises } from '../../database'
 import { CenterSkill } from '../../database/Center'
-import {
-    AccessorySkill,
-    CardSkill,
-    EffectType,
-    TriggerType,
-} from '../../database/Skill'
+import { AccessorySkill, CardSkill, EffectType, TriggerType } from '../../database/Skill'
 import { calculateTeamStat } from '../stats'
 import { Team } from '../Team'
 import { Event } from './events'
@@ -61,8 +56,7 @@ export class Context {
         skillChanceReduction: number,
         enableDiagnostics: boolean
     ) {
-        if (mode !== 'normal' && mode !== 'afk')
-            throw `Unsupported mode: ${mode}`
+        if (mode !== 'normal' && mode !== 'afk') throw `Unsupported mode: ${mode}`
 
         this.skillInfos = team.map((member) => {
             const card = cards.get(member.card.id)!
@@ -75,10 +69,7 @@ export class Context {
                 },
                 effect: {
                     type: card.skill.effect.type,
-                    durations: processSkill(
-                        card.skill.effect.durations,
-                        cardSl
-                    ),
+                    durations: processSkill(card.skill.effect.durations, cardSl),
                     values: processSkill(card.skill.effect.values, cardSl),
                 },
             }
@@ -89,25 +80,13 @@ export class Context {
             const accessorySl = member.accessory.level
             const accessorySkill = {
                 trigger: {
-                    chances: processSkill(
-                        accessory.skill.trigger.chances,
-                        accessorySl
-                    ),
-                    values: processSkill(
-                        accessory.skill.trigger.values,
-                        accessorySl
-                    ),
+                    chances: processSkill(accessory.skill.trigger.chances, accessorySl),
+                    values: processSkill(accessory.skill.trigger.values, accessorySl),
                 },
                 effect: {
                     type: accessory.skill.effect.type,
-                    durations: processSkill(
-                        accessory.skill.effect.durations,
-                        accessorySl
-                    ),
-                    values: processSkill(
-                        accessory.skill.effect.values,
-                        accessorySl
-                    ),
+                    durations: processSkill(accessory.skill.effect.durations, accessorySl),
+                    values: processSkill(accessory.skill.effect.values, accessorySl),
                 },
             }
 
@@ -118,16 +97,12 @@ export class Context {
         })
 
         const chart = charts.get(chartId)!
-        this.stat = calculateTeamStat(
-            team,
-            memoryGalleryBonus,
-            chartId,
-            guestCenter
-        )[chart.attribute]
+        this.stat = calculateTeamStat(team, memoryGalleryBonus, chartId, guestCenter)[
+            chart.attribute
+        ]
         this.noteCount = chart.notes.length
         const maxTime = Math.max(...chart.notes.map(({ endTime }) => endTime))
-        const onScreenDuration =
-            noteSpeed >= 6 ? 1.6 - noteSpeed * 0.1 : 1.9 - noteSpeed * 0.15
+        const onScreenDuration = noteSpeed >= 6 ? 1.6 - noteSpeed * 0.1 : 1.9 - noteSpeed * 0.15
 
         this.groupMultipliers = team.map(({ card: { id } }) =>
             cards.get(id)!.group === chart.group ? 1.1 : 1
@@ -136,9 +111,7 @@ export class Context {
             cards.get(id)!.attribute === chart.attribute ? 1.1 : 1
         )
         this.tapScoreMultiplier = 1 + tapScoreBonus
-        this.maxHp = team
-            .map(({ card: { id } }) => cards.get(id)!.hp)
-            .reduce((a, b) => a + b, 0)
+        this.maxHp = team.map(({ card: { id } }) => cards.get(id)!.hp).reduce((a, b) => a + b, 0)
         this.heartBonus = getHeartBonus(this.maxHp)
         this.maxHearts = Math.ceil(2 / this.heartBonus)
 
@@ -168,9 +141,7 @@ export class Context {
                     this.starPerfectTriggers.push([i, trigger.values[0]])
                     break
                 default:
-                    throw `Unsupported card trigger: ${
-                        TriggerType[trigger.type] || trigger.type
-                    }`
+                    throw `Unsupported card trigger: ${TriggerType[trigger.type] || trigger.type}`
             }
         })
 
@@ -204,10 +175,7 @@ export class Context {
                         position: note.position,
                         isStar: note.isStar,
                         isSwing: note.isSwing,
-                        perfectJudgments:
-                            note.startTime === note.endTime
-                                ? [true]
-                                : [true, true],
+                        perfectJudgments: note.startTime === note.endTime ? [true] : [true, true],
                     })
                     break
                 case 'afk':
@@ -244,11 +212,7 @@ export class Context {
             this.log(undefined, 'stat', this.stat)
             this.log(undefined, 'onScreenDuration', onScreenDuration)
             this.log(undefined, 'groupMultipliers', this.groupMultipliers)
-            this.log(
-                undefined,
-                'attributeMultipliers',
-                this.attributeMultipliers
-            )
+            this.log(undefined, 'attributeMultipliers', this.attributeMultipliers)
             this.log(undefined, 'tapScoreMultiplier', this.tapScoreMultiplier)
             this.log(undefined, 'maxHp', this.maxHp)
             this.log(undefined, 'heartBonus', this.heartBonus)
@@ -273,9 +237,8 @@ export class Context {
         return {
             results,
             survivalRate:
-                results.filter(
-                    ({ survivedNotes }) => survivedNotes === this.noteCount
-                ).length / count,
+                results.filter(({ survivedNotes }) => survivedNotes === this.noteCount).length /
+                count,
             diagnostics: this.formattedDiagnostics,
         }
     }
@@ -335,15 +298,10 @@ export class Context {
     }
 }
 
-export function sortTriggers(
-    triggers: [number, ...unknown[]][],
-    priorities: number[]
-) {
+export function sortTriggers(triggers: [number, ...unknown[]][], priorities: number[]) {
     triggers.sort(([a], [b]) => priorities[a] - priorities[b])
 }
 
 function processSkill<T>(values: T[], level: number) {
-    return values
-        .concat(Array(16).fill(values[values.length - 1]))
-        .slice(level - 1)
+    return values.concat(Array(16).fill(values[values.length - 1])).slice(level - 1)
 }

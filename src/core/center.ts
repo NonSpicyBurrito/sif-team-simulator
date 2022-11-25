@@ -1,23 +1,15 @@
-import {
-    CenterApplyType,
-    CenterEffectType,
-    CenterSkill,
-} from '../database/Center'
+import { CenterApplyType, CenterEffectType, CenterSkill } from '../database/Center'
 import { percent } from './formatting'
 
 export function getCenterDescription(center: CenterSkill) {
     const descriptions: string[] = []
 
     if (center) {
-        descriptions.push(
-            getEffectDescription(center.main.type, center.main.value)
-        )
+        descriptions.push(getEffectDescription(center.main.type, center.main.value))
 
         if (center.extra.apply && center.extra.type && center.extra.value) {
             descriptions.push(
-                `additionally for ${getApplyDescription(
-                    center.extra.apply
-                )} ${getEffectDescription(
+                `additionally for ${getApplyDescription(center.extra.apply)} ${getEffectDescription(
                     center.extra.type,
                     center.extra.value
                 )}`
@@ -51,9 +43,7 @@ function getEffectDescription(type: CenterEffectType, value: number) {
         case CenterEffectType.PureEmpress:
             return `increase Pure by ${percent(value / 100, 0)} of Cool`
         default:
-            return `unsupported center effect: ${
-                CenterEffectType[type] || type
-            }`
+            return `unsupported center effect: ${CenterEffectType[type] || type}`
     }
 }
 
@@ -230,8 +220,6 @@ function getApplyDescription(apply: CenterApplyType) {
         case CenterApplyType.Liella:
             return 'Liella'
         default:
-            return `unsupported center apply: ${
-                CenterApplyType[apply] || apply
-            }`
+            return `unsupported center apply: ${CenterApplyType[apply] || apply}`
     }
 }

@@ -35,15 +35,11 @@ function editData() {
             <button class="ml-2" @click="editData">Edit Data</button>
         </template>
         <div v-else class="-mb-1 flex flex-wrap">
-            <template
-                v-for="[id, accessory] in accessories.entries()"
-                :key="id"
-            >
+            <template v-for="[id, accessory] in accessories.entries()" :key="id">
                 <Accessory
                     v-if="
                         accessory.character === 0 ||
-                        accessory.character ===
-                            cards.get(member.card.id)?.character
+                        accessory.character === cards.get(member.card.id)?.character
                     "
                     class="mr-1 mb-1 h-12 w-12 cursor-pointer"
                     :="{ id }"
@@ -61,9 +57,7 @@ function editData() {
                     :key="level"
                     class="mr-1 mb-1"
                     :class="{ 'opacity-25': member.accessory.level !== level }"
-                    @click="
-                        member.accessory = { id: member.accessory!.id, level }
-                    "
+                    @click="member.accessory = { id: member.accessory!.id, level }"
                 >
                     {{ level }}
                 </button>

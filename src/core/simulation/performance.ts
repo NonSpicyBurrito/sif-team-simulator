@@ -27,9 +27,7 @@ export function getPerformanceDescription(performance: Performance) {
 
     const count = Object.keys(performance.overwrites).length
     if (count) {
-        descriptions.push(
-            `${Object.keys(performance.overwrites).length} overwrites`
-        )
+        descriptions.push(`${Object.keys(performance.overwrites).length} overwrites`)
     }
 
     return descriptions.join(', ')

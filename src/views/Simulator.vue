@@ -11,10 +11,7 @@ import TeamEditor from '../components/TeamEditor.vue'
 import { getCenterDescription } from '../core/center'
 import { getChartDescription } from '../core/chart'
 import { simulateScore } from '../core/simulation'
-import {
-    getPerformanceDescription,
-    Performance,
-} from '../core/simulation/performance'
+import { getPerformanceDescription, Performance } from '../core/simulation/performance'
 import { isTeamComplete, PartialTeam, Team } from '../core/Team'
 import { clone, enumKeys, sleep } from '../core/utils'
 import { cards, charts, initDatabase, isLoading } from '../database'
@@ -33,10 +30,7 @@ const performance = useLocalStorage<Performance>('performance', {
     overwrites: {},
 })
 const noteSpeed = useLocalStorage('noteSpeed', 9)
-const memoryGalleryBonus = useLocalStorage(
-    'memoryGalleryBonus',
-    [3926, 3762, 3912]
-)
+const memoryGalleryBonus = useLocalStorage('memoryGalleryBonus', [3926, 3762, 3912])
 const guestCenter = useLocalStorage<CenterSkill>('guestCenter.1', null, {
     serializer: StorageSerializers.object,
 })
@@ -165,24 +159,15 @@ async function simulate() {
             </div>
         </Field>
         <Field label="Chart">
-            <select
-                v-model="chartId"
-                class="w-full overflow-hidden text-ellipsis"
-            >
-                <option
-                    v-for="[id, info] in sortedChartEntries"
-                    :key="id"
-                    :value="id"
-                >
+            <select v-model="chartId" class="w-full overflow-hidden text-ellipsis">
+                <option v-for="[id, info] in sortedChartEntries" :key="id" :value="id">
                     {{ getChartDescription(info) }}
                 </option>
             </select>
         </Field>
         <template v-if="mode !== 'afk'">
             <Field label="Performance">
-                <button @click="showPerformance = !showPerformance">
-                    Edit
-                </button>
+                <button @click="showPerformance = !showPerformance">Edit</button>
                 <span class="ml-2">
                     {{ getPerformanceDescription(performance) }}
                 </span>
@@ -218,9 +203,7 @@ async function simulate() {
         </Field>
         <Field label="Guest Center">
             <button v-if="guestCenter" @click="guestCenter = null">✗</button>
-            <button v-else @click="showSelectCenter = !showSelectCenter">
-                Select
-            </button>
+            <button v-else @click="showSelectCenter = !showSelectCenter">Select</button>
         </Field>
         <div v-if="!guestCenter && showSelectCenter" class="surface">
             <CardSelector @select="selectGuestCenter" />
@@ -292,11 +275,7 @@ async function simulate() {
             </button>
         </Field>
 
-        <PresetEditor
-            v-if="showPreset"
-            :="{ team }"
-            @select="selectPresetTeam"
-        />
+        <PresetEditor v-if="showPreset" :="{ team }" @select="selectPresetTeam" />
 
         <TeamEditor :="{ team, memoryGalleryBonus, chartId, guestCenter }" />
 

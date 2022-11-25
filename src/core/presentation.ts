@@ -44,8 +44,7 @@ export function summarize<T extends string>(results: Record<T, number>[]) {
                 const to = min + (i + 0.5) * range
                 return {
                     count: values.filter((v) => v >= from && v < to).length,
-                    percentile:
-                        values.filter((v) => v >= from).length / values.length,
+                    percentile: values.filter((v) => v >= from).length / values.length,
                 }
             })
             const maxCount = Math.max(...histogram.map(({ count }) => count))
@@ -63,12 +62,7 @@ export function summarize<T extends string>(results: Record<T, number>[]) {
                     })),
                     percentiles: significantPercentiles.map((percentile) => [
                         percentile,
-                        sortedValues[
-                            Math.max(
-                                0,
-                                Math.floor(percentile * sortedValues.length) - 1
-                            )
-                        ],
+                        sortedValues[Math.max(0, Math.floor(percentile * sortedValues.length) - 1)],
                     ]),
                 },
             ]

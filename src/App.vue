@@ -13,9 +13,7 @@ const current = ref<keyof typeof tabs>('Simulator')
 
 <template>
     <div class="bg-white/5 pt-4 shadow-lg sm:mb-4 sm:pt-8">
-        <div class="text-center text-2xl font-bold sm:text-5xl">
-            SIF Team Simulator
-        </div>
+        <div class="text-center text-2xl font-bold sm:text-5xl">SIF Team Simulator</div>
 
         <div class="mx-auto mt-4 flex max-w-lg sm:mt-8">
             <a

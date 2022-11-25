@@ -7,12 +7,7 @@ export function doEncore(live: Live, time: number, index: number) {
         if (skill) {
             live.context.log(time, 'Member', index, 'activates Encore')
         } else {
-            live.context.log(
-                time,
-                'Member',
-                index,
-                'activates Encore but no skill to copy'
-            )
+            live.context.log(time, 'Member', index, 'activates Encore but no skill to copy')
         }
     }
 

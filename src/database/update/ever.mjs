@@ -57,11 +57,7 @@ async function getData() {
 
 async function getAccessoryData(index, effectType, character) {
     const data = Object.entries(
-        (
-            await axios.get(
-                `https://lab.everisay.xyz/sif/interface/accessory.php?a=${index}`
-            )
-        ).data
+        (await axios.get(`https://lab.everisay.xyz/sif/interface/accessory.php?a=${index}`)).data
     )
         .sort(([a], [b]) => +a - +b)
         .map(([, value]) => value)

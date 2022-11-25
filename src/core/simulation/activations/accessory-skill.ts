@@ -33,8 +33,7 @@ export function activateAccessorySkill(
         )
     }
 
-    if (Math.random() >= (trigger.chances[0] / 100) * skillChanceMultiplier)
-        return
+    if (Math.random() >= (trigger.chances[0] / 100) * skillChanceMultiplier) return
 
     switch (effect.type) {
         case EffectType.Plock: {
@@ -54,13 +53,7 @@ export function activateAccessorySkill(
         }
         case EffectType.SRU: {
             const level = consumeAmp(live)
-            doSRU(
-                live,
-                time,
-                index,
-                effect.durations[level],
-                effect.values[level] - 1
-            )
+            doSRU(live, time, index, effect.durations[level], effect.values[level] - 1)
             break
         }
         case EffectType.Encore:
@@ -68,24 +61,12 @@ export function activateAccessorySkill(
             break
         case EffectType.PSU: {
             const level = consumeAmp(live)
-            doPSU(
-                live,
-                time,
-                index,
-                effect.durations[level],
-                effect.values[level]
-            )
+            doPSU(live, time, index, effect.durations[level], effect.values[level])
             break
         }
         case EffectType.CF: {
             const level = consumeAmp(live)
-            doCF(
-                live,
-                time,
-                index,
-                effect.durations[level],
-                effect.values[level]
-            )
+            doCF(live, time, index, effect.durations[level], effect.values[level])
             break
         }
         case EffectType.Amp: {
@@ -95,13 +76,7 @@ export function activateAccessorySkill(
         }
         case EffectType.Param: {
             const level = consumeAmp(live)
-            doParam(
-                live,
-                time,
-                index,
-                effect.durations[level],
-                effect.values[level] - 1
-            )
+            doParam(live, time, index, effect.durations[level], effect.values[level] - 1)
             break
         }
         case EffectType.Spark: {
@@ -117,9 +92,7 @@ export function activateAccessorySkill(
             break
         }
         default:
-            throw `Unsupported accessory effect: ${
-                EffectType[effect.type] || effect.type
-            }`
+            throw `Unsupported accessory effect: ${EffectType[effect.type] || effect.type}`
     }
 
     return true

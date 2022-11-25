@@ -22,13 +22,7 @@ for (const [difficulty, id] of await getChartIds()) {
     try {
         const data = await getChartData(id)
         chartsByDifficulty[difficulty][id] = data
-        console.log(
-            id,
-            data.title,
-            data.difficulty,
-            data.attribute,
-            data.notes.length
-        )
+        console.log(id, data.title, data.difficulty, data.attribute, data.notes.length)
     } catch (error) {
         console.error(id, error)
     }

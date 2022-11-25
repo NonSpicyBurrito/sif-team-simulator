@@ -139,11 +139,7 @@ function removeOverwrite(note: number) {
     </Field>
 
     <Field label="Overwrites">
-        <div
-            v-for="(judgment, note) in performance.overwrites"
-            :key="note"
-            class="mb-2"
-        >
+        <div v-for="(judgment, note) in performance.overwrites" :key="note" class="mb-2">
             <button @click="removeOverwrite(note)">✗</button>
             <span class="ml-2">
                 #{{ note }}:

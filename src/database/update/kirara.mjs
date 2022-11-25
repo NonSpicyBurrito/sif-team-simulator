@@ -46,17 +46,14 @@ writeFileSync(charactersPath, JSON.stringify(characters))
 
 async function getCardIds() {
     return (
-        await axios.post(
-            'https://sif.kirara.ca/api/ds/neo-search/cards/results.json',
-            {
-                rarity: [1],
-                max_smile: {
-                    compare_type: 'gt',
-                    compare_to: 1,
-                },
-                _sort: '+ordinal',
-            }
-        )
+        await axios.post('https://sif.kirara.ca/api/ds/neo-search/cards/results.json', {
+            rarity: [1],
+            max_smile: {
+                compare_type: 'gt',
+                compare_to: 1,
+            },
+            _sort: '+ordinal',
+        })
     ).data.result
 }
 
@@ -67,11 +64,8 @@ function split(array, size) {
 }
 
 async function getCardsData(ids) {
-    const cards = (
-        await axios.get(
-            `https://sif.kirara.ca/api/v1/card/${ids.join(',')}.json`
-        )
-    ).data.cards
+    const cards = (await axios.get(`https://sif.kirara.ca/api/v1/card/${ids.join(',')}.json`)).data
+        .cards
 
     return cards.map((card) => [
         card.ordinal,

@@ -2,24 +2,10 @@ import { Live } from '../Live'
 import { setSelfCoverage } from './self-coverage'
 import { doSkill } from './utils'
 
-export function doCF(
-    live: Live,
-    time: number,
-    index: number,
-    duration: number,
-    value: number
-) {
+export function doCF(live: Live, time: number, index: number, duration: number, value: number) {
     doSkill(live, time, index, (time, index) => {
         if (VITE_APP_DIAGNOSTICS) {
-            live.context.log(
-                time,
-                'Member',
-                index,
-                'activates CF',
-                value,
-                'until',
-                time + duration
-            )
+            live.context.log(time, 'Member', index, 'activates CF', value, 'until', time + duration)
         }
 
         live.cfState.add(time + duration, value)

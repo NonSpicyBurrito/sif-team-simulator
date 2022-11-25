@@ -2,13 +2,7 @@ import { Live } from '../Live'
 import { setSelfCoverage } from './self-coverage'
 import { doSkill } from './utils'
 
-export function doSRU(
-    live: Live,
-    time: number,
-    index: number,
-    duration: number,
-    value: number
-) {
+export function doSRU(live: Live, time: number, index: number, duration: number, value: number) {
     doSkill(live, time, index, (time, index) => {
         if (live.sruState.value) return
 

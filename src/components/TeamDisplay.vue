@@ -23,9 +23,7 @@ defineEmits<{
                 'ring-4 ring-white': modelValue === index,
                 'opacity-25': ![undefined, -1, index].includes(modelValue),
             }"
-            @click="
-                $emit('update:modelValue', modelValue === index ? -1 : index)
-            "
+            @click="$emit('update:modelValue', modelValue === index ? -1 : index)"
         >
             <Card
                 v-if="member"
