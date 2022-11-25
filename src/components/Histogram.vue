@@ -15,7 +15,7 @@ defineProps<{
         <div
             v-for="({ value, percentile }, i) in data.histogram"
             :key="i"
-            class="peer group flex h-full grow basis-0 flex-col justify-end"
+            class="group peer flex h-full grow basis-0 flex-col justify-end"
         >
             <div
                 class="bg-gray-700 transition-all group-hover:bg-gray-600"

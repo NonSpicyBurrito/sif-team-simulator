@@ -60,7 +60,10 @@ function editData() {
     <Field label="Card Skill">
         <div class="py-1 first-letter:uppercase">
             {{
-                getSkillDescription(cards.get(member.card.id)!.skill, member.card.sl)
+                getSkillDescription(
+                    cards.get(member.card.id)!.skill,
+                    member.card.sl
+                )
             }}
         </div>
     </Field>

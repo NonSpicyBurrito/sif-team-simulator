@@ -61,7 +61,9 @@ function editData() {
                     :key="level"
                     class="mr-1 mb-1"
                     :class="{ 'opacity-25': member.accessory.level !== level }"
-                    @click="member.accessory = { id: member.accessory!.id, level }"
+                    @click="
+                        member.accessory = { id: member.accessory!.id, level }
+                    "
                 >
                     {{ level }}
                 </button>
@@ -70,7 +72,10 @@ function editData() {
         <Field label="Accessory Skill">
             <div class="py-1 first-letter:uppercase">
                 {{
-                    getSkillDescription(accessories.get(member.accessory.id)!.skill, member.accessory.level)
+                    getSkillDescription(
+                        accessories.get(member.accessory.id)!.skill,
+                        member.accessory.level
+                    )
                 }}
             </div>
         </Field>
