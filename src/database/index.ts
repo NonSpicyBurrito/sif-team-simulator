@@ -35,12 +35,7 @@ export const sises = new Map<string, Sis>([
 export async function initDatabase(difficulty: Difficulty) {
     isLoading.value = true
 
-    await Promise.all([
-        initCharts(difficulty),
-        initAccessories(),
-        initCards(),
-        initCharacters(),
-    ])
+    await Promise.all([initCharts(difficulty), initAccessories(), initCards(), initCharacters()])
 
     isLoading.value = false
 }
@@ -77,8 +72,8 @@ async function initCharts(difficulty: Difficulty) {
     currentDifficulty = difficulty
     charts.clear()
 
-    Object.entries(await loadJson(`charts/${difficulty}`)).forEach(
-        ([id, chart]) => charts.set(id, chart as Chart)
+    Object.entries(await loadJson(`charts/${difficulty}`)).forEach(([id, chart]) =>
+        charts.set(id, chart as Chart)
     )
 }
 

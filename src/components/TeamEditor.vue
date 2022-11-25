@@ -29,6 +29,14 @@ function moveMember(direction: -1 | 1) {
     selected.value = newIndex
 }
 
+function duplicateMember() {
+    const emptyIndex = props.team.indexOf(null)
+    if (emptyIndex === -1) return
+
+    props.team[emptyIndex] = JSON.parse(JSON.stringify(member.value))
+    selected.value = emptyIndex
+}
+
 function deleteMember() {
     props.team[selected.value] = null
 }
@@ -63,6 +71,7 @@ function selectCard(cardId: number) {
         <template v-if="member">
             <div class="mb-8 flex justify-center">
                 <button class="mx-1" @click="moveMember(-1)">◄</button>
+                <button class="mx-1" @click="duplicateMember()">⧉</button>
                 <button class="mx-1" @click="deleteMember()">✗</button>
                 <button class="mx-1" @click="moveMember(1)">►</button>
             </div>

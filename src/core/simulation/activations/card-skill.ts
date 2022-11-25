@@ -36,8 +36,7 @@ export function activateCardSkill(
 
     if (
         Math.random() >=
-        (trigger.chances[0] / 100 - live.context.skillChanceReduction) *
-            skillChanceMultiplier
+        (trigger.chances[0] / 100 - live.context.skillChanceReduction) * skillChanceMultiplier
     )
         return false
 
@@ -59,13 +58,7 @@ export function activateCardSkill(
         }
         case EffectType.SRU: {
             const level = consumeAmp(live)
-            doSRU(
-                live,
-                time,
-                index,
-                effect.durations[level],
-                effect.values[level] / 100
-            )
+            doSRU(live, time, index, effect.durations[level], effect.values[level] / 100)
             break
         }
         case EffectType.Encore:
@@ -73,24 +66,12 @@ export function activateCardSkill(
             break
         case EffectType.PSU: {
             const level = consumeAmp(live)
-            doPSU(
-                live,
-                time,
-                index,
-                effect.durations[level],
-                effect.values[level]
-            )
+            doPSU(live, time, index, effect.durations[level], effect.values[level])
             break
         }
         case EffectType.CF: {
             const level = consumeAmp(live)
-            doCF(
-                live,
-                time,
-                index,
-                effect.durations[level],
-                effect.values[level]
-            )
+            doCF(live, time, index, effect.durations[level], effect.values[level])
             break
         }
         case EffectType.Amp: {
@@ -100,19 +81,11 @@ export function activateCardSkill(
         }
         case EffectType.Param: {
             const level = consumeAmp(live)
-            doParam(
-                live,
-                time,
-                index,
-                effect.durations[level],
-                effect.values[level] / 100
-            )
+            doParam(live, time, index, effect.durations[level], effect.values[level] / 100)
             break
         }
         default:
-            throw `Unsupported card effect: ${
-                EffectType[effect.type] || effect.type
-            }`
+            throw `Unsupported card effect: ${EffectType[effect.type] || effect.type}`
     }
 
     return true

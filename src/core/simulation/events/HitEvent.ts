@@ -31,9 +31,7 @@ export function processHitEvent(live: Live, event: HitEvent) {
     const finalJudgment = Math.max(...judgments)
 
     const plockMultiplier =
-        isPlockActive && baseJudgments.every((judgment) => judgment === 0)
-            ? 1.08
-            : 1
+        isPlockActive && baseJudgments.every((judgment) => judgment === 0) ? 1.08 : 1
     const trickMultiplier = isPlockActive ? 1 : 0
     const heartMultiplier = 1 + live.hearts * live.context.heartBonus
 
@@ -93,8 +91,7 @@ export function processHitEvent(live: Live, event: HitEvent) {
     )
     const comboMultiplier = getComboMultiplier(live.combo)
     const groupMultiplier = live.context.groupMultipliers[event.position]
-    const attributeMultiplier =
-        live.context.attributeMultipliers[event.position]
+    const attributeMultiplier = live.context.attributeMultipliers[event.position]
     const noteMultiplier = event.isSwing ? 0.5 : 1
     const cfMultiplier = getCFMultiplier(live.combo)
 

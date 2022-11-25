@@ -14,8 +14,7 @@ export type LastSkill = (time: number, index: number) => true | void
 export class Live {
     public readonly coinFlip = Math.random() < 0.5
     public readonly triggerCounters = fill(0)
-    public readonly selfCoverages: (SelfCoverage | undefined)[] =
-        fill(undefined)
+    public readonly selfCoverages: (SelfCoverage | undefined)[] = fill(undefined)
 
     public notes = 0
     public combo = 0
@@ -59,9 +58,7 @@ export class Live {
             overhealHearts: this.hearts + this.overheal / this.context.maxHp,
             plockCoverage: this.covered / this.notes,
             survivedNotes:
-                this.survivedNotes === Number.POSITIVE_INFINITY
-                    ? this.notes
-                    : this.survivedNotes,
+                this.survivedNotes === Number.POSITIVE_INFINITY ? this.notes : this.survivedNotes,
         }
     }
 

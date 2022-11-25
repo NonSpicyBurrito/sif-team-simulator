@@ -1,10 +1,9 @@
-import * as Axios from 'axios'
+import axios from 'axios'
 import { readFileSync, writeFileSync } from 'fs'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const axios = Axios.default
 
 const cardsPath = `${__dirname}/../../../public/database/cards.json`
 const charactersPath = `${__dirname}/../../../public/database/characters.json`
@@ -46,17 +45,14 @@ writeFileSync(charactersPath, JSON.stringify(characters))
 
 async function getCardIds() {
     return (
-        await axios.post(
-            'https://sif.kirara.ca/api/ds/neo-search/cards/results.json',
-            {
-                rarity: [1],
-                max_smile: {
-                    compare_type: 'gt',
-                    compare_to: 1,
-                },
-                _sort: '+ordinal',
-            }
-        )
+        await axios.post('https://sif.kirara.ca/api/ds/neo-search/cards/results.json', {
+            rarity: [1],
+            max_smile: {
+                compare_type: 'gt',
+                compare_to: 1,
+            },
+            _sort: '+ordinal',
+        })
     ).data.result
 }
 
@@ -67,11 +63,8 @@ function split(array, size) {
 }
 
 async function getCardsData(ids) {
-    const cards = (
-        await axios.get(
-            `https://sif.kirara.ca/api/v1/card/${ids.join(',')}.json`
-        )
-    ).data.cards
+    const cards = (await axios.get(`https://sif.kirara.ca/api/v1/card/${ids.join(',')}.json`)).data
+        .cards
 
     return cards.map((card) => [
         card.ordinal,

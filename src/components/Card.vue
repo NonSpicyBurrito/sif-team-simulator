@@ -29,10 +29,7 @@ const simpleDescription = computed(() => {
     <div class="relative h-16 w-16">
         <CardIcon :="{ id }" />
         <template v-if="accessory">
-            <AccessoryIcon
-                :id="accessory.id"
-                class="absolute top-0 left-0 h-6 w-6"
-            />
+            <AccessoryIcon :id="accessory.id" class="absolute top-0 left-0 h-6 w-6" />
             <div v-if="level" class="tag absolute top-0 left-0">
                 {{ accessory.level }}
             </div>
@@ -45,10 +42,7 @@ const simpleDescription = computed(() => {
                 {{ sl }}
             </div>
         </div>
-        <div
-            v-if="sisNames"
-            class="absolute bottom-0 flex w-full justify-center"
-        >
+        <div v-if="sisNames" class="absolute bottom-0 flex w-full justify-center">
             <div class="tag text-center">
                 {{ sisNames.join(' ') }}
             </div>

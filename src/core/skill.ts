@@ -1,9 +1,4 @@
-import {
-    AccessorySkill,
-    CardSkill,
-    EffectType,
-    TriggerType,
-} from '../database/Skill'
+import { AccessorySkill, CardSkill, EffectType, TriggerType } from '../database/Skill'
 import { percent, thousands } from './formatting'
 
 export function getSkillDescription(
@@ -30,15 +25,11 @@ export function getSkillDescription(
                 descriptions.push(`every ${triggerValue} perfects`)
                 break
             case TriggerType.StarPerfect:
-                descriptions.push(
-                    `every ${triggerValue} perfects on star notes`
-                )
+                descriptions.push(`every ${triggerValue} perfects on star notes`)
                 break
             default:
                 descriptions.push(
-                    `unsupported trigger: ${
-                        TriggerType[trigger.type] || trigger.type
-                    }`
+                    `unsupported trigger: ${TriggerType[trigger.type] || trigger.type}`
                 )
         }
     }
@@ -105,18 +96,13 @@ export function getSkillDescription(
             )
             break
         default:
-            descriptions.push(
-                `unsupported effect: ${EffectType[effect.type] || effect.type}`
-            )
+            descriptions.push(`unsupported effect: ${EffectType[effect.type] || effect.type}`)
     }
 
     return descriptions.join(', ') + '. '
 }
 
-export function getSkillSimpleDescription({
-    trigger,
-    effect,
-}: CardSkill | AccessorySkill) {
+export function getSkillSimpleDescription({ trigger, effect }: CardSkill | AccessorySkill) {
     const descriptions: string[] = []
 
     if ('type' in trigger) {

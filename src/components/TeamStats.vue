@@ -18,28 +18,16 @@ const chartAttribute = computed(() => charts.get(props.chartId)?.attribute)
 const teamStat = computed(() => {
     if (!isTeamComplete(props.team)) return
 
-    return calculateTeamStat(
-        props.team,
-        props.memoryGalleryBonus,
-        props.chartId,
-        props.guestCenter
-    )
+    return calculateTeamStat(props.team, props.memoryGalleryBonus, props.chartId, props.guestCenter)
 })
 </script>
 
 <template>
-    <div
-        v-if="teamStat"
-        class="my-2 mx-auto flex max-w-md items-center justify-around text-center"
-    >
+    <div v-if="teamStat" class="my-2 mx-auto flex max-w-md items-center justify-around text-center">
         <div
             v-for="({ base }, index) in teamStat"
             :key="index"
-            :class="
-                index === chartAttribute
-                    ? 'font-semibold'
-                    : 'text-sm text-gray-600'
-            "
+            :class="index === chartAttribute ? 'font-semibold' : 'text-sm text-gray-600'"
         >
             {{ thousands(base) }}
         </div>

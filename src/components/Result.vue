@@ -25,11 +25,7 @@ const props = defineProps<{
 const sections = computed(
     () =>
         ({
-            survivedNotes: [
-                'Survival Rate',
-                thousands,
-                percent(props.result.survivalRate),
-            ],
+            survivedNotes: ['Survival Rate', thousands, percent(props.result.survivalRate)],
             score: ['Score', thousands],
             scorePerNote: ['Score / Note', thousands],
             overhealHearts: ['Overheal Hearts', small],
@@ -83,14 +79,8 @@ function toggleDiagnosticExpansion(index: number) {
             {{ getChartDescription(charts.get(chartId)!) }}
         </Field>
 
-        <template
-            v-for="([label, formatter, title], key) in sections"
-            :key="key"
-        >
-            <Field
-                v-if="key !== 'survivedNotes' || mode === 'afk'"
-                :label="label"
-            >
+        <template v-for="([label, formatter, title], key) in sections" :key="key">
+            <Field v-if="key !== 'survivedNotes' || mode === 'afk'" :label="label">
                 <button class="w-full select-text" @click="selected = key">
                     <div v-if="title">
                         {{ title }}
@@ -115,10 +105,7 @@ function toggleDiagnosticExpansion(index: number) {
             <button @click="exportData">Export</button>
         </Field>
 
-        <Histogram
-            :data="result[selected]"
-            :formatter="sections[selected][1]"
-        />
+        <Histogram :data="result[selected]" :formatter="sections[selected][1]" />
     </div>
 
     <div v-if="result.diagnostics.length" class="surface">
@@ -135,9 +122,7 @@ function toggleDiagnosticExpansion(index: number) {
                     </template>
                     <template v-else>
                         ►
-                        <span class="whitespace-pre-wrap">{{
-                            message.split('\n')[0]
-                        }}</span
+                        <span class="whitespace-pre-wrap">{{ message.split('\n')[0] }}</span
                         >...
                     </template>
                 </template>

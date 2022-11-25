@@ -1,11 +1,10 @@
-import * as Axios from 'axios'
+import axios from 'axios'
 import { readFileSync, writeFileSync } from 'fs'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { extract } from './utils.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const axios = Axios.default
 
 const path = `${__dirname}/../../../public/database/accessories.json`
 
@@ -57,11 +56,7 @@ async function getData() {
 
 async function getAccessoryData(index, effectType, character) {
     const data = Object.entries(
-        (
-            await axios.get(
-                `https://lab.everisay.xyz/sif/interface/accessory.php?a=${index}`
-            )
-        ).data
+        (await axios.get(`https://lab.everisay.xyz/sif/interface/accessory.php?a=${index}`)).data
     )
         .sort(([a], [b]) => +a - +b)
         .map(([, value]) => value)

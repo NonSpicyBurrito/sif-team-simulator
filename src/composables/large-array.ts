@@ -1,11 +1,7 @@
 import { useIntervalFn } from '@vueuse/core'
 import { computed, Ref, ref, watch } from 'vue'
 
-export function useLargeArray<T>(
-    array: Ref<T[]>,
-    interval = 50,
-    chunkSize = 10
-) {
+export function useLargeArray<T>(array: Ref<T[]>, interval = 50, chunkSize = 10) {
     const length = ref(0)
 
     watch(array, () => (length.value = chunkSize))

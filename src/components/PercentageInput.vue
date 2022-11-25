@@ -14,9 +14,7 @@ const emit = defineEmits<{
 }>()
 
 const optionValue = ref(
-    Object.values(props.options).includes(props.modelValue)
-        ? props.modelValue
-        : undefined
+    Object.values(props.options).includes(props.modelValue) ? props.modelValue : undefined
 )
 const customValue = computed({
     get() {
@@ -44,15 +42,8 @@ watch(optionValue, (value) => {
             :max="max * 100"
             :step="step * 100"
         />
-        <select
-            v-model="optionValue"
-            :class="optionValue === undefined ? 'w-32' : 'grow'"
-        >
-            <option
-                v-for="(value, text) in options"
-                :key="value"
-                :value="value"
-            >
+        <select v-model="optionValue" :class="optionValue === undefined ? 'w-32' : 'grow'">
+            <option v-for="(value, text) in options" :key="value" :value="value">
                 {{ text }}
             </option>
             <option :value="undefined">Custom (%)</option>

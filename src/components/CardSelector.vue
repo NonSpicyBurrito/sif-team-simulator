@@ -41,32 +41,24 @@ const ids = useLargeArray(
                 }
 
                 if (rarities[condition]) {
-                    return ids.filter(
-                        (id) => cards.get(id)?.rarity === rarities[condition]
-                    )
+                    return ids.filter((id) => cards.get(id)?.rarity === rarities[condition])
                 }
 
                 if (attributes.includes(condition)) {
                     return ids.filter(
-                        (id) =>
-                            cards.get(id)?.attribute ===
-                            attributes.indexOf(condition)
+                        (id) => cards.get(id)?.attribute === attributes.indexOf(condition)
                     )
                 }
 
                 if (triggers[condition]) {
                     return ids.filter(
-                        (id) =>
-                            cards.get(id)?.skill.trigger.type ===
-                            triggers[condition]
+                        (id) => cards.get(id)?.skill.trigger.type === triggers[condition]
                     )
                 }
 
                 if (effects[condition]) {
                     return ids.filter(
-                        (id) =>
-                            cards.get(id)?.skill.effect.type ===
-                            effects[condition]
+                        (id) => cards.get(id)?.skill.effect.type === effects[condition]
                     )
                 }
 
@@ -82,10 +74,7 @@ const ids = useLargeArray(
 
                 const wideValue = +condition
                 if (wideValue) {
-                    return ids.filter(
-                        (id) =>
-                            cards.get(id)?.skill.trigger.values[0] === wideValue
-                    )
+                    return ids.filter((id) => cards.get(id)?.skill.trigger.values[0] === wideValue)
                 }
 
                 const allowedCharacters = getCharacterIds(condition)
@@ -117,11 +106,7 @@ const ids = useLargeArray(
             </p>
             <p>
                 <span class="font-semibold">Specific Triggers:</span>
-                {{
-                    ['', ...Object.keys(specificTriggers)]
-                        .map((t) => `20${t}`)
-                        .join(', ')
-                }}
+                {{ ['', ...Object.keys(specificTriggers)].map((t) => `20${t}`).join(', ') }}
             </p>
             <p>
                 <span class="font-semibold">Triggers:</span>

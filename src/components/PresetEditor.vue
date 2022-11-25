@@ -61,21 +61,12 @@ function movePresetTeam(index: number, direction: -1 | 1) {
 
 <template>
     <div class="surface flex flex-col items-center">
-        <div
-            class="flex justify-center"
-            :class="{ 'mb-8': presetTeams.length }"
-        >
+        <div class="flex justify-center" :class="{ 'mb-8': presetTeams.length }">
             <button class="mx-1" @click="importPreset()">Import Preset</button>
-            <button
-                class="mx-1"
-                :disabled="!presetTeams.length"
-                @click="exportPreset()"
-            >
+            <button class="mx-1" :disabled="!presetTeams.length" @click="exportPreset()">
                 Export Preset
             </button>
-            <button class="mx-1" :disabled="!canSave" @click="saveTeam()">
-                Save Team
-            </button>
+            <button class="mx-1" :disabled="!canSave" @click="saveTeam()">Save Team</button>
             <button class="mx-1" @click="resetTeam()">Reset Team</button>
         </div>
         <div
@@ -86,16 +77,9 @@ function movePresetTeam(index: number, direction: -1 | 1) {
             <button @click="$emit('select', presetTeam)">
                 <TeamDisplay class="my-1" :team="presetTeam" />
             </button>
-            <div
-                class="mt-2 flex justify-center text-sm sm:mt-0 sm:ml-2 sm:flex-col"
-            >
+            <div class="mt-2 flex justify-center text-sm sm:mt-0 sm:ml-2 sm:flex-col">
                 <button @click="movePresetTeam(i, -1)">▲</button>
-                <button
-                    class="mx-1 sm:my-1 sm:mx-0"
-                    @click="deletePresetTeam(i)"
-                >
-                    ✗
-                </button>
+                <button class="mx-1 sm:my-1 sm:mx-0" @click="deletePresetTeam(i)">✗</button>
                 <button @click="movePresetTeam(i, 1)">▼</button>
             </div>
         </div>
