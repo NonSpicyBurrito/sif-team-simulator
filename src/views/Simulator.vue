@@ -65,6 +65,13 @@ function selectGuestCenter(id: number) {
     showSelectCenter.value = false
 }
 
+function useTeamCenter() {
+    const center = team.value[4]
+    if (!center) return
+
+    selectGuestCenter(center.card.id)
+}
+
 const showPreset = ref(false)
 function selectPresetTeam(presetTeam: PartialTeam) {
     team.value = clone(presetTeam)
@@ -203,7 +210,10 @@ async function simulate() {
         </Field>
         <Field label="Guest Center">
             <button v-if="guestCenter" @click="guestCenter = null">✗</button>
-            <button v-else @click="showSelectCenter = !showSelectCenter">Select</button>
+            <template v-else>
+                <button @click="showSelectCenter = !showSelectCenter">Select</button>
+                <button class="ml-2" @click="useTeamCenter()">Use Team Center</button>
+            </template>
         </Field>
         <div v-if="!guestCenter && showSelectCenter" class="surface">
             <CardSelector @select="selectGuestCenter" />
