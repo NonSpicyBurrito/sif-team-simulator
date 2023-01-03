@@ -2,7 +2,6 @@ import axios from 'axios'
 import { readFileSync, writeFileSync } from 'fs'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { extract } from './utils.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -27,9 +26,9 @@ for (const [difficulty, id] of await getChartIds()) {
     }
 }
 
-Object.entries(chartsByDifficulty).forEach(([difficulty, charts]) =>
+for (const [difficulty, charts] of Object.entries(chartsByDifficulty)) {
     writeFileSync(`${pathBase}/${difficulty}.json`, JSON.stringify(charts))
-)
+}
 
 async function getChartIds() {
     const html = (
@@ -44,13 +43,13 @@ async function getChartIds() {
     const lives = JSON.parse(extract(html, 'var live = ', '\n'))
 
     const ids = []
-    lives.forEach(({ difficulties }) =>
-        difficulties.forEach((diff) => {
-            if (!diff.available) return
+    for (const { difficulties } of lives) {
+        for (const difficulty of difficulties) {
+            if (!difficulty.available) continue
 
-            ids.push([diff.difficulty, diff.notes_setting_asset])
-        })
-    )
+            ids.push([difficulty.difficulty, difficulty.notes_setting_asset])
+        }
+    }
 
     return ids
 }
@@ -104,4 +103,12 @@ async function getChartData(id) {
             }
         }),
     }
+}
+
+function extract(text, start, end, from) {
+    const fromIndex = from ? text.indexOf(from) : 0
+    const startIndex = text.indexOf(start, fromIndex) + start.length
+    const endIndex = text.indexOf(end, startIndex)
+
+    return text.slice(startIndex, endIndex)
 }

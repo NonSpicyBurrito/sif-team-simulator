@@ -18,7 +18,7 @@ const cardIdChunks = split(cardIds, 1000)
 
 for (const cardIds of cardIdChunks) {
     try {
-        ;(await getCardsData(cardIds)).forEach(([id, data, name]) => {
+        for (const [id, data, name] of await getCardsData(cardIds)) {
             cards[id] = data
             console.log(
                 id,
@@ -36,7 +36,7 @@ for (const cardIds of cardIdChunks) {
             )
 
             characters[data.character] = name
-        })
+        }
     } catch (error) {
         console.error(error)
     }
@@ -47,10 +47,10 @@ const accessoryIdChunks = split(accessoryIds, 1000)
 
 for (const accessoryIds of accessoryIdChunks) {
     try {
-        ;(await getAccessoriesData(accessoryIds)).forEach(([id, data]) => {
+        for (const [id, data] of await getAccessoriesData(accessoryIds)) {
             accessories[id] = data
             console.log(id, data.character, data.skill.effect.type)
-        })
+        }
     } catch (error) {
         console.error(error)
     }
@@ -71,12 +71,6 @@ async function getCardIds() {
             _sort: '+ordinal',
         })
     ).data.result
-}
-
-function split(array, size) {
-    return [...Array(Math.ceil(array.length / size))].map((_, i) =>
-        array.slice(i * size, i * size + size)
-    )
 }
 
 async function getCardsData(ids) {
@@ -122,10 +116,6 @@ async function getCardsData(ids) {
     ])
 }
 
-function last(array) {
-    return array[array.length - 1]
-}
-
 async function getAccessoryIds() {
     return (await axios.get('https://sif.kirara.ca/api/v1/accessory_list.json')).data.accessories
         .filter((accessory) => accessory.is_valid)
@@ -160,4 +150,14 @@ async function getAccessoriesData(ids) {
         },
         accessory.char_name,
     ])
+}
+
+function split(array, size) {
+    return [...Array(Math.ceil(array.length / size))].map((_, i) =>
+        array.slice(i * size, i * size + size)
+    )
+}
+
+function last(array) {
+    return array[array.length - 1]
 }
