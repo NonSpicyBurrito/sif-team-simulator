@@ -17,28 +17,24 @@ const cardIds = (await getCardIds()).filter((id) => !cards[id])
 const cardIdChunks = split(cardIds, 1000)
 
 for (const cardIds of cardIdChunks) {
-    try {
-        for (const [id, data, name] of await getCardsData(cardIds)) {
-            cards[id] = data
-            console.log(
-                id,
-                name,
-                data.character,
-                data.group,
-                data.year,
-                data.subunit,
-                data.rarity,
-                data.attribute,
-                data.center.main.type,
-                data.center.extra.type,
-                data.skill.trigger.type,
-                data.skill.effect.type
-            )
+    for (const [id, data, name] of await getCardsData(cardIds)) {
+        cards[id] = data
+        console.log(
+            id,
+            name,
+            data.character,
+            data.group,
+            data.year,
+            data.subunit,
+            data.rarity,
+            data.attribute,
+            data.center.main.type,
+            data.center.extra.type,
+            data.skill.trigger.type,
+            data.skill.effect.type
+        )
 
-            characters[data.character] = name
-        }
-    } catch (error) {
-        console.error(error)
+        characters[data.character] = name
     }
 }
 
@@ -46,13 +42,9 @@ const accessoryIds = (await getAccessoryIds()).filter((id) => !accessories[id])
 const accessoryIdChunks = split(accessoryIds, 1000)
 
 for (const accessoryIds of accessoryIdChunks) {
-    try {
-        for (const [id, data] of await getAccessoriesData(accessoryIds)) {
-            accessories[id] = data
-            console.log(id, data.character, data.skill.effect.type)
-        }
-    } catch (error) {
-        console.error(error)
+    for (const [id, data] of await getAccessoriesData(accessoryIds)) {
+        accessories[id] = data
+        console.log(id, data.character, data.skill.effect.type)
     }
 }
 

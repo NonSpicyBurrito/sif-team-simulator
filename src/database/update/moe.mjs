@@ -17,13 +17,9 @@ const chartsByDifficulty = Object.fromEntries(
 for (const [difficulty, id] of await getChartIds()) {
     if (chartsByDifficulty[difficulty][id]) continue
 
-    try {
-        const data = await getChartData(id)
-        chartsByDifficulty[difficulty][id] = data
-        console.log(id, data.title, data.difficulty, data.attribute, data.notes.length)
-    } catch (error) {
-        console.error(id, error)
-    }
+    const data = await getChartData(id)
+    chartsByDifficulty[difficulty][id] = data
+    console.log(id, data.title, data.difficulty, data.attribute, data.notes.length)
 }
 
 for (const [difficulty, charts] of Object.entries(chartsByDifficulty)) {
