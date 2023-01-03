@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { readFileSync, writeFileSync } from 'fs'
+import fetch from 'node-fetch'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -27,14 +27,7 @@ for (const [difficulty, charts] of Object.entries(chartsByDifficulty)) {
 }
 
 async function getChartIds() {
-    const html = (
-        await axios.get('https://card.llsif.moe/live', {
-            headers: {
-                'accept-encoding': 'gzip',
-            },
-            responseType: 'text',
-        })
-    ).data
+    const html = await get('/live')
 
     const lives = JSON.parse(extract(html, 'var live = ', '\n'))
 
@@ -51,11 +44,7 @@ async function getChartIds() {
 }
 
 async function getChartData(id) {
-    const html = (
-        await axios.get(`https://card.llsif.moe/live/${id}`, {
-            responseType: 'text',
-        })
-    ).data
+    const html = await get(`/live/${id}`)
 
     const live = JSON.parse(extract(html, 'var lives = ', '\n'))[0]
     const notes = JSON.parse(live.notes_list)
@@ -99,6 +88,15 @@ async function getChartData(id) {
             }
         }),
     }
+}
+
+async function get(url) {
+    const response = await fetch(`https://card.llsif.moe${url}`, {
+        headers: {
+            'accept-encoding': 'gzip',
+        },
+    })
+    return await response.text()
 }
 
 function extract(text, start, end, from) {

@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { readFileSync, writeFileSync } from 'fs'
+import fetch from 'node-fetch'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -54,7 +54,7 @@ writeFileSync(accessoriesPath, JSON.stringify(accessories))
 
 async function getCardIds() {
     return (
-        await axios.post('https://sif.kirara.ca/api/ds/neo-search/cards/results.json', {
+        await post('/ds/neo-search/cards/results.json', {
             rarity: [1],
             max_smile: {
                 compare_type: 'gt',
@@ -62,12 +62,11 @@ async function getCardIds() {
             },
             _sort: '+ordinal',
         })
-    ).data.result
+    ).result
 }
 
 async function getCardsData(ids) {
-    const cards = (await axios.get(`https://sif.kirara.ca/api/v1/card/${ids.join(',')}.json`)).data
-        .cards
+    const cards = (await get(`/v1/card/${ids.join(',')}.json`)).cards
 
     return cards.map((card) => [
         card.ordinal,
@@ -109,15 +108,13 @@ async function getCardsData(ids) {
 }
 
 async function getAccessoryIds() {
-    return (await axios.get('https://sif.kirara.ca/api/v1/accessory_list.json')).data.accessories
+    return (await get('/v1/accessory_list.json')).accessories
         .filter((accessory) => accessory.is_valid)
         .map((accessory) => accessory.id)
 }
 
 async function getAccessoriesData(ids) {
-    const accessories = (
-        await axios.get(`https://sif.kirara.ca/api/v1/accessory/${ids.join(',')}.json`)
-    ).data.accessories
+    const accessories = (await get(`/v1/accessory/${ids.join(',')}.json`)).accessories
 
     return accessories.map((accessory) => [
         accessory.id,
@@ -142,6 +139,19 @@ async function getAccessoriesData(ids) {
         },
         accessory.char_name,
     ])
+}
+
+async function get(url) {
+    const response = await fetch(`https://sif.kirara.ca/api${url}`)
+    return await response.json()
+}
+
+async function post(url, data) {
+    const response = await fetch(`https://sif.kirara.ca/api${url}`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    })
+    return await response.json()
 }
 
 function split(array, size) {
