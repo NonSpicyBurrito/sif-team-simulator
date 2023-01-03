@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useLocalStorage } from '@vueuse/core'
 import { computed } from 'vue'
+import { useConfig } from '../composables/config'
 import { isTeamEmpty, PartialTeam } from '../core/Team'
 import { clone } from '../core/utils'
 import TeamDisplay from './TeamDisplay.vue'
@@ -13,7 +13,7 @@ const emit = defineEmits<{
     (e: 'select', team: PartialTeam): void
 }>()
 
-const presetTeams = useLocalStorage('preset.teams', [] as PartialTeam[])
+const presetTeams = useConfig<PartialTeam[]>('preset.teams', [])
 
 const canSave = computed(() => !isTeamEmpty(props.team))
 

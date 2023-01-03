@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import { computed, nextTick, ref, watch, watchEffect } from 'vue'
 import CardSelector from '../components/CardSelector.vue'
 import Field from '../components/Field.vue'
@@ -8,6 +7,7 @@ import PerformanceEditor from '../components/PerformanceEditor.vue'
 import PresetEditor from '../components/PresetEditor.vue'
 import Result from '../components/Result.vue'
 import TeamEditor from '../components/TeamEditor.vue'
+import { useConfig } from '../composables/config'
 import { getCenterDescription } from '../core/center'
 import { getChartDescription } from '../core/chart'
 import { simulateScore } from '../core/simulation'
@@ -18,10 +18,10 @@ import { cards, charts, initDatabase, isLoading } from '../database'
 import { CenterSkill } from '../database/Center'
 import { Chart, Difficulty } from '../database/Chart'
 
-const mode = useLocalStorage('mode', 'normal')
-const difficulty = useLocalStorage('difficulty', Difficulty.Master)
-const chartId = useLocalStorage('chartId', '')
-const performance = useLocalStorage<Performance>('performance', {
+const mode = useConfig('mode', 'normal')
+const difficulty = useConfig('difficulty', Difficulty.Master)
+const chartId = useConfig('chartId', '')
+const performance = useConfig<Performance>('performance', {
     perfect: 0.85,
     great: 0,
     good: 0,
@@ -29,16 +29,14 @@ const performance = useLocalStorage<Performance>('performance', {
     miss: 0,
     overwrites: {},
 })
-const noteSpeed = useLocalStorage('noteSpeed', 9)
-const memoryGalleryBonus = useLocalStorage('memoryGalleryBonus', [3994, 3834, 3992])
-const guestCenter = useLocalStorage<CenterSkill>('guestCenter.1', null, {
-    serializer: StorageSerializers.object,
-})
-const tapScoreBonus = useLocalStorage('tapScoreBonus', 0)
-const skillChanceBonus = useLocalStorage('skillChanceBonus', 0)
-const skillChanceReduction = useLocalStorage('skillChanceReduction', 0)
-const count = useLocalStorage('count', 10000)
-const team = useLocalStorage('team', Array(9).fill(null) as PartialTeam)
+const noteSpeed = useConfig('noteSpeed', 9)
+const memoryGalleryBonus = useConfig('memoryGalleryBonus', [3994, 3834, 3992])
+const guestCenter = useConfig<CenterSkill>('guestCenter.1', null)
+const tapScoreBonus = useConfig('tapScoreBonus', 0)
+const skillChanceBonus = useConfig('skillChanceBonus', 0)
+const skillChanceReduction = useConfig('skillChanceReduction', 0)
+const count = useConfig('count', 10000)
+const team = useConfig<PartialTeam>('team', [null, null, null, null, null, null, null, null, null])
 
 const sortedChartEntries = ref<[string, Chart][]>([])
 
