@@ -51,10 +51,7 @@ export function getSkillDescription(
             break
         case EffectType.SRU:
             descriptions.push(
-                `increase skill activation chance by ${percent(
-                    'type' in trigger ? effectValue / 100 : effectValue - 1,
-                    0
-                )}`,
+                `increase skill activation chance by ${percent(effectValue / 100, 0)}`,
                 `for ${effectDuration} seconds`
             )
             break
@@ -80,10 +77,7 @@ export function getSkillDescription(
             break
         case EffectType.Param:
             descriptions.push(
-                `increase stat by ${percent(
-                    'type' in trigger ? effectValue / 100 : effectValue - 1,
-                    0
-                )}`,
+                `increase stat by ${percent(effectValue / 100, 0)}`,
                 `for ${effectDuration} seconds`
             )
             break

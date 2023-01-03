@@ -1,8 +1,7 @@
-import axios from 'axios'
 import { readFileSync, writeFileSync } from 'fs'
+import fetch from 'node-fetch'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { extract } from './utils.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -18,49 +17,34 @@ const chartsByDifficulty = Object.fromEntries(
 for (const [difficulty, id] of await getChartIds()) {
     if (chartsByDifficulty[difficulty][id]) continue
 
-    try {
-        const data = await getChartData(id)
-        chartsByDifficulty[difficulty][id] = data
-        console.log(id, data.title, data.difficulty, data.attribute, data.notes.length)
-    } catch (error) {
-        console.error(id, error)
-    }
+    const data = await getChartData(id)
+    chartsByDifficulty[difficulty][id] = data
+    console.log(id, data.title, data.difficulty, data.attribute, data.notes.length)
 }
 
-Object.entries(chartsByDifficulty).forEach(([difficulty, charts]) =>
+for (const [difficulty, charts] of Object.entries(chartsByDifficulty)) {
     writeFileSync(`${pathBase}/${difficulty}.json`, JSON.stringify(charts))
-)
+}
 
 async function getChartIds() {
-    const html = (
-        await axios.get('https://card.llsif.moe/live', {
-            headers: {
-                'accept-encoding': 'gzip',
-            },
-            responseType: 'text',
-        })
-    ).data
+    const html = await get('/live')
 
     const lives = JSON.parse(extract(html, 'var live = ', '\n'))
 
     const ids = []
-    lives.forEach(({ difficulties }) =>
-        difficulties.forEach((diff) => {
-            if (!diff.available) return
+    for (const { difficulties } of lives) {
+        for (const difficulty of difficulties) {
+            if (!difficulty.available) continue
 
-            ids.push([diff.difficulty, diff.notes_setting_asset])
-        })
-    )
+            ids.push([difficulty.difficulty, difficulty.notes_setting_asset])
+        }
+    }
 
     return ids
 }
 
 async function getChartData(id) {
-    const html = (
-        await axios.get(`https://card.llsif.moe/live/${id}`, {
-            responseType: 'text',
-        })
-    ).data
+    const html = await get(`/live/${id}`)
 
     const live = JSON.parse(extract(html, 'var lives = ', '\n'))[0]
     const notes = JSON.parse(live.notes_list)
@@ -104,4 +88,21 @@ async function getChartData(id) {
             }
         }),
     }
+}
+
+async function get(url) {
+    const response = await fetch(`https://card.llsif.moe${url}`, {
+        headers: {
+            'accept-encoding': 'gzip',
+        },
+    })
+    return await response.text()
+}
+
+function extract(text, start, end, from) {
+    const fromIndex = from ? text.indexOf(from) : 0
+    const startIndex = text.indexOf(start, fromIndex) + start.length
+    const endIndex = text.indexOf(end, startIndex)
+
+    return text.slice(startIndex, endIndex)
 }

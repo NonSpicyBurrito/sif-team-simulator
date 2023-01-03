@@ -53,7 +53,7 @@ export function activateAccessorySkill(
         }
         case EffectType.SRU: {
             const level = consumeAmp(live)
-            doSRU(live, time, index, effect.durations[level], effect.values[level] - 1)
+            doSRU(live, time, index, effect.durations[level], effect.values[level] / 100)
             break
         }
         case EffectType.Encore:
@@ -76,7 +76,7 @@ export function activateAccessorySkill(
         }
         case EffectType.Param: {
             const level = consumeAmp(live)
-            doParam(live, time, index, effect.durations[level], effect.values[level] - 1)
+            doParam(live, time, index, effect.durations[level], effect.values[level] / 100)
             break
         }
         case EffectType.Spark: {

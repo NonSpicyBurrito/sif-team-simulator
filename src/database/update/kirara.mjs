@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { readFileSync, writeFileSync } from 'fs'
+import fetch from 'node-fetch'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -7,45 +7,54 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const cardsPath = `${__dirname}/../../../public/database/cards.json`
 const charactersPath = `${__dirname}/../../../public/database/characters.json`
+const accessoriesPath = `${__dirname}/../../../public/database/accessories.json`
 
 const cards = JSON.parse(readFileSync(cardsPath))
 const characters = JSON.parse(readFileSync(charactersPath))
+const accessories = JSON.parse(readFileSync(accessoriesPath))
 
-const ids = (await getCardIds()).filter((id) => !cards[id])
-const chunks = split(ids, 1000)
+const cardIds = (await getCardIds()).filter((id) => !cards[id])
+const cardIdChunks = split(cardIds, 1000)
 
-for (const chunk of chunks) {
-    try {
-        ;(await getCardsData(chunk)).forEach(([id, data, name]) => {
-            cards[id] = data
-            console.log(
-                id,
-                name,
-                data.character,
-                data.group,
-                data.year,
-                data.subunit,
-                data.rarity,
-                data.attribute,
-                data.center.main.type,
-                data.center.extra.type,
-                data.skill.trigger.type,
-                data.skill.effect.type
-            )
+for (const cardIds of cardIdChunks) {
+    for (const [id, data, name] of await getCardsData(cardIds)) {
+        cards[id] = data
+        console.log(
+            id,
+            name,
+            data.character,
+            data.group,
+            data.year,
+            data.subunit,
+            data.rarity,
+            data.attribute,
+            data.center.main.type,
+            data.center.extra.type,
+            data.skill.trigger.type,
+            data.skill.effect.type
+        )
 
-            characters[data.character] = name
-        })
-    } catch (error) {
-        console.error(error)
+        characters[data.character] = name
+    }
+}
+
+const accessoryIds = (await getAccessoryIds()).filter((id) => !accessories[id])
+const accessoryIdChunks = split(accessoryIds, 1000)
+
+for (const accessoryIds of accessoryIdChunks) {
+    for (const [id, data] of await getAccessoriesData(accessoryIds)) {
+        accessories[id] = data
+        console.log(id, data.character, data.skill.effect.type)
     }
 }
 
 writeFileSync(cardsPath, JSON.stringify(cards))
 writeFileSync(charactersPath, JSON.stringify(characters))
+writeFileSync(accessoriesPath, JSON.stringify(accessories))
 
 async function getCardIds() {
     return (
-        await axios.post('https://sif.kirara.ca/api/ds/neo-search/cards/results.json', {
+        await post('/ds/neo-search/cards/results.json', {
             rarity: [1],
             max_smile: {
                 compare_type: 'gt',
@@ -53,18 +62,11 @@ async function getCardIds() {
             },
             _sort: '+ordinal',
         })
-    ).data.result
-}
-
-function split(array, size) {
-    return [...Array(Math.ceil(array.length / size))].map((_, i) =>
-        array.slice(i * size, i * size + size)
-    )
+    ).result
 }
 
 async function getCardsData(ids) {
-    const cards = (await axios.get(`https://sif.kirara.ca/api/v1/card/${ids.join(',')}.json`)).data
-        .cards
+    const cards = (await get(`/v1/card/${ids.join(',')}.json`)).cards
 
     return cards.map((card) => [
         card.ordinal,
@@ -103,6 +105,59 @@ async function getCardsData(ids) {
         },
         card.char_name,
     ])
+}
+
+async function getAccessoryIds() {
+    return (await get('/v1/accessory_list.json')).accessories
+        .filter((accessory) => accessory.is_valid)
+        .map((accessory) => accessory.id)
+}
+
+async function getAccessoriesData(ids) {
+    const accessories = (await get(`/v1/accessory/${ids.join(',')}.json`)).accessories
+
+    return accessories.map((accessory) => [
+        accessory.id,
+        {
+            character: accessory.unit_type_id || 0,
+            stats: accessory.smile.map((_, i) => [
+                accessory.smile[i],
+                accessory.pure[i],
+                accessory.cool[i],
+            ]),
+            skill: {
+                trigger: {
+                    chances: accessory.probability,
+                    values: accessory.trigger_val.map((value) => value || 0),
+                },
+                effect: {
+                    type: accessory.effect_type,
+                    durations: accessory.effect_dur,
+                    values: accessory.effect_val,
+                },
+            },
+        },
+        accessory.char_name,
+    ])
+}
+
+async function get(url) {
+    const response = await fetch(`https://sif.kirara.ca/api${url}`)
+    return await response.json()
+}
+
+async function post(url, data) {
+    const response = await fetch(`https://sif.kirara.ca/api${url}`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    })
+    return await response.json()
+}
+
+function split(array, size) {
+    return [...Array(Math.ceil(array.length / size))].map((_, i) =>
+        array.slice(i * size, i * size + size)
+    )
 }
 
 function last(array) {

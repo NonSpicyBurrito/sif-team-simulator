@@ -7,7 +7,7 @@
     "lint": "vue-tsc --noEmit && eslint --ext .mjs,.ts,.vue src/",
     "build": "vite build",
     "serve": "vite preview",
-    "update": "node src/database/update/kirara.mjs && node src/database/update/moe.mjs && node src/database/update/ever.mjs"
+    "update": "node src/database/update/kirara.mjs && node src/database/update/moe.mjs"
   },
   "dependencies": {
     "@vueuse/core": "^9.6.0",
@@ -22,12 +22,12 @@
     "@typescript-eslint/parser": "^5.44.0",
     "@vitejs/plugin-vue": "^3.2.0",
     "autoprefixer": "^10.4.13",
-    "axios": "^0.27.2",
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-tailwindcss": "^3.7.0",
     "eslint-plugin-vue": "^9.8.0",
+    "node-fetch": "^3.3.0",
     "postcss": "^8.4.19",
     "prettier": "^2.8.0",
     "prettier-plugin-tailwindcss": "^0.1.13",

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useDebounce, useLocalStorage } from '@vueuse/core'
+import { useDebounce } from '@vueuse/core'
 import { computed } from 'vue'
+import { useConfig } from '../composables/config'
 import { useLargeArray } from '../composables/large-array'
 import { getCharacterIds } from '../core/character'
 import { enumKeys } from '../core/utils'
@@ -14,7 +15,7 @@ defineEmits<{
     (e: 'select', id: number): void
 }>()
 
-const search = useLocalStorage('cardSelector.search', '')
+const search = useConfig('cardSelector.search', '')
 const debouncedSearch = useDebounce(search, 500)
 
 const rarities = enumKeys(Rarity)
