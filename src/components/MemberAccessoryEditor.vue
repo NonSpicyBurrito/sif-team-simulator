@@ -1,6 +1,7 @@
 <script setup lang="ts">
 /* eslint-disable vue/no-mutating-props */
 
+import { computed } from 'vue'
 import { getSkillDescription } from '../core/skill'
 import { Member } from '../core/Team'
 import { accessories, cards } from '../database'
@@ -10,6 +11,17 @@ import Field from './Field.vue'
 const props = defineProps<{
     member: Member
 }>()
+
+const accessorySections = computed(() => [
+    getAccessoriesOfCharacter(cards.get(props.member.card.id)?.character),
+    getAccessoriesOfCharacter(0),
+])
+
+function getAccessoriesOfCharacter(character?: number) {
+    return [...accessories.entries()]
+        .filter(([, accessory]) => accessory.character === character)
+        .map(([id]) => id)
+}
 
 function editData() {
     if (!props.member.accessory) return
@@ -34,13 +46,14 @@ function editData() {
             <button @click="member.accessory = undefined">✗</button>
             <button class="ml-2" @click="editData">Edit Data</button>
         </template>
-        <div v-else class="-mb-1 flex flex-wrap">
-            <template v-for="[id, accessory] in accessories.entries()" :key="id">
+        <div
+            v-for="(section, index) in accessorySections"
+            v-else
+            :key="index"
+            class="flex flex-wrap"
+        >
+            <template v-for="id in section" :key="id">
                 <Accessory
-                    v-if="
-                        accessory.character === 0 ||
-                        accessory.character === cards.get(member.card.id)?.character
-                    "
                     class="mr-1 mb-1 h-12 w-12 cursor-pointer"
                     :="{ id }"
                     simple
