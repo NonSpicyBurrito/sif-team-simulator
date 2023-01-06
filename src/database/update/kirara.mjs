@@ -101,29 +101,31 @@ async function getAccessoryIds() {
 async function getAccessoriesData(ids) {
     const accessories = (await get(`/v1/accessory/${ids.join(',')}.json`)).accessories
 
-    return accessories.map((accessory) => [
-        accessory.id,
-        {
-            character: accessory.unit_type_id || 0,
-            stats: accessory.smile.map((_, i) => [
-                accessory.smile[i],
-                accessory.pure[i],
-                accessory.cool[i],
-            ]),
-            skill: {
-                trigger: {
-                    chances: accessory.probability,
-                    values: accessory.trigger_val.map((value) => value || 0),
-                },
-                effect: {
-                    type: accessory.effect_type,
-                    durations: accessory.effect_dur,
-                    values: accessory.effect_val,
+    return accessories
+        .filter((accessory) => [4, 5].includes(accessory.rarity))
+        .map((accessory) => [
+            accessory.id,
+            {
+                character: accessory.unit_type_id || 0,
+                stats: accessory.smile.map((_, i) => [
+                    accessory.smile[i],
+                    accessory.pure[i],
+                    accessory.cool[i],
+                ]),
+                skill: {
+                    trigger: {
+                        chances: accessory.probability,
+                        values: accessory.trigger_val.map((value) => value || 0),
+                    },
+                    effect: {
+                        type: accessory.effect_type,
+                        durations: accessory.effect_dur,
+                        values: accessory.effect_val,
+                    },
                 },
             },
-        },
-        accessory.char_name,
-    ])
+            accessory.char_name,
+        ])
 }
 
 async function get(url) {
