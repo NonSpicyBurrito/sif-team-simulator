@@ -1,7 +1,8 @@
-import { readFileSync, writeFileSync } from 'fs'
+import { writeFileSync } from 'fs'
 import fetch from 'node-fetch'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { prettify } from './utils.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -9,48 +10,32 @@ const cardsPath = `${__dirname}/../../../public/database/cards.json`
 const charactersPath = `${__dirname}/../../../public/database/characters.json`
 const accessoriesPath = `${__dirname}/../../../public/database/accessories.json`
 
-const cards = JSON.parse(readFileSync(cardsPath))
-const characters = JSON.parse(readFileSync(charactersPath))
-const accessories = JSON.parse(readFileSync(accessoriesPath))
+const cards = {}
+const characters = {}
+const accessories = {}
 
-const cardIds = (await getCardIds()).filter((id) => !cards[id])
+const cardIds = await getCardIds()
 const cardIdChunks = split(cardIds, 1000)
 
 for (const cardIds of cardIdChunks) {
     for (const [id, data, name] of await getCardsData(cardIds)) {
         cards[id] = data
-        console.log(
-            id,
-            name,
-            data.character,
-            data.group,
-            data.year,
-            data.subunit,
-            data.rarity,
-            data.attribute,
-            data.center.main.type,
-            data.center.extra.type,
-            data.skill.trigger.type,
-            data.skill.effect.type
-        )
-
         characters[data.character] = name
     }
 }
 
-const accessoryIds = (await getAccessoryIds()).filter((id) => !accessories[id])
+const accessoryIds = await getAccessoryIds()
 const accessoryIdChunks = split(accessoryIds, 1000)
 
 for (const accessoryIds of accessoryIdChunks) {
     for (const [id, data] of await getAccessoriesData(accessoryIds)) {
         accessories[id] = data
-        console.log(id, data.character, data.skill.effect.type)
     }
 }
 
-writeFileSync(cardsPath, JSON.stringify(cards))
-writeFileSync(charactersPath, JSON.stringify(characters))
-writeFileSync(accessoriesPath, JSON.stringify(accessories))
+writeFileSync(cardsPath, prettify(cards))
+writeFileSync(charactersPath, prettify(characters))
+writeFileSync(accessoriesPath, prettify(accessories))
 
 async function getCardIds() {
     return (

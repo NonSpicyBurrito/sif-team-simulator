@@ -22,17 +22,9 @@ jobs:
 
       - run: npm ci
 
-      - id: update
-        run: |
-          echo 'result<<EOF' >> $GITHUB_OUTPUT
-          npm run update >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
+      - run: npm run update
 
       - uses: peter-evans/create-pull-request@v4
         with:
           commit-message: Updated database
           title: Updated database
-          body: |
-            ```
-            ${{ steps.update.outputs.result }}
-            ```
