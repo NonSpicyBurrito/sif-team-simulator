@@ -93,9 +93,16 @@ async function getCardsData(ids) {
 }
 
 async function getAccessoryIds() {
-    return (await get('/v1/accessory_list.json')).accessories
-        .filter((accessory) => accessory.is_valid)
-        .map((accessory) => accessory.id)
+    return (
+        await post('/ds/neo-search/accessories/results.json', {
+            rarity: [1, 2, 3],
+            max_smile: {
+                compare_type: 'gt',
+                compare_to: 1,
+            },
+            _sort: '+id',
+        })
+    ).result
 }
 
 async function getAccessoriesData(ids) {

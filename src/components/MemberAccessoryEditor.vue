@@ -12,6 +12,13 @@ const props = defineProps<{
     member: Member
 }>()
 
+const url = computed(
+    () =>
+        `https://sif.kirara.ca/accessories/search?id=${encodeURIComponent(
+            `eq,${props.member.accessory?.id}`
+        )}`
+)
+
 const accessorySections = computed(() => [
     getAccessoriesOfCharacter(cards.get(props.member.card.id)?.character),
     getAccessoriesOfCharacter(0),
@@ -44,6 +51,7 @@ function editData() {
     <Field label="Accessory">
         <template v-if="member.accessory">
             <button @click="member.accessory = undefined">✗</button>
+            <a class="button ml-2" :href="url" target="_blank">View Details</a>
             <button class="ml-2" @click="editData">Edit Data</button>
         </template>
         <div

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 /* eslint-disable vue/no-mutating-props */
 
+import { computed } from 'vue'
 import { getSkillDescription } from '../core/skill'
 import { Member } from '../core/Team'
 import { cards } from '../database'
@@ -10,9 +11,7 @@ const props = defineProps<{
     member: Member
 }>()
 
-function viewDetails() {
-    window.open(`https://sif.kirara.ca/card/${props.member.card.id}`, '_blank')
-}
+const url = computed(() => `https://sif.kirara.ca/card/${props.member.card.id}`)
 
 function editData() {
     const card = cards.get(props.member.card.id)
@@ -31,7 +30,7 @@ function editData() {
 
 <template>
     <Field label="Card">
-        <button @click="viewDetails">View Details</button>
+        <a class="button" :href="url" target="_blank">View Details</a>
         <button class="ml-2" @click="editData">Edit Data</button>
     </Field>
     <Field label="Card Level">
