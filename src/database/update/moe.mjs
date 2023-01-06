@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync } from 'fs'
 import fetch from 'node-fetch'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { prettify } from './utils.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -23,7 +24,7 @@ for (const [difficulty, id] of await getChartIds()) {
 }
 
 for (const [difficulty, charts] of Object.entries(chartsByDifficulty)) {
-    writeFileSync(`${pathBase}/${difficulty}.json`, JSON.stringify(charts))
+    writeFileSync(`${pathBase}/${difficulty}.json`, prettify(charts))
 }
 
 async function getChartIds() {

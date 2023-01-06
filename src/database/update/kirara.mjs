@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync } from 'fs'
 import fetch from 'node-fetch'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { prettify } from './utils.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -48,9 +49,9 @@ for (const accessoryIds of accessoryIdChunks) {
     }
 }
 
-writeFileSync(cardsPath, JSON.stringify(cards))
-writeFileSync(charactersPath, JSON.stringify(characters))
-writeFileSync(accessoriesPath, JSON.stringify(accessories))
+writeFileSync(cardsPath, prettify(cards))
+writeFileSync(charactersPath, prettify(characters))
+writeFileSync(accessoriesPath, prettify(accessories))
 
 async function getCardIds() {
     return (
