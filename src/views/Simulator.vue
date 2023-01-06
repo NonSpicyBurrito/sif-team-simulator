@@ -299,7 +299,7 @@ async function simulate() {
 
         <Result v-if="result" :="result" />
     </div>
-    <div v-else class="py-8 text-center">Loading...</div>
+    <div v-else class="animate-pulse py-8 text-center">Loading...</div>
 
     <div v-if="isCalculating" class="fixed inset-0 z-50 cursor-wait" />
 </template>
