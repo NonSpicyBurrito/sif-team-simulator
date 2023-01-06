@@ -11,13 +11,15 @@
 }
 
 .tag {
-    @apply px-1 text-xxs bg-black/75;
+    @apply bg-black/75 px-1 text-xxs;
 }
 
+.button,
 button,
 select,
 input[type='number'],
 input[type='text'] {
+    @apply inline-block;
     @apply px-3 py-1;
     @apply bg-gray-700;
     @apply rounded-md;
