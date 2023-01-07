@@ -177,9 +177,16 @@ async function simulate() {
                     {{ getPerformanceDescription(performance) }}
                 </span>
             </Field>
-            <div v-if="showPerformance" class="surface">
-                <PerformanceEditor :="{ performance }" />
-            </div>
+            <Transition
+                enter-from-class="opacity-0"
+                enter-active-class="transition-opacity"
+                leave-to-class="opacity-0"
+                leave-active-class="transition-opacity"
+            >
+                <div v-if="showPerformance" class="surface">
+                    <PerformanceEditor :="{ performance }" />
+                </div>
+            </Transition>
         </template>
         <Field label="Note Speed">
             <div class="-mb-1 flex flex-wrap">
@@ -213,9 +220,16 @@ async function simulate() {
                 <button class="ml-2" @click="useTeamCenter()">Use Team Center</button>
             </template>
         </Field>
-        <div v-if="!guestCenter && showSelectCenter" class="surface">
-            <CardSelector @select="selectGuestCenter" />
-        </div>
+        <Transition
+            enter-from-class="opacity-0"
+            enter-active-class="transition-opacity"
+            leave-to-class="opacity-0"
+            leave-active-class="transition-opacity"
+        >
+            <div v-if="!guestCenter && showSelectCenter" class="surface">
+                <CardSelector @select="selectGuestCenter" />
+            </div>
+        </Transition>
         <Field v-if="guestCenter" label="Guest Center Skill">
             <div class="py-1 first-letter:uppercase">
                 {{ getCenterDescription(guestCenter) }}
@@ -283,7 +297,14 @@ async function simulate() {
             </button>
         </Field>
 
-        <PresetEditor v-if="showPreset" :="{ team }" @select="selectPresetTeam" />
+        <Transition
+            enter-from-class="opacity-0"
+            enter-active-class="transition-opacity"
+            leave-to-class="opacity-0"
+            leave-active-class="transition-opacity"
+        >
+            <PresetEditor v-if="showPreset" :="{ team }" @select="selectPresetTeam" />
+        </Transition>
 
         <TeamEditor :="{ team, memoryGalleryBonus, chartId, guestCenter }" />
 

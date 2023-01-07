@@ -30,25 +30,25 @@ const simpleDescription = computed(() => {
         <CardIcon :="{ id }" />
         <template v-if="accessory">
             <AccessoryIcon :id="accessory.id" class="absolute top-0 left-0 h-6 w-6" />
-            <div v-if="level" class="tag absolute top-0 left-0">
+            <div v-if="level" class="absolute top-0 left-0 rounded-br-sm bg-black/75 px-1 text-xxs">
                 {{ accessory.level }}
             </div>
         </template>
         <div class="absolute top-0 right-0 flex flex-col items-end">
-            <div v-if="level" class="tag w-min">
+            <div v-if="level" class="w-min rounded-bl-sm bg-black/75 px-1 text-xxs">
                 {{ level }}
             </div>
-            <div v-if="sl" class="tag w-min">
+            <div v-if="sl" class="w-min rounded-bl-sm bg-black/75 px-1 text-xxs">
                 {{ sl }}
             </div>
         </div>
         <div v-if="sisNames" class="absolute bottom-0 flex w-full justify-center">
-            <div class="tag text-center">
+            <div class="rounded-t-sm bg-black/75 px-1 text-center text-xxs">
                 {{ sisNames.join(' ') }}
             </div>
         </div>
         <div v-if="simple" class="absolute bottom-0 flex w-full justify-center">
-            <div class="tag text-center">
+            <div class="rounded-t-sm bg-black/75 px-1 text-center text-xxs">
                 {{ simpleDescription }}
             </div>
         </div>

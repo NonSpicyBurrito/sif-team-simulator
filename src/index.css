@@ -10,10 +10,6 @@
     @apply bg-white/5;
 }
 
-.tag {
-    @apply bg-black/75 px-1 text-xxs;
-}
-
 .button,
 button,
 select,

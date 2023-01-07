@@ -67,16 +67,23 @@ function selectCard(cardId: number) {
         <TeamStats :="{ team, memoryGalleryBonus, chartId, guestCenter }" />
     </div>
 
-    <div v-if="selected !== -1" class="surface">
-        <template v-if="member">
-            <div class="mb-8 flex justify-center">
-                <button class="mx-1" @click="moveMember(-1)">◄</button>
-                <button class="mx-1" @click="duplicateMember()">⧉</button>
-                <button class="mx-1" @click="deleteMember()">✗</button>
-                <button class="mx-1" @click="moveMember(1)">►</button>
-            </div>
-            <MemberEditor :="{ member }" />
-        </template>
-        <CardSelector v-else @select="selectCard" />
-    </div>
+    <Transition
+        enter-from-class="opacity-0"
+        enter-active-class="transition-opacity"
+        leave-to-class="opacity-0"
+        leave-active-class="transition-opacity"
+    >
+        <div v-if="selected !== -1" class="surface">
+            <template v-if="member">
+                <div class="mb-8 flex justify-center">
+                    <button class="mx-1" @click="moveMember(-1)">◄</button>
+                    <button class="mx-1" @click="duplicateMember()">⧉</button>
+                    <button class="mx-1" @click="deleteMember()">✗</button>
+                    <button class="mx-1" @click="moveMember(1)">►</button>
+                </div>
+                <MemberEditor :="{ member }" />
+            </template>
+            <CardSelector v-else @select="selectCard" />
+        </div>
+    </Transition>
 </template>
