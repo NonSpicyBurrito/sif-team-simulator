@@ -37,7 +37,7 @@ function getMemberDescription(member: Member | null) {
         >
             <span
                 v-if="description"
-                class="rounded-sm rounded-b-none bg-white/5 px-1 text-center text-xxs transition-opacity"
+                class="rounded-t-sm bg-white/5 px-1 text-center text-xxs transition-opacity"
                 :class="{ 'opacity-25': ![undefined, -1].includes(modelValue) }"
             >
                 {{ description }}
