@@ -36,9 +36,9 @@ function importPreset() {
     }
 }
 
-function exportPreset() {
+async function exportPreset() {
     try {
-        navigator.clipboard.writeText(JSON.stringify(presetTeams.value))
+        await navigator.clipboard.writeText(JSON.stringify(presetTeams.value))
         alert('Preset copied to clipboard')
     } catch (error) {
         alert('Failed to copy preset to clipboard')

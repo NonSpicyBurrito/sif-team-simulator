@@ -5,5 +5,5 @@ defineProps<{
 </script>
 
 <template>
-    <img :key="id" :src="`https://lostone.kirara.ca/accessory/icon_${id}.png`" />
+    <img :key="id" :src="`https://lostone.kirara.ca/accessory/icon_${id}_f.png`" />
 </template>
